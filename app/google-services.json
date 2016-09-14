@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "273203920558",
+    "firebase_url": "https://pushnotificationtest-a6029.firebaseio.com",
+    "project_id": "pushnotificationtest-a6029",
+    "storage_bucket": "pushnotificationtest-a6029.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273203920558:android:8e64ba4e35ed0b59",
+        "android_client_info": {
+          "package_name": "com.example.slobodyanuk.pushnotificationtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "273203920558-sakpj9pbrjnrl3cnkr5gv63t934ek6v5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXDFWjJ8HYwKwRLCSH6Fh1O9e0EzI7nwk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273203920558:android:dbfdbd53ad979d97",
+        "android_client_info": {
+          "package_name": "com.skysoft.slobodyanuk.employeestatistics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "273203920558-sakpj9pbrjnrl3cnkr5gv63t934ek6v5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXDFWjJ8HYwKwRLCSH6Fh1O9e0EzI7nwk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

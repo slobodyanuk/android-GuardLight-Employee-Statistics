@@ -1,3 +1,8 @@
 <resources>
+
     <string name="app_name">Employee Statistics</string>
+
+    <string name="passage_in">Passage : IN</string>
+    <string name="passage_out">Passage : OUT</string>
+
 </resources>
