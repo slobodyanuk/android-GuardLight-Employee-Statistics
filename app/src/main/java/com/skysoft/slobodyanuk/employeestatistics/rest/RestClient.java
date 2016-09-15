@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RestClient {
 
-    private static final String BASE_API_URL = "http://192.168.1.150:3000";
+    private static String BASE_API_URL = "http://192.168.1.150:3000";
 
     private static final OkHttpClient client;
 

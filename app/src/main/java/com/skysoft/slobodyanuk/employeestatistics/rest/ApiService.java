@@ -1,9 +1,13 @@
 package com.skysoft.slobodyanuk.employeestatistics.rest;
 
+import com.skysoft.slobodyanuk.employeestatistics.data.Employee;
 import com.skysoft.slobodyanuk.employeestatistics.rest.request.TokenRequest;
+
+import java.util.List;
 
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -14,5 +18,8 @@ public interface ApiService {
 
     @POST("/settoken")
     Observable<Response<String>> sendToken(@Body TokenRequest tokenRequest);
+
+    @GET("/users")
+    Observable<List<Employee>> getEmployee();
 
 }

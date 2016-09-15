@@ -4,12 +4,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.skysoft.slobodyanuk.employeestatistics.R;
+import com.skysoft.slobodyanuk.employeestatistics.util.Globals;
+import com.skysoft.slobodyanuk.employeestatistics.util.PreferencesManager;
 import com.skysoft.slobodyanuk.employeestatistics.view.activity.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,21 +34,21 @@ public class MessageHandler extends FirebaseMessagingService {
 
     private static final String GROUP_KEY = "group";
 
+    private String mMessage;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Map<String, String> data = remoteMessage.getData();
+        Log.e(TAG, "onMessageReceived: " + data);
         createNotification(data);
         testLogShow(data);
     }
 
     private void createNotification(Map<String, String> data) {
-
         Context context = getBaseContext();
 
         String id = data.get(ID_KEY);
-
         Intent intent = new Intent(this, MainActivity.class);
-
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -67,17 +69,22 @@ public class MessageHandler extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent)
                 .setGroup(GROUP_KEY)
                 .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentText(data.get(DATE_KEY) + ", key : " + id);
 
         NotificationManager mNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
+        Log.e(TAG, "create notification: build");
 
         mNotificationManager.notify(MESSAGE_NOTIFICATION_ID, mBuilder.build());
 
     }
 
     private void testLogShow(Map<String, String> data) {
+        String tmp = PreferencesManager.getInstance().getText();
+        PreferencesManager.getInstance().setText(tmp.concat("\n" +
+                "Event :: " + data.get(Globals.EVENT_KEY) +
+                ", time :: " + data.get(Globals.DATE_KEY) +
+                ", KEY :: " + data.get(Globals.ID_KEY) + "\n"));
         EventBus.getDefault().post(new FragmentEvent(data));
     }
 

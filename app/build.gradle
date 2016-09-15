@@ -4,9 +4,9 @@ apply plugin: 'me.tatarka.retrolambda'
 
 def PROJECT_NAME = "Employee Statistics"
 def versionMajor = 0
-def versionMinor = 0
+def versionMinor = 1
 def versionPatch = 1
-def versionBuild = 0
+def versionBuild = 1
 
 def VERSION_CODE = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
 def VERSION_NAME = "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
