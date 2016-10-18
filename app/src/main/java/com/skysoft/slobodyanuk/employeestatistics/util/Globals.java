@@ -7,6 +7,8 @@ public class Globals {
 
     public static int MESSAGE_NOTIFICATION_ID = 435345;
 
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 12523;
+
     public static final String EVENT_KEY = "event";
     public static final String DATE_KEY = "date";
     public static final String ID_KEY = "id";

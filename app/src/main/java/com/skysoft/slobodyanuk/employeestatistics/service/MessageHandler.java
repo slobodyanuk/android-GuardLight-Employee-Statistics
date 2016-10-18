@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -39,7 +38,6 @@ public class MessageHandler extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Map<String, String> data = remoteMessage.getData();
-        Log.e(TAG, "onMessageReceived: " + data);
         createNotification(data);
         testLogShow(data);
     }
@@ -73,7 +71,6 @@ public class MessageHandler extends FirebaseMessagingService {
 
         NotificationManager mNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        Log.e(TAG, "create notification: build");
 
         mNotificationManager.notify(MESSAGE_NOTIFICATION_ID, mBuilder.build());
 

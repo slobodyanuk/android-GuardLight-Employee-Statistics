@@ -5,4 +5,9 @@
     <string name="passage_in">Passage : IN</string>
     <string name="passage_out">Passage : OUT</string>
 
+    <string name="server_address">Server address:</string>
+    <string name="username">Username:</string>
+    <string name="confirm">Confirm</string>
+    <string name="password">Password:</string>
+
 </resources>

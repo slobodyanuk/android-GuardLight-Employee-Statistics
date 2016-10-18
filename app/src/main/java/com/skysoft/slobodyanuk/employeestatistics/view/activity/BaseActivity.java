@@ -2,6 +2,7 @@ package com.skysoft.slobodyanuk.employeestatistics.view.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
@@ -17,6 +18,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutResources());
         ButterKnife.bind(this);
     }
+
+    public void replaceFragment(int container, Fragment fragment){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(container, fragment)
+                .commit();
+    }
+
+    public void addFragment(int container, Fragment fragment){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(container, fragment)
+                .addToBackStack(String.valueOf(fragment.getId()))
+                .commit();
+    }
+
 
     protected abstract int getLayoutResources();
 }
