@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="68dp"
+    android:background="?attr/selectableItemBackground">
+
+    <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:typeface="OPEN_SANS_SEMI_BOLD"
+        android:textSize="16sp"
+        android:textColor="@color/textColorBlack"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/btn_switch"
+        android:layout_toRightOf="@+id/present" />
+
+    <Switch
+        android:id="@+id/btn_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/default_component_margin"
+        android:layout_marginRight="@dimen/default_component_margin"
+        android:checked="true" />
+
+    <ImageView
+        android:id="@+id/present"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/default_component_margin"
+        android:layout_marginRight="@dimen/default_component_margin"
+        android:src="@drawable/red_circle" />
+
+</RelativeLayout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="82dp"
+    android:background="?attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/default_component_margin"
+        android:layout_marginRight="@dimen/default_component_margin"
+        android:layout_toRightOf="@+id/img_user">
+
+        <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorBlack"
+            android:textSize="16sp"
+            app:typeface="OPEN_SANS_SEMI_BOLD" />
+
+        <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView
+            android:id="@+id/time_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/textColorBlack"
+            android:textSize="14sp"
+            app:typeface="OPEN_SANS_REGULAR" />
+
+        <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_toRightOf="@+id/time_month"
+            android:textColor="@color/textColorBlack"
+            android:textSize="14sp"
+            app:typeface="OPEN_SANS_SEMI_BOLD" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/img_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/default_component_margin"
+        android:layout_marginStart="@dimen/default_component_margin">
+
+        <ImageView
+            android:id="@+id/user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user" />
+
+        <ImageView
+            android:id="@+id/present"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/default_component_margin"
+            android:src="@drawable/ic_ar_out" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -5,6 +5,4 @@ package com.skysoft.slobodyanuk.employeestatistics.view;
  */
 public interface Navigator {
 
-    void navigateToEmployeeStatistics(String id);
-
 }

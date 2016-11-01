@@ -27,11 +27,17 @@ public class SignInActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            Fragment fragment = (Prefs.getBoolean(PrefsKeys.SERVER_AVAILABLE_PREF, false)) ?
-                    SignInFragment.newInstance() :
-                    ServerConfigurationFragment.newInstance();
+            Fragment fragment;
+            String tag;
+            if (Prefs.getBoolean(PrefsKeys.SERVER_AVAILABLE_PREF, false)) {
+                fragment = SignInFragment.newInstance();
+                tag = getString(R.string.sign_in);
+            } else {
+                fragment = ServerConfigurationFragment.newInstance();
+                tag = "";
+            }
 
-            replaceFragment(R.id.container, fragment);
+            replaceFragment(R.id.container, fragment, tag);
         }
     }
 

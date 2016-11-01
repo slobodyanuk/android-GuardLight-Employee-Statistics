@@ -2,49 +2,46 @@ package com.skysoft.slobodyanuk.employeestatistics.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.skysoft.slobodyanuk.employeestatistics.R;
-import com.skysoft.slobodyanuk.employeestatistics.data.Employee;
-import com.skysoft.slobodyanuk.employeestatistics.rest.RestClient;
 import com.skysoft.slobodyanuk.employeestatistics.service.FragmentEvent;
-import com.skysoft.slobodyanuk.employeestatistics.util.PreferencesManager;
+import com.skysoft.slobodyanuk.employeestatistics.util.FragmentListener;
+import com.skysoft.slobodyanuk.employeestatistics.util.TopTabListener;
+import com.skysoft.slobodyanuk.employeestatistics.view.activity.BaseActivity;
+import com.skysoft.slobodyanuk.employeestatistics.view.adapter.EmployeePagerAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+import static com.skysoft.slobodyanuk.employeestatistics.util.Globals.MONTH;
+import static com.skysoft.slobodyanuk.employeestatistics.util.Globals.TODAY;
+import static com.skysoft.slobodyanuk.employeestatistics.util.Globals.WEEK;
 
 /**
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
-public class EmployeeFragment extends BaseFragment {
+public class EmployeeFragment extends BaseFragment implements TopTabListener{
 
     private static final String TAG = EmployeeFragment.class.getCanonicalName();
-    private PreferencesManager mPref = PreferencesManager.getInstance();
 
-    @BindView(R.id.scrollView)
-    ScrollView mScrollView;
-    @BindView(R.id.text)
-    TextView mTextView;
+    @BindView(R.id.pager)
+    ViewPager mViewPager;
 
-//    private String mMessage = "";
+    private TabLayout mTabLayout;
 
     public static Fragment newInstance() {
-        return new EmployeeFragment();
+        Fragment fragment = new EmployeeFragment();
+        return fragment;
     }
 
     @Override
@@ -54,38 +51,72 @@ public class EmployeeFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(false);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateToolbar();
+        ((FragmentListener) getActivity()).onFragmentCreated();
+//        Observable<List<Employee>> employeeObservable = RestClient.getApiService().getEmployee();
+//        employeeObservable
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(employee -> {
+//                    Log.e(TAG, "onViewCreated: " + employee.get(0).toString());
+//                }, throwable -> {
+//                    Toast.makeText(getActivity(), "Failed: " + throwable, Toast.LENGTH_SHORT).show();
+//                });
+    }
+
+    private void setupViewPager() {
+        EmployeePagerAdapter adapter = new EmployeePagerAdapter(getResources(), getChildFragmentManager());
+        adapter.addFragment(EventEmployeeFragment.newInstance(TODAY), TODAY);
+        adapter.addFragment(EventEmployeeFragment.newInstance(WEEK), WEEK);
+        adapter.addFragment(EventEmployeeFragment.newInstance(MONTH), MONTH);
+        mViewPager.setAdapter(adapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+            }
+        });
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mTextView.setText(mPref.getText());
-        if (mScrollView != null) {
-            Log.e(TAG, "onViewCreated: " + mScrollView.toString());
-            mScrollView.post(() -> {
-                if (mScrollView != null) {
-                    mScrollView.fullScroll(View.FOCUS_DOWN);
-                }
-            });
-        }
-        Observable<List<Employee>> employeeObservable = RestClient.getApiService().getEmployee();
-        employeeObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(employee -> {
-                    Log.e(TAG, "onViewCreated: " + employee.get(0).toString());
-                }, throwable -> {
-                    Toast.makeText(getActivity(), "Failed: " + throwable, Toast.LENGTH_SHORT).show();
-                });
+    public void setupTabLayout(TabLayout tabLayout) {
+        mTabLayout = tabLayout;
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.today)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.week)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.month)));
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        setupViewPager();
     }
 
-    @OnClick(R.id.clear)
-    public void onClearLog() {
-        mPref.clear();
-        mTextView.setText(mPref.getText());
+    @Override
+    public void updateToolbar() {
+        ((BaseActivity) getActivity()).unableToolbar();
+        ((BaseActivity) getActivity()).disableHomeButton();
+        ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.activity));
+
+//        RelativeLayout mChartMenu = ((BaseActivity) getActivity())
+//                .unableMenuContainer(android.R.drawable.ic_menu_more);
+//        mChartMenu.setOnClickListener(clickedView ->
+//                ((BaseActivity) getActivity())
+//                        .addFragment(R.id.container, ChartFragment.newInstance(), getString(R.string.charts)));
     }
 
     @Override
@@ -94,24 +125,16 @@ public class EmployeeFragment extends BaseFragment {
     }
 
     public void showEvent(Map<String, String> data) {
-
-        if (mPref.getText().length() > 40000) {
-            mPref.clear();
-        }
-        mTextView.setText(mPref.getText());
-        if (mScrollView != null) {
-            mScrollView.post(() -> mScrollView.fullScroll(View.FOCUS_DOWN));
-        }
-
-//        if (mTextView != null){
-//            mMessage += "\n" +
-//                    "Event :: " + data.get(Globals.EVENT_KEY) +
-//                    ", time :: " + data.get(Globals.DATE_KEY) +
-//                    ", KEY :: " + data.get(Globals.ID_KEY) + "\n";
-//            mTextView.setText(mMessage);
-//        }
     }
 
+    /*Test
+     * Delete*/
+    @Override
+    public void onPause() {
+        super.onPause();
+        mTabLayout.removeAllTabs();
+        Prefs.clear();
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(FragmentEvent event) {
@@ -123,4 +146,5 @@ public class EmployeeFragment extends BaseFragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
+
 }

@@ -3,28 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/clear"
-        android:text="Clear log"
-        android:textColor="@android:color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_below="@+id/clear"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:paddingBottom="10dp"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/text"
-            android:textColor="@android:color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </ScrollView>
-
-
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

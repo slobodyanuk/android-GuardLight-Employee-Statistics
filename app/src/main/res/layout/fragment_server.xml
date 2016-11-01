@@ -1,33 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="none"
+    android:fillViewport="true">
 
-    <TextView
-        android:text="@string/server_address"
-        android:textSize="17sp"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_sign_margin"
+        android:paddingRight="@dimen/activity_sign_margin"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
 
-    <EditText
-        android:id="@+id/et_server_address"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/default_component_margin"
+            android:layout_marginTop="@dimen/default_component_margin"
+            android:src="@drawable/timekeeper_logo_normal" />
 
-    <android.support.v7.widget.AppCompatButton
-        android:layout_width="match_parent"
-        android:id="@+id/btn_confirm"
-        android:layout_marginTop="68dp"
-        android:text="@string/confirm"
-        android:layout_marginLeft="68dp"
-        android:layout_marginRight="68dp"
-        android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:id="@+id/address_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo">
 
-</LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:background="@color/colorGray" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/white"
+                android:src="@drawable/ic_address" />
+
+        </RelativeLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_server"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/textColorBlack"
+            android:gravity="bottom"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_below="@+id/address_view"
+            android:layout_marginTop="@dimen/default_component_margin">
+
+            <EditText
+                android:id="@+id/et_server_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:textSize="28sp"
+                android:textColor="@color/textColorBlack"
+                android:hint="@string/server_address" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/input_server"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/BlueButton"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="23dp"
+                android:text="@string/conf_continue" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
