@@ -132,7 +132,6 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener{
     @Override
     public void onPause() {
         super.onPause();
-        mTabLayout.removeAllTabs();
         Prefs.clear();
     }
 
