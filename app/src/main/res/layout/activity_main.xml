@@ -50,7 +50,7 @@
             app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>
 
-    <com.skysoft.slobodyanuk.employeestatistics.view.component.NonSwipeableViewPager
+    <com.skysoft.slobodyanuk.timekeeper.view.component.NonSwipeableViewPager
         android:id="@+id/main_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

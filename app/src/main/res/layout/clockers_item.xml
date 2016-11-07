@@ -4,7 +4,7 @@
     android:layout_height="68dp"
     android:background="?attr/selectableItemBackground">
 
-    <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView
+    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/title"

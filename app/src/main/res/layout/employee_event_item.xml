@@ -13,7 +13,7 @@
         android:layout_marginRight="@dimen/default_component_margin"
         android:layout_toRightOf="@+id/img_user">
 
-        <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
             android:textSize="16sp"
             app:typeface="OPEN_SANS_SEMI_BOLD" />
 
-        <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView
+        <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
             android:id="@+id/time_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:textSize="14sp"
             app:typeface="OPEN_SANS_REGULAR" />
 
-        <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView
+        <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
