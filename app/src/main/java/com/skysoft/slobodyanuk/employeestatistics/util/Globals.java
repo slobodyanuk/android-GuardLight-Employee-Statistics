@@ -27,12 +27,14 @@ public class Globals {
     * ViewPager constants
     * */
     public final static String PAGE_KEY = "page_key";
+
     public final static int TODAY = 0;
     public final static int WEEK = 1;
     public final static int MONTH = 2;
-    public final static int CLOCKERS = 3;
-    public final static int ACTIVITY = 4;
-    public final static int SETTINGS = 5;
+
+    public final static int CLOCKERS = 0;
+    public final static int ACTIVITY = 1;
+    public final static int SETTINGS = 2;
 
     public static final String EVENT_KEY = "event";
     public static final String DATE_KEY = "date";

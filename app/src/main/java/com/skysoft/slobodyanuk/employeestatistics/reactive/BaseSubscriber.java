@@ -49,5 +49,6 @@ public class BaseSubscriber<T> extends Subscriber<BaseResponse> {
     @Override
     public void onNext(BaseResponse t) {
         nextListener.onNext(t);
+        onCompleted();
     }
 }

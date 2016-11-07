@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 
 import com.skysoft.slobodyanuk.employeestatistics.R;
@@ -54,8 +55,9 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateToolbar();
-        ((FragmentListener) getActivity()).onFragmentCreated(this);
+        Log.e("tag", "onViewCreated: employyee ");
+
+        //updateToolbar();
     }
 
     private void setupViewPager() {
@@ -114,11 +116,15 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener {
 
     @Override
     public void updateToolbar() {
-        ((BaseActivity) getActivity()).unableToolbar();
-        ((BaseActivity) getActivity()).disableHomeButton();
-        ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.activity));
-        ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts)
-                .setOnClickListener(clickedView -> setupChartViewPager());
+        if (isVisible()) {
+            Log.e("tag", "onViewCreated: v ");
+            ((FragmentListener) getActivity()).onFragmentCreated(this);
+            ((BaseActivity) getActivity()).unableToolbar();
+            ((BaseActivity) getActivity()).disableHomeButton();
+            ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.activity));
+            ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts)
+                    .setOnClickListener(clickedView -> setupChartViewPager());
+        }
     }
 
     @Override
@@ -135,7 +141,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener {
     }
 
     @Subscribe
-    public void onEvent(ChartBackEvent event){
+    public void onEvent(ChartBackEvent event) {
         setupViewPager();
         updateToolbar();
     }

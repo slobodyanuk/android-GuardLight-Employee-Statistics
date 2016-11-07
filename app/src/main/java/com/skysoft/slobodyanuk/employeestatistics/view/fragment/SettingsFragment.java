@@ -16,6 +16,7 @@ import com.skysoft.slobodyanuk.employeestatistics.util.Globals;
 import com.skysoft.slobodyanuk.employeestatistics.util.KeyboardUtil;
 import com.skysoft.slobodyanuk.employeestatistics.util.PrefsKeys;
 import com.skysoft.slobodyanuk.employeestatistics.util.TypefaceManager;
+import com.skysoft.slobodyanuk.employeestatistics.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.employeestatistics.view.activity.MainActivity;
 
 import butterknife.BindView;
@@ -37,7 +38,7 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateToolbar();
+        //updateToolbar();
         mTextInputLayout.setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_REGULAR));
         mServerAddress.setOnFocusChangeListener((view1, b) -> {
             if (b) mServerAddress.setText(Prefs.getString(PrefsKeys.SERVER_URL, ""));
@@ -77,8 +78,11 @@ public class SettingsFragment extends BaseFragment {
 
     @Override
     public void updateToolbar() {
-        ((MainActivity) getActivity()).unableToolbar();
-        ((MainActivity) getActivity()).setToolbarTitle(getString(R.string.settings));
+        if (isVisible()) {
+            ((MainActivity) getActivity()).unableToolbar();
+            ((MainActivity) getActivity()).setToolbarTitle(getString(R.string.settings));
+            ((BaseActivity) getActivity()).disableMenuContainer();
+        }
     }
 
     @Override

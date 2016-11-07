@@ -3,6 +3,7 @@ package com.skysoft.slobodyanuk.employeestatistics.reactive;
 import com.skysoft.slobodyanuk.employeestatistics.rest.response.BaseResponse;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -12,8 +13,8 @@ import rx.schedulers.Schedulers;
 
 public class BaseTask<T> {
 
-    public void execute(T activity, Observable<? extends BaseResponse> observable){
-        observable
+    public Subscription execute(T activity, Observable<? extends BaseResponse> observable){
+      return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseSubscriber<>(activity));

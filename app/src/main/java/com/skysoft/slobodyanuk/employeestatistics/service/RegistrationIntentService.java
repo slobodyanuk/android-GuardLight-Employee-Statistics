@@ -16,6 +16,8 @@ import com.skysoft.slobodyanuk.employeestatistics.rest.request.TokenRequest;
 import com.skysoft.slobodyanuk.employeestatistics.rest.response.BaseResponse;
 import com.skysoft.slobodyanuk.employeestatistics.util.IllegalUrlException;
 
+import rx.Subscription;
+
 /**
  * Created by Serhii Slobodyanuk on 08.09.2016.
  */
@@ -27,6 +29,8 @@ public class RegistrationIntentService extends IntentService implements OnSubscr
         super(TAG);
     }
 
+    private Subscription mSubscription;
+
     @Override
     protected void onHandleIntent(Intent intent) {
         FirebaseInstanceId instanceID = FirebaseInstanceId.getInstance();
@@ -36,7 +40,7 @@ public class RegistrationIntentService extends IntentService implements OnSubscr
 
         if (!TextUtils.isEmpty(token)) {
             try {
-                new BaseTask<>().execute(this, RestClient
+               mSubscription = new BaseTask<>().execute(this, RestClient
                         .getApiService()
                         .sendToken(new TokenRequest(token)));
             } catch (IllegalUrlException e) {
@@ -54,7 +58,7 @@ public class RegistrationIntentService extends IntentService implements OnSubscr
 
     @Override
     public void onCompleted() {
-
+        mSubscription.unsubscribe();
     }
 
     @Override

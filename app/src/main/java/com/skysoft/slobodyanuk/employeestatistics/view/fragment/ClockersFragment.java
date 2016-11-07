@@ -3,9 +3,9 @@ package com.skysoft.slobodyanuk.employeestatistics.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -28,9 +28,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import io.realm.Realm;
+import rx.Subscription;
 
 @SuppressWarnings("SpellCheckingInspection")
-public class ClockersFragment extends BaseFragment implements OnSubscribeNextListener, OnSubscribeCompleteListener {
+public class ClockersFragment extends BaseFragment
+        implements OnSubscribeNextListener, OnSubscribeCompleteListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
@@ -40,41 +42,50 @@ public class ClockersFragment extends BaseFragment implements OnSubscribeNextLis
     private ClockersAdapter mAdapter;
     private List<Employee> employees;
     private Realm mRealm;
+    private Subscription mSubscription;
+
 
     public static ClockersFragment newInstance() {
         return new ClockersFragment();
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mRealm = Realm.getDefaultInstance();
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateToolbar();
+        //updateToolbar();
         showProgress();
+        mRealm = Realm.getDefaultInstance();
+
+        if (mRefreshLayout != null) mRefreshLayout.setOnRefreshListener(this);
         if (mRealm.where(Employee.class).findAll().isEmpty()) {
-            try {
-                new BaseTask<>().execute(this, RestClient
-                        .getApiService()
-                        .getEmployees()
-                        .compose(bindToLifecycle()));
-            } catch (IllegalUrlException e) {
-                Toast.makeText(getActivity(), getString(R.string.error_illegal_url), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
+            executeEmployees();
         } else {
             initRecyclerView(mRealm.where(Employee.class).findAll());
         }
 
     }
 
+    private void executeEmployees() {
+        try {
+            mSubscription = new BaseTask<>().execute(this, RestClient
+                    .getApiService()
+                    .getEmployees()
+                    .compose(bindToLifecycle()));
+        } catch (IllegalUrlException e) {
+            Toast.makeText(getActivity(), getString(R.string.error_illegal_url), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (mRefreshLayout != null) mRefreshLayout.setRefreshing(true);
+        executeEmployees();
+    }
+
     @Override
     public void onCompleted() {
-
+        mSubscription.unsubscribe();
     }
 
     @Override
@@ -103,9 +114,9 @@ public class ClockersFragment extends BaseFragment implements OnSubscribeNextLis
                 employees.add(employee);
             }
             mRealm.beginTransaction();
-            mRealm.copyToRealm(employees);
+            mRealm.copyToRealmOrUpdate(employees);
             mRealm.commitTransaction();
-            Log.e("tag", "onNext: " + mRealm.where(Employee.class).findAll());
+            mRealm.close();
             initRecyclerView(employees);
         }
     }
@@ -117,12 +128,16 @@ public class ClockersFragment extends BaseFragment implements OnSubscribeNextLis
         mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         hideProgress();
+        if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void updateToolbar() {
-        ((BaseActivity) getActivity()).unableToolbar();
-        ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.notification));
+        if (isVisible()) {
+            ((BaseActivity) getActivity()).disableMenuContainer();
+            ((BaseActivity) getActivity()).unableToolbar();
+            ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.notification));
+        }
     }
 
     private void showProgress() {
@@ -142,10 +157,4 @@ public class ClockersFragment extends BaseFragment implements OnSubscribeNextLis
         return R.layout.fragment_clockers;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mRealm.close();
-        mRealm = null;
-    }
 }

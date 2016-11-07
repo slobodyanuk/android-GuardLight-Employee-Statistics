@@ -32,6 +32,7 @@ import com.skysoft.slobodyanuk.employeestatistics.view.activity.SignInActivity;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.OnClick;
+import rx.Subscription;
 
 /**
  * Created by Serhii Slobodyanuk on 14.09.2016.
@@ -46,6 +47,8 @@ public class SignInFragment extends BaseFragment implements OnSubscribeCompleteL
     EditText mPassword;
     @BindViews({R.id.input_username, R.id.input_password})
     TextInputLayout[] mTextInputLayouts;
+
+    private Subscription mSubscription;
 
     public static Fragment newInstance() {
         return new SignInFragment();
@@ -75,7 +78,7 @@ public class SignInFragment extends BaseFragment implements OnSubscribeCompleteL
             Prefs.putString(PrefsKeys.USERNAME, String.valueOf(mUserName.getText()));
         }
         try {
-            new BaseTask<>().execute(this, RestClient
+            mSubscription = new BaseTask<>().execute(this, RestClient
                     .getApiService()
                     .login(new LoginRequest(Prefs.getString(PrefsKeys.USERNAME, ""), String.valueOf(mPassword.getText())))
                     .compose(bindToLifecycle()));
@@ -102,6 +105,7 @@ public class SignInFragment extends BaseFragment implements OnSubscribeCompleteL
 
     @Override
     public void onCompleted() {
+        mSubscription.unsubscribe();
     }
 
     @Override
