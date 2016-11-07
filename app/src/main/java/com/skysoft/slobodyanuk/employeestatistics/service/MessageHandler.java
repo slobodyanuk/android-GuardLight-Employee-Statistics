@@ -8,9 +8,11 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.skysoft.slobodyanuk.employeestatistics.R;
 import com.skysoft.slobodyanuk.employeestatistics.util.Globals;
 import com.skysoft.slobodyanuk.employeestatistics.util.PreferencesManager;
+import com.skysoft.slobodyanuk.employeestatistics.util.PrefsKeys;
 import com.skysoft.slobodyanuk.employeestatistics.view.activity.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,9 +39,11 @@ public class MessageHandler extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Map<String, String> data = remoteMessage.getData();
-        createNotification(data);
-        testLogShow(data);
+        if (Prefs.getBoolean(PrefsKeys.NOTIFICATION, true)) {
+            Map<String, String> data = remoteMessage.getData();
+            createNotification(data);
+            testLogShow(data);
+        }
     }
 
     private void createNotification(Map<String, String> data) {

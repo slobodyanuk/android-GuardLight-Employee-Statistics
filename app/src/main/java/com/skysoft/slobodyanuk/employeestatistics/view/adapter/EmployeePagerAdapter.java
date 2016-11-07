@@ -3,7 +3,7 @@ package com.skysoft.slobodyanuk.employeestatistics.view.adapter;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.skysoft.slobodyanuk.employeestatistics.R;
 import com.skysoft.slobodyanuk.employeestatistics.util.Globals;
@@ -15,9 +15,10 @@ import java.util.List;
  * Created by Serhii Slobodyanuk on 28.10.2016.
  */
 
-public class EmployeePagerAdapter extends FragmentPagerAdapter {
+public class EmployeePagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<Fragment> mChartFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
     private Resources resources;
 
@@ -29,6 +30,11 @@ public class EmployeePagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         return mFragmentList.get(position);
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override
@@ -50,6 +56,15 @@ public class EmployeePagerAdapter extends FragmentPagerAdapter {
                 break;
         }
     }
+
+    public void clearFragments() {
+        if (mFragmentList != null) {
+            mFragmentList.clear();
+            mFragmentTitleList.clear();
+            mChartFragmentList.clear();
+        }
+    }
+
 
     @Override
     public CharSequence getPageTitle(int position) {

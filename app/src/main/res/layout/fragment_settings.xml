@@ -1,6 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.skysoft.slobodyanuk.employeestatistics.view.fragment.SettingsFragment">
 
-</LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/notification_container"
+                android:layout_width="match_parent"
+                android:layout_height="82dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true">
+
+                <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/notification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_component_margin"
+                    android:layout_toLeftOf="@+id/btn_notification"
+                    android:text="@string/notifications"
+                    android:textColor="@color/textColorBlack"
+                    android:textSize="21sp"
+                    app:typeface="OPEN_SANS_REGULAR" />
+
+                <Switch
+                    android:id="@+id/btn_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_component_margin"
+                    android:layout_marginRight="@dimen/default_component_margin" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/notification_container"
+                android:layout_margin="5dp"
+                android:background="@color/colorLightGray" />
+
+            <RelativeLayout
+                android:id="@+id/server_container"
+                android:layout_width="match_parent"
+                android:layout_height="82dp"
+                android:layout_below="@+id/divider"
+                android:clickable="true">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_server"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_component_margin"
+                    android:layout_marginRight="@dimen/default_component_margin"
+                    android:layout_marginTop="@dimen/default_component_margin"
+                    android:layout_toLeftOf="@+id/btn_confirm"
+                    android:clipToPadding="false"
+                    android:gravity="left"
+                    android:textColorHint="@color/textColorBlack"
+                    app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium">
+
+                    <EditText
+                        android:id="@+id/et_server_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:hint="@string/server_address"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:textColor="@color/textColorBlack"
+                        android:textSize="21sp" />
+
+
+                </android.support.design.widget.TextInputLayout>
+
+                <RelativeLayout
+                    android:id="@+id/btn_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/default_component_margin"
+                    android:background="?attr/actionBarItemBackground"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@android:drawable/ic_input_add" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/server_container"
+                android:layout_margin="5dp"
+                android:background="@color/colorLightGray" />
+
+            <RelativeLayout
+                android:id="@+id/logout_container"
+                android:layout_width="match_parent"
+                android:layout_height="82dp"
+                android:layout_below="@+id/divider2"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true">
+
+                <com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_component_margin"
+                    android:layout_marginRight="@dimen/default_component_margin"
+                    android:text="@string/logout"
+                    android:textColor="@color/textColorBlack"
+                    android:textSize="21sp"
+                    app:typeface="OPEN_SANS_REGULAR" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

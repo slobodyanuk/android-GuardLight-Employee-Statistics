@@ -1,11 +1,11 @@
 package com.skysoft.slobodyanuk.employeestatistics.rest;
 
-import com.skysoft.slobodyanuk.employeestatistics.data.Employee;
+import com.skysoft.slobodyanuk.employeestatistics.rest.request.LoginRequest;
 import com.skysoft.slobodyanuk.employeestatistics.rest.request.TokenRequest;
+import com.skysoft.slobodyanuk.employeestatistics.rest.response.BaseResponse;
+import com.skysoft.slobodyanuk.employeestatistics.rest.response.EmployeesResponse;
+import com.skysoft.slobodyanuk.employeestatistics.rest.response.LoginResponse;
 
-import java.util.List;
-
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -16,10 +16,13 @@ import rx.Observable;
  */
 public interface ApiService {
 
-    @POST("/settoken")
-    Observable<Response<String>> sendToken(@Body TokenRequest tokenRequest);
+    @POST("/api/subscribe/")
+    Observable<BaseResponse> sendToken(@Body TokenRequest tokenRequest);
 
-    @GET("/users")
-    Observable<List<Employee>> getEmployee();
+    @POST("/api/login/")
+    Observable<LoginResponse> login(@Body LoginRequest request);
+
+    @GET("/api/employees/")
+    Observable<EmployeesResponse> getEmployees();
 
 }

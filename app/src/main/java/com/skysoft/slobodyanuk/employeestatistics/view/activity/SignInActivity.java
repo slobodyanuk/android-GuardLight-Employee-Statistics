@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.pixplicity.easyprefs.library.Prefs;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.skysoft.slobodyanuk.employeestatistics.R;
-import com.skysoft.slobodyanuk.employeestatistics.util.PrefsKeys;
+import com.skysoft.slobodyanuk.employeestatistics.util.Globals;
 import com.skysoft.slobodyanuk.employeestatistics.view.fragment.ServerConfigurationFragment;
-import com.skysoft.slobodyanuk.employeestatistics.view.fragment.SignInFragment;
 
 public class SignInActivity extends BaseActivity {
 
@@ -28,17 +28,25 @@ public class SignInActivity extends BaseActivity {
 
         if (savedInstanceState == null) {
             Fragment fragment;
-            String tag;
-            if (Prefs.getBoolean(PrefsKeys.SERVER_AVAILABLE_PREF, false)) {
-                fragment = SignInFragment.newInstance();
-                tag = getString(R.string.sign_in);
-            } else {
-                fragment = ServerConfigurationFragment.newInstance();
-                tag = "";
-            }
-
+            String tag = "";
+            fragment = ServerConfigurationFragment.newInstance();
             replaceFragment(R.id.container, fragment, tag);
         }
+    }
+
+    public boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, Globals.PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override

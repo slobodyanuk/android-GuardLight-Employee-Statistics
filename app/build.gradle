@@ -15,13 +15,13 @@ def VERSION_NAME = "${versionMajor}.${versionMinor}.${versionPatch}.${versionBui
 def APK_NAME = PROJECT_NAME + "-" + VERSION_NAME + ".apk"
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.skysoft.slobodyanuk.employeestatistics"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode VERSION_CODE
         versionName VERSION_NAME
     }
@@ -50,27 +50,32 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-
-
-
-
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:preference-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:support-v4:25.0.0'
     compile 'com.google.firebase:firebase-messaging:9.8.0'
     compile 'com.google.android.gms:play-services-gcm:9.8.0'
     compile 'com.google.code.gson:gson:2.6.1'
+
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.1.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+
     compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.pixplicity.easyprefs:library:1.8.1@aar'
+
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
+
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
-    compile 'com.android.support:support-v4:24.2.1'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.trello:rxlifecycle-components:1.0'
+
+    provided 'org.projectlombok:lombok:1.16.2'
+
 }
 apply plugin: 'com.google.gms.google-services'

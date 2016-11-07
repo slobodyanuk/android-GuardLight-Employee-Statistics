@@ -3,6 +3,7 @@ package com.skysoft.slobodyanuk.employeestatistics.view.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -18,6 +19,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.skysoft.slobodyanuk.employeestatistics.R;
 import com.skysoft.slobodyanuk.employeestatistics.util.DaysValueFormatter;
+import com.skysoft.slobodyanuk.employeestatistics.util.Globals;
 import com.skysoft.slobodyanuk.employeestatistics.view.activity.BaseActivity;
 
 import java.util.ArrayList;
@@ -39,8 +41,12 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
             Color.GREEN,
     };
 
-    public static Fragment newInstance() {
-        return new ChartFragment();
+    public static Fragment newInstance(int page) {
+        ChartFragment fragment = new ChartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(Globals.PAGE_KEY, page);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -131,7 +137,11 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
     public void updateToolbar() {
         ((BaseActivity) getActivity()).unableToolbar();
         ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.charts));
-        ((BaseActivity) getActivity()).unableHomeButton();
+        ((BaseActivity) getActivity()).unableChartHomeButton(this);
+        ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_calendar).setOnClickListener(view -> {
+            DialogFragment datePickerFragment = new DatePickerFragment();
+            datePickerFragment.show(getActivity().getFragmentManager(), "Date Picker");
+        });
     }
 
     @Override

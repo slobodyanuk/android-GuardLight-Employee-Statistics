@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.skysoft.slobodyanuk.employeestatistics.R;
 import com.skysoft.slobodyanuk.employeestatistics.util.Globals;
+import com.skysoft.slobodyanuk.employeestatistics.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.employeestatistics.view.adapter.EmployeeEventAdapter;
 import com.skysoft.slobodyanuk.employeestatistics.view.component.SimpleDividerItemDecoration;
 
@@ -33,7 +34,7 @@ public class EventEmployeeFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        updateToolbar();
         mAdapter = new EmployeeEventAdapter(this);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
@@ -43,6 +44,7 @@ public class EventEmployeeFragment extends BaseFragment {
 
     @Override
     public void updateToolbar() {
+        ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts);
     }
 
     @Override

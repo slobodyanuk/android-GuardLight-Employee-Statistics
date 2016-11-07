@@ -6,6 +6,6 @@ package com.skysoft.slobodyanuk.employeestatistics.util;
 
 public interface FragmentListener {
 
-    void onFragmentCreated();
+    void onFragmentCreated(TopTabListener listener);
 
 }

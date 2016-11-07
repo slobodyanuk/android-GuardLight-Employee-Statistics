@@ -32,9 +32,4 @@ public class SplashActivity extends BaseActivity {
         return R.layout.activity_splash;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mHandler.removeCallbacks(mStartActivityRunnable);
-    }
 }

@@ -5,7 +5,16 @@ package com.skysoft.slobodyanuk.employeestatistics.util;
  */
 public class PrefsKeys {
 
-    public static final String SERVER_AVAILABLE_PREF = "server_available";
-    public static final String SIGN_IN_PREF = "sign_in";
+    /*
+    * Settings
+    * */
+    public static final String SERVER_AVAILABLE = "server_available";
+    public static final String SERVER_URL = "server_url";
+    public static final String SIGN_IN = "sign_in";
+    public static final String NOTIFICATION = "notification";
 
+
+    public static final String USERNAME = "username";
+
+    public static final String API_KEY = "api_key";
 }

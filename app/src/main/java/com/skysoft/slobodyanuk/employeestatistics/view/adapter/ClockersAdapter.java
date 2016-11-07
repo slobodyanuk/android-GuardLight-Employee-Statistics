@@ -9,10 +9,11 @@ import android.widget.ImageView;
 import android.widget.Switch;
 
 import com.skysoft.slobodyanuk.employeestatistics.R;
-import com.skysoft.slobodyanuk.employeestatistics.data.ClockersItem;
+import com.skysoft.slobodyanuk.employeestatistics.data.Employee;
 import com.skysoft.slobodyanuk.employeestatistics.view.component.TypefaceTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,19 +23,13 @@ import butterknife.ButterKnife;
  */
 public class ClockersAdapter extends RecyclerView.Adapter<ClockersAdapter.ListViewHolder> {
 
-    private static ArrayList<ClockersItem> mItems = new ArrayList<>();
+    private List<Employee> mItems = new ArrayList<>();
     private static final int mRedCircle = R.drawable.red_circle;
     private static final int mBlueCircle = R.drawable.blue_circle;
     private Fragment mContext;
 
-
-    public ClockersAdapter(Fragment mContext) {
-        mItems.clear();
-        for (int i = 0; i < 20; i++) {
-            ClockersItem item = new ClockersItem();
-            item.setName("Item :: " + i);
-            mItems.add(item);
-        }
+    public ClockersAdapter(Fragment mContext, List<Employee> t) {
+        this.mItems = t;
         this.mContext = mContext;
     }
 
@@ -46,14 +41,10 @@ public class ClockersAdapter extends RecyclerView.Adapter<ClockersAdapter.ListVi
 
     @Override
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
-        ClockersItem item = getItem(position);
-        holder.imgPresent.setImageResource((item.isPresent()) ? mRedCircle : mBlueCircle);
+        Employee item = mItems.get(position);
+        holder.imgPresent.setImageResource((item.isAttendant()) ? mBlueCircle : mRedCircle);
         holder.title.setText(item.getName());
-        holder.btnSwitch.setChecked(item.isChecked());
-    }
-
-    private ClockersItem getItem(int position) {
-        return mItems.get(position);
+        holder.btnSwitch.setChecked(item.isSubscribed());
     }
 
     @Override
@@ -65,7 +56,6 @@ public class ClockersAdapter extends RecyclerView.Adapter<ClockersAdapter.ListVi
     public long getItemId(int position) {
         return position;
     }
-
 
     public static class ListViewHolder extends RecyclerView.ViewHolder {
 

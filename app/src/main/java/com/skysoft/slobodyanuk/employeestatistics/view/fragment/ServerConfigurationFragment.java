@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -39,11 +40,17 @@ public class ServerConfigurationFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         ((BaseActivity) getActivity()).disableToolbar();
         mTextInputLayout.setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_LIGHT));
+        mServerAddress.setOnFocusChangeListener((view1, b) -> {
+            if (b) mServerAddress.setText(Prefs.getString(PrefsKeys.SERVER_URL, ""));
+        });
+
     }
 
     @OnClick(R.id.btn_confirm)
     public void onConfirmServer() {
-        Prefs.putBoolean(PrefsKeys.SERVER_AVAILABLE_PREF, true);
+        Prefs.putBoolean(PrefsKeys.SERVER_AVAILABLE, true);
+        String url = String.valueOf(mServerAddress.getText());
+        Prefs.putString(PrefsKeys.SERVER_URL, (TextUtils.isEmpty(url) ? Prefs.getString(PrefsKeys.SERVER_URL, "") : url));
         KeyboardUtil.hideKeyboard(getView());
         ((BaseActivity) getActivity())
                 .replaceFragment(R.id.container, SignInFragment.newInstance(), getString(R.string.sign_in));

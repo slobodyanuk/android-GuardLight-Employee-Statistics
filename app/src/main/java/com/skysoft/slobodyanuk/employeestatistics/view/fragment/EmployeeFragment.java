@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.pixplicity.easyprefs.library.Prefs;
 import com.skysoft.slobodyanuk.employeestatistics.R;
+import com.skysoft.slobodyanuk.employeestatistics.data.event.ChartBackEvent;
 import com.skysoft.slobodyanuk.employeestatistics.service.FragmentEvent;
 import com.skysoft.slobodyanuk.employeestatistics.util.FragmentListener;
 import com.skysoft.slobodyanuk.employeestatistics.util.TopTabListener;
@@ -30,7 +30,7 @@ import static com.skysoft.slobodyanuk.employeestatistics.util.Globals.WEEK;
 /**
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
-public class EmployeeFragment extends BaseFragment implements TopTabListener{
+public class EmployeeFragment extends BaseFragment implements TopTabListener {
 
     private static final String TAG = EmployeeFragment.class.getCanonicalName();
 
@@ -38,6 +38,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener{
     ViewPager mViewPager;
 
     private TabLayout mTabLayout;
+    private EmployeePagerAdapter adapter;
 
     public static Fragment newInstance() {
         Fragment fragment = new EmployeeFragment();
@@ -54,20 +55,11 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         updateToolbar();
-        ((FragmentListener) getActivity()).onFragmentCreated();
-//        Observable<List<Employee>> employeeObservable = RestClient.getApiService().getEmployee();
-//        employeeObservable
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(employee -> {
-//                    Log.e(TAG, "onViewCreated: " + employee.get(0).toString());
-//                }, throwable -> {
-//                    Toast.makeText(getActivity(), "Failed: " + throwable, Toast.LENGTH_SHORT).show();
-//                });
+        ((FragmentListener) getActivity()).onFragmentCreated(this);
     }
 
     private void setupViewPager() {
-        EmployeePagerAdapter adapter = new EmployeePagerAdapter(getResources(), getChildFragmentManager());
+        adapter = new EmployeePagerAdapter(getResources(), getChildFragmentManager());
         adapter.addFragment(EventEmployeeFragment.newInstance(TODAY), TODAY);
         adapter.addFragment(EventEmployeeFragment.newInstance(WEEK), WEEK);
         adapter.addFragment(EventEmployeeFragment.newInstance(MONTH), MONTH);
@@ -79,6 +71,20 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener{
             }
         });
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    private void setupChartViewPager() {
+        adapter = new EmployeePagerAdapter(getResources(), getChildFragmentManager());
+        adapter.addFragment(ChartFragment.newInstance(TODAY), TODAY);
+        adapter.addFragment(ChartFragment.newInstance(WEEK), WEEK);
+        adapter.addFragment(ChartFragment.newInstance(MONTH), MONTH);
+        mViewPager.setAdapter(adapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+            }
+        });
     }
 
     @Override
@@ -111,12 +117,8 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener{
         ((BaseActivity) getActivity()).unableToolbar();
         ((BaseActivity) getActivity()).disableHomeButton();
         ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.activity));
-
-//        RelativeLayout mChartMenu = ((BaseActivity) getActivity())
-//                .unableMenuContainer(android.R.drawable.ic_menu_more);
-//        mChartMenu.setOnClickListener(clickedView ->
-//                ((BaseActivity) getActivity())
-//                        .addFragment(R.id.container, ChartFragment.newInstance(), getString(R.string.charts)));
+        ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts)
+                .setOnClickListener(clickedView -> setupChartViewPager());
     }
 
     @Override
@@ -127,17 +129,15 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener{
     public void showEvent(Map<String, String> data) {
     }
 
-    /*Test
-     * Delete*/
-    @Override
-    public void onPause() {
-        super.onPause();
-        Prefs.clear();
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(FragmentEvent event) {
         showEvent(event.getData());
+    }
+
+    @Subscribe
+    public void onEvent(ChartBackEvent event){
+        setupViewPager();
+        updateToolbar();
     }
 
     @Override

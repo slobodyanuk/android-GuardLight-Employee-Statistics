@@ -1,13 +1,13 @@
 package com.skysoft.slobodyanuk.employeestatistics.view.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.skysoft.slobodyanuk.employeestatistics.view.Navigator;
 import com.skysoft.slobodyanuk.employeestatistics.view.activity.BaseActivity;
+import com.trello.rxlifecycle.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -15,7 +15,7 @@ import butterknife.Unbinder;
 /**
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends RxFragment {
 
     private Unbinder bind;
 

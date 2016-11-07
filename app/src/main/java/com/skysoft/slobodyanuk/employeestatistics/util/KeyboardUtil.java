@@ -1,6 +1,8 @@
 package com.skysoft.slobodyanuk.employeestatistics.util;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -39,5 +41,10 @@ public class KeyboardUtil {
         if (imm != null) {
             imm.hideSoftInputFromWindow(theView.getWindowToken(), 0);
         }
+    }
+
+    public static float dpToPx(Context context, float valueInDp) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
     }
 }

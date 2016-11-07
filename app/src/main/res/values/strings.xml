@@ -9,6 +9,7 @@
 
     <!--Server activity-->
     <string name="server_address">Server address</string>
+    <string name="server_configuration">Server configuration</string>
 
     <!--Sign in activity-->
     <string name="sign_in">Sign In</string>
@@ -29,9 +30,11 @@
     <string name="month">Month</string>
     <string name="clockers">All clockers</string>
     <string name="settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notification">Notification</string>
+    <string name="notifications">Notifications</string>
+    <string name="error_illegal_url">Error: illegal URL</string>
+    <string name="logout">Logout</string>
+    <string name="logout_text">Are you sure you want to logout?</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

@@ -1,34 +1,28 @@
 
 package com.skysoft.slobodyanuk.employeestatistics.data;
 
-public class Employee {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import lombok.Getter;
+import lombok.Setter;
 
-    private String id;
+public class Employee extends RealmObject {
+
+    @Getter
+    @PrimaryKey
+    @Setter
+    private int id;
+
+    @Getter
+    @Setter
     private String name;
+
+    @Getter
+    @Setter
     private boolean isAttendant;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isIsAttendant() {
-        return isAttendant;
-    }
-
-    public void setIsAttendant(boolean isAttendant) {
-        this.isAttendant = isAttendant;
-    }
+    @Getter
+    @Setter
+    private boolean isSubscribed;
 
 }

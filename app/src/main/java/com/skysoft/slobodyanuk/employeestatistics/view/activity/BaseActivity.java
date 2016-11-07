@@ -1,17 +1,24 @@
 package com.skysoft.slobodyanuk.employeestatistics.view.activity;
 
+import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.skysoft.slobodyanuk.employeestatistics.R;
+import com.skysoft.slobodyanuk.employeestatistics.data.event.ChartBackEvent;
+import com.skysoft.slobodyanuk.employeestatistics.view.fragment.ChartFragment;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,34 +27,57 @@ import butterknife.Unbinder;
 /**
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends RxAppCompatActivity{
 
     @Nullable
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
     @Nullable
-    @BindView(R.id.menu_list)
+    @BindView(R.id.toolbar_menu)
     RelativeLayout mMenuContainer;
 
     private Unbinder mBinder;
+    private boolean isChartFragment;
+    private ChartFragment fragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResources());
         mBinder = ButterKnife.bind(this);
+        fragment = null;
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
+            applyToolbarFont(this);
             mToolbar.setTitleTextColor(Color.WHITE);
         }
+        isChartFragment = false;
         disableMenuContainer();
+    }
+
+    private void applyToolbarFont(Activity context) {
+        for (int i = 0; i < mToolbar.getChildCount(); i++) {
+            View view = mToolbar.getChildAt(i);
+            if (view instanceof TextView) {
+                TextView tv = (TextView) view;
+                Toolbar.LayoutParams lp = (Toolbar.LayoutParams) tv.getLayoutParams();
+                lp.width = Toolbar.LayoutParams.MATCH_PARENT;
+                tv.setLayoutParams(lp);
+                Typeface titleFont = Typeface.
+                        createFromAsset(context.getAssets(), "fonts/OpenSans-Semibold.ttf");
+                if (tv.getText().equals(context.getTitle())) {
+                    tv.setTypeface(titleFont);
+                    break;
+                }
+            }
+        }
     }
 
     public void unableToolbar() {
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
-            if (getSupportActionBar() != null){
+            if (getSupportActionBar() != null) {
                 getSupportActionBar().show();
             }
         }
@@ -69,6 +99,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    public void unableChartHomeButton(ChartFragment fragment) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            this.fragment = fragment;
+            isChartFragment = true;
         }
     }
 
@@ -98,7 +137,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public RelativeLayout unableMenuContainer(int icon){
+    public RelativeLayout unableMenuContainer(int icon) {
         if (mMenuContainer != null) {
             mMenuContainer.setVisibility(View.VISIBLE);
             ImageView view = ButterKnife.findById(mMenuContainer, R.id.menu_icon);
@@ -109,7 +148,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void disableMenuContainer() {
         if (mMenuContainer != null) {
-            mMenuContainer.setVisibility(View.GONE);
+            mMenuContainer.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -117,7 +156,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                if (isChartFragment) {
+                    if (fragment != null){
+                        EventBus.getDefault().post(new ChartBackEvent());
+                    }
+                } else {
+                    onBackPressed();
+                }
         }
         return (super.onOptionsItemSelected(menuItem));
     }
