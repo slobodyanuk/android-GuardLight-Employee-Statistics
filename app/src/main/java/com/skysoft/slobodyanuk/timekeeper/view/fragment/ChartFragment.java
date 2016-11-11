@@ -136,8 +136,8 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
     @Override
     public void updateToolbar() {
         ((BaseActivity) getActivity()).unableToolbar();
-        ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.charts));
         ((BaseActivity) getActivity()).unableChartHomeButton(this);
+        ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.charts));
         ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_calendar).setOnClickListener(view -> {
             DialogFragment datePickerFragment = new DatePickerFragment();
             datePickerFragment.show(getActivity().getFragmentManager(), "Date Picker");

@@ -1,6 +1,7 @@
 package com.skysoft.slobodyanuk.timekeeper.view.adapter;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.greenrobot.eventbus.EventBus.TAG;
+
 /**
  * Created by Serhii Slobodyanuk on 19.09.2016.
  */
@@ -28,6 +31,7 @@ public class EmployeeEventAdapter extends EmptyRecyclerView.Adapter<EmployeeEven
 
 
     public EmployeeEventAdapter(Fragment mContext, List<ClockersItem> arrayList) {
+        Log.e(TAG, "EmployeeEventAdapter: " + this);
         this.mItems = new ArrayList<>(arrayList);
         this.mContext = mContext;
     }

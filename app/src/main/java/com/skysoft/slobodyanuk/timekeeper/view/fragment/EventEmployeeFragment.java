@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.ClockersItem;
 import com.skysoft.slobodyanuk.timekeeper.data.Employee;
 import com.skysoft.slobodyanuk.timekeeper.data.EmployeeEvent;
 import com.skysoft.slobodyanuk.timekeeper.util.Globals;
+import com.skysoft.slobodyanuk.timekeeper.util.TimeConverter;
 import com.skysoft.slobodyanuk.timekeeper.util.TimeUtil;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeeEventAdapter;
@@ -29,6 +31,9 @@ public class EventEmployeeFragment extends BaseFragment {
 
     @BindView(R.id.list_event)
     EmptyRecyclerView mRecyclerView;
+
+    @BindView(R.id.empty)
+    LinearLayout mEmptyLayout;
 
     private Realm mRealm;
     private int mPage;
@@ -74,6 +79,7 @@ public class EventEmployeeFragment extends BaseFragment {
             mRecyclerView.setLayoutManager(manager);
             mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
             EmployeeEventAdapter adapter = new EmployeeEventAdapter(this, employeeFromRealm);
+            mRecyclerView.setEmptyView(mEmptyLayout);
             mRecyclerView.setAdapter(adapter);
         }
     }
@@ -81,14 +87,15 @@ public class EventEmployeeFragment extends BaseFragment {
     private List<ClockersItem> getEmployeeFromRealm(List<EmployeeEvent> events) {
         mRealm = Realm.getDefaultInstance();
         List<ClockersItem> clockersItems = new ArrayList<>();
+        TimeConverter timeConverter = new TimeConverter();
         for (int i = 0; i < events.size(); i++) {
             Employee employee = mRealm.where(Employee.class).equalTo("id", events.get(i).getId()).findFirst();
             ClockersItem item = new ClockersItem();
             item.setId(employee.getId());
             item.setName(employee.getName());
             item.setType(events.get(i).getType());
-            item.setMonth("");
-            item.setTime("");
+            item.setMonth(timeConverter.getMonth(events.get(i).getDate()));
+            item.setTime(timeConverter.getTime(events.get(i).getDate()));
             clockersItems.add(item);
         }
         mRealm.close();

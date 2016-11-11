@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -108,7 +107,6 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
 
     @Override
     public void onNext(Object t) {
-        hideProgress();
         if (t instanceof EmployeesEventResponse) {
             mRealm = Realm.getDefaultInstance();
             mRealm.beginTransaction();
@@ -139,7 +137,6 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
                 @Override
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
-                    Log.e("frag", "onPageSelected: twm   " + position + " " + this);
                     if (adapter.getItem(position) instanceof EventEmployeeFragment) {
                         ((EventEmployeeFragment) adapter.getItem(position)).initEventData();
                     }
@@ -148,25 +145,24 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
             mSimpleOnPageChangeListener.onPageSelected(0);
             mTabLayout.setupWithViewPager(mViewPager, false);
-        }else {
+        } else {
+            adapter.clearFragments();
+            adapter.addFragment(EventEmployeeFragment.newInstance(TODAY), TODAY);
+            adapter.addFragment(EventEmployeeFragment.newInstance(WEEK), WEEK);
+            adapter.addFragment(EventEmployeeFragment.newInstance(MONTH), MONTH);
             adapter.notifyDataSetChanged();
             mSimpleOnPageChangeListener.onPageSelected(0);
         }
+        hideProgress();
     }
 
     private void setupChartViewPager() {
-        adapter = new EmployeePagerAdapter(getResources(), getChildFragmentManager());
+        adapter.clearFragments();
         adapter.addFragment(ChartFragment.newInstance(TODAY), TODAY);
         adapter.addFragment(ChartFragment.newInstance(WEEK), WEEK);
         adapter.addFragment(ChartFragment.newInstance(MONTH), MONTH);
-        mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setAdapter(adapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-            }
-        });
+        adapter.notifyDataSetChanged();
+        hideProgress();
     }
 
     @Override
@@ -204,9 +200,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             ((BaseActivity) getActivity()).disableHomeButton();
             ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.activity));
             ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts)
-                    .setOnClickListener(clickedView -> {
-                        setupChartViewPager();
-                    });
+                    .setOnClickListener(clickedView -> setupChartViewPager());
             executeEmployeeEvent();
         }
     }
@@ -226,18 +220,14 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
 
     @Subscribe
     public void onEvent(ChartBackEvent event) {
+        adapter = null;
         setupViewPager();
         updateToolbar();
-    }
-
-    public void updateViewPager() {
-//        setupViewPager();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        created = false;
         EventBus.getDefault().unregister(this);
     }
 

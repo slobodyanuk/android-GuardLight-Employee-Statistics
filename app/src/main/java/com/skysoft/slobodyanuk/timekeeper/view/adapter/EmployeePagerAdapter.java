@@ -18,7 +18,6 @@ import java.util.List;
 public class EmployeePagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
-    private final List<Fragment> mChartFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
     private Resources resources;
 
@@ -62,7 +61,6 @@ public class EmployeePagerAdapter extends FragmentStatePagerAdapter {
         if (mFragmentList != null) {
             mFragmentList.clear();
             mFragmentTitleList.clear();
-            mChartFragmentList.clear();
         }
     }
 

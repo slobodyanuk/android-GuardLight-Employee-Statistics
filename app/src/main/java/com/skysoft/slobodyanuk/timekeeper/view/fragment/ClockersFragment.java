@@ -46,6 +46,8 @@ public class ClockersFragment extends BaseFragment
     EmptyRecyclerView mRecyclerView;
     @BindView(R.id.progress)
     LinearLayout mProgressBar;
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout mRefreshLayout;
 
     private ClockersAdapter mAdapter;
     private List<Employee> employees;
@@ -67,7 +69,6 @@ public class ClockersFragment extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        showProgress();
         mRealm = Realm.getDefaultInstance();
 
         if (mRefreshLayout != null) mRefreshLayout.setOnRefreshListener(this);
@@ -80,6 +81,7 @@ public class ClockersFragment extends BaseFragment
     }
 
     private void executeEmployees() {
+        showProgress();
         try {
             mSubscription = new BaseTask<>().execute(this, RestClient
                     .getApiService()
@@ -92,6 +94,7 @@ public class ClockersFragment extends BaseFragment
     }
 
     private void executeSubscribeEmployees(int[] users) {
+        showProgress();
         try {
             mSubscription = new BaseTask<>().execute(this, RestClient
                     .getApiService()
@@ -124,7 +127,6 @@ public class ClockersFragment extends BaseFragment
 
     @Override
     public void onNext(Object t) {
-        hideProgress();
         if (t instanceof EmployeesResponse) {
             initEmployeesData((EmployeesResponse) t);
             mSubscription.unsubscribe();
@@ -132,6 +134,8 @@ public class ClockersFragment extends BaseFragment
             mSubscription.unsubscribe();
             executeEmployees();
         }
+        if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
+        hideProgress();
     }
 
     private void initEmployeesData(EmployeesResponse t) {
@@ -166,14 +170,12 @@ public class ClockersFragment extends BaseFragment
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
-        hideProgress();
         if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
     }
 
     @Subscribe
     public void onEvent(RefreshContentEvent ev) {
         if (ev.isConfirm()) {
-            showProgress();
             executeSubscribeEmployees(mUsers);
         } else {
             onRefresh();
@@ -193,6 +195,7 @@ public class ClockersFragment extends BaseFragment
     public void updateToolbar() {
         if (isVisible()) {
             ((BaseActivity) getActivity()).disableMenuContainer();
+            ((BaseActivity) getActivity()).disableHomeButton();
             ((BaseActivity) getActivity()).unableToolbar();
             ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.notification));
         }

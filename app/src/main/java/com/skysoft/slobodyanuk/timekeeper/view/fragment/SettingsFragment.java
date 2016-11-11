@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.pixplicity.easyprefs.library.Prefs;
@@ -30,6 +31,8 @@ public class SettingsFragment extends BaseFragment {
     EditText mServerAddress;
     @BindView(R.id.btn_notification)
     Switch mSwitchNotification;
+    @BindView(R.id.btn_confirm)
+    RelativeLayout mConfirmServerButton;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -39,10 +42,9 @@ public class SettingsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mTextInputLayout.setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_REGULAR));
-        mServerAddress.setFocusable(false);
-        mServerAddress.setFocusableInTouchMode(true);
         mServerAddress.setOnFocusChangeListener((view1, b) -> {
             if (b) mServerAddress.setText(Prefs.getString(PrefsKeys.SERVER_URL, ""));
+            mConfirmServerButton.setVisibility((b) ? View.VISIBLE : View.INVISIBLE);
         });
 
         mSwitchNotification.setChecked(Prefs.getBoolean(PrefsKeys.NOTIFICATION, true));
@@ -81,6 +83,7 @@ public class SettingsFragment extends BaseFragment {
     public void updateToolbar() {
         if (isVisible()) {
             ((MainActivity) getActivity()).unableToolbar();
+            ((BaseActivity) getActivity()).disableHomeButton();
             ((MainActivity) getActivity()).setToolbarTitle(getString(R.string.settings));
             ((BaseActivity) getActivity()).disableMenuContainer();
         }

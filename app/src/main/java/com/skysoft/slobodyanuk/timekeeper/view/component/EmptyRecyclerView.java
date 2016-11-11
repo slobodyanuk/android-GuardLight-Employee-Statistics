@@ -5,10 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.skysoft.slobodyanuk.timekeeper.R;
-
-import butterknife.ButterKnife;
-
 /**
  * Created by Serhii Slobodyanuk on 10.11.2016.
  */
@@ -20,14 +16,12 @@ public class EmptyRecyclerView extends RecyclerView {
     private AdapterDataObserver emptyObserver = new AdapterDataObserver() {
         @Override
         public void onChanged() {
-            Adapter<?> adapter = getAdapter();
-            if (adapter != null && initEmptyView(getContext())) {
+            Adapter<?> adapter = EmptyRecyclerView.this.getAdapter();
+            if (adapter != null && emptyView != null) {
                 if (adapter.getItemCount() == 0) {
                     emptyView.setVisibility(View.VISIBLE);
-                    setVisibility(View.GONE);
                 } else {
                     emptyView.setVisibility(View.GONE);
-                    setVisibility(View.VISIBLE);
                 }
             }
 
@@ -46,8 +40,8 @@ public class EmptyRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    private boolean initEmptyView(Context context) {
-        return ((emptyView = ButterKnife.findById(getRootView(), R.id.empty)) != null);
+    public void setEmptyView(View view){
+        this.emptyView = view;
     }
 
     @Override
@@ -63,7 +57,4 @@ public class EmptyRecyclerView extends RecyclerView {
         emptyObserver.onChanged();
     }
 
-    public void updateObserver() {
-        emptyObserver.onChanged();
-    }
 }

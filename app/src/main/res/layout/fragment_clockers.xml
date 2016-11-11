@@ -1,24 +1,25 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.skysoft.slobodyanuk.timekeeper.view.fragment.ClockersFragment">
+    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/progress"
-        layout="@layout/progress_layout"
-        android:visibility="gone" />
-
-    <android.support.v4.widget.SwipeRefreshLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/refresh"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:orientation="vertical">
 
-    <com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <include
+            android:id="@+id/progress"
+            layout="@layout/progress_layout"
+            android:visibility="gone" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-</RelativeLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>
