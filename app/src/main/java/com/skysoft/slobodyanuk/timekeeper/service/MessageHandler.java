@@ -21,10 +21,8 @@ import java.util.Map;
 
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.DATE_KEY;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.EVENT_KEY;
-import static com.skysoft.slobodyanuk.timekeeper.util.Globals.ID_KEY;
-import static com.skysoft.slobodyanuk.timekeeper.util.Globals.IN_PASSAGE_KEY;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.MESSAGE_NOTIFICATION_ID;
-import static com.skysoft.slobodyanuk.timekeeper.util.Globals.OUT_PASSAGE_KEY;
+import static com.skysoft.slobodyanuk.timekeeper.util.Globals.NAME_KEY;
 
 /**
  * Created by Serhii Slobodyanuk on 08.09.2016.
@@ -42,14 +40,14 @@ public class MessageHandler extends FirebaseMessagingService {
         if (Prefs.getBoolean(PrefsKeys.NOTIFICATION, true)) {
             Map<String, String> data = remoteMessage.getData();
             createNotification(data);
-            testLogShow(data);
+//            testLogShow(data);
         }
     }
 
     private void createNotification(Map<String, String> data) {
         Context context = getBaseContext();
 
-        String id = data.get(ID_KEY);
+        String id = data.get(NAME_KEY);
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_CLEAR_TOP |
@@ -59,9 +57,9 @@ public class MessageHandler extends FirebaseMessagingService {
                 PendingIntent.getActivity(context, 0, intent, 0);
 
         String title = "";
-        if (data.get(EVENT_KEY).equals(IN_PASSAGE_KEY)) {
+        if (Boolean.parseBoolean(data.get(EVENT_KEY))) {
             title = getString(R.string.passage_in);
-        } else if (data.get(EVENT_KEY).equals(OUT_PASSAGE_KEY)) {
+        } else  {
             title = getString(R.string.passage_out);
         }
 
@@ -85,7 +83,7 @@ public class MessageHandler extends FirebaseMessagingService {
         PreferencesManager.getInstance().setText(tmp.concat("\n" +
                 "Event :: " + data.get(Globals.EVENT_KEY) +
                 ", time :: " + data.get(Globals.DATE_KEY) +
-                ", KEY :: " + data.get(Globals.ID_KEY) + "\n"));
+                ", KEY :: " + data.get(Globals.NAME_KEY) + "\n"));
         EventBus.getDefault().post(new FragmentEvent(data));
     }
 

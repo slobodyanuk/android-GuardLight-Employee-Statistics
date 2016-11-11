@@ -13,7 +13,6 @@ import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeCompleteListener;
 import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeNextListener;
 import com.skysoft.slobodyanuk.timekeeper.rest.RestClient;
 import com.skysoft.slobodyanuk.timekeeper.rest.request.TokenRequest;
-import com.skysoft.slobodyanuk.timekeeper.rest.response.BaseResponse;
 import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
 
 import rx.Subscription;
@@ -42,7 +41,7 @@ public class RegistrationIntentService extends IntentService implements OnSubscr
             try {
                mSubscription = new BaseTask<>().execute(this, RestClient
                         .getApiService()
-                        .sendToken(new TokenRequest(token)));
+                        .subscribe(new TokenRequest(token)));
             } catch (IllegalUrlException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), getString(R.string.error_illegal_url), Toast.LENGTH_SHORT).show();
@@ -67,7 +66,7 @@ public class RegistrationIntentService extends IntentService implements OnSubscr
     }
 
     @Override
-    public void onNext(BaseResponse t) {
+    public void onNext(Object t) {
         makeToast("Response: success");
     }
 }

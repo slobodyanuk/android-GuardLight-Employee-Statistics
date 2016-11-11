@@ -11,17 +11,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.skysoft.slobodyanuk.timekeeper.R;
+import com.skysoft.slobodyanuk.timekeeper.data.event.RefreshContentEvent;
+import com.skysoft.slobodyanuk.timekeeper.data.event.ShowCheckEvent;
 import com.skysoft.slobodyanuk.timekeeper.service.RegistrationIntentService;
-import com.skysoft.slobodyanuk.timekeeper.util.listener.AppBarStateListener;
-import com.skysoft.slobodyanuk.timekeeper.util.listener.FragmentListener;
 import com.skysoft.slobodyanuk.timekeeper.util.KeyboardUtil;
 import com.skysoft.slobodyanuk.timekeeper.util.PrefsKeys;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.AppBarStateListener;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.FragmentListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.TopTabListener;
 import com.skysoft.slobodyanuk.timekeeper.view.Navigator;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.MainPagerAdapter;
@@ -30,6 +33,9 @@ import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 import com.skysoft.slobodyanuk.timekeeper.view.fragment.ClockersFragment;
 import com.skysoft.slobodyanuk.timekeeper.view.fragment.EmployeeFragment;
 import com.skysoft.slobodyanuk.timekeeper.view.fragment.SettingsFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -41,7 +47,8 @@ import static com.skysoft.slobodyanuk.timekeeper.util.Globals.ACTIVITY;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.CLOCKERS;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.SETTINGS;
 
-public class MainActivity extends BaseActivity implements Navigator, FragmentListener {
+public class MainActivity extends BaseActivity
+        implements Navigator, FragmentListener {
 
     @BindView(R.id.tabs)
     TabLayout mTopTabLayout;
@@ -56,6 +63,10 @@ public class MainActivity extends BaseActivity implements Navigator, FragmentLis
     AppBarLayout mAppBarLayout;
     @BindViews({R.id.tab_clockers, R.id.tab_activity, R.id.tab_settings})
     LinearLayout[] mBottomTabLayout;
+    @BindView(R.id.check_container)
+    LinearLayout mCheckContainer;
+    @BindView(R.id.bottom_tabs)
+    LinearLayout mTabsContainer;
 
     private FragmentManager mFragmentManager;
     private int mCurrentBottomTab = ACTIVITY;
@@ -71,6 +82,12 @@ public class MainActivity extends BaseActivity implements Navigator, FragmentLis
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -92,24 +109,32 @@ public class MainActivity extends BaseActivity implements Navigator, FragmentLis
     }
 
     private void setupViewPager() {
-            mPagerAdapter = new MainPagerAdapter(getResources(), getSupportFragmentManager());
-            mPagerAdapter.addFragment(ClockersFragment.newInstance(), getString(R.string.clockers));
-            mPagerAdapter.addFragment(EmployeeFragment.newInstance(), getString(R.string.activity));
-            mPagerAdapter.addFragment(SettingsFragment.newInstance(), getString(R.string.settings));
-            mNonSwipeableViewPager.setAdapter(mPagerAdapter);
-            mNonSwipeableViewPager.addOnPageChangeListener(setupPageListener());
-            mNonSwipeableViewPager.post(() -> mPageChangeListener.onPageSelected(ACTIVITY));
+        mPagerAdapter = new MainPagerAdapter(getResources(), getSupportFragmentManager());
+        mPagerAdapter.addFragment(ClockersFragment.newInstance(), getString(R.string.clockers));
+        mPagerAdapter.addFragment(EmployeeFragment.newInstance(), getString(R.string.activity));
+        mPagerAdapter.addFragment(SettingsFragment.newInstance(), getString(R.string.settings));
+        mNonSwipeableViewPager.setAdapter(mPagerAdapter);
+        mNonSwipeableViewPager.addOnPageChangeListener(setupPageListener());
+        mNonSwipeableViewPager.post(() -> mPageChangeListener.onPageSelected(ACTIVITY));
     }
 
     private ViewPager.SimpleOnPageChangeListener setupPageListener() {
         return mPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+            int pos = -1;
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 Fragment page = mPagerAdapter.getItem(position);
-                ((BaseFragment) page).updateToolbar();
                 mCurrentBottomTab = position;
                 initBottomTabs();
+                if (pos != position) {
+                    Log.e("tag", "onPageSelected: ");
+                    pos = position;
+                    ((BaseFragment) page).updateToolbar();
+//                    if (page instanceof EmployeeFragment){
+//                        ((EmployeeFragment) page).updateViewPager();
+//                    }
+                }
             }
         };
     }
@@ -169,40 +194,67 @@ public class MainActivity extends BaseActivity implements Navigator, FragmentLis
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
     }
 
+    @Subscribe
+    public void onEvent(ShowCheckEvent ev) {
+        showCheckContainer();
+    }
+
+    private void showCheckContainer() {
+        mCheckContainer.setVisibility(VISIBLE);
+        mTabsContainer.setVisibility(GONE);
+    }
+
+    private void hideCheckContainer() {
+        mCheckContainer.setVisibility(GONE);
+        mTabsContainer.setVisibility(VISIBLE);
+    }
+
+    @OnClick(R.id.btn_confirm_check)
+    public void onConfirmCheck() {
+        EventBus.getDefault().post(new RefreshContentEvent(true));
+        hideCheckContainer();
+    }
+
+    @OnClick(R.id.btn_cancel_check)
+    public void onCancelCheck() {
+        EventBus.getDefault().post(new RefreshContentEvent(false));
+        hideCheckContainer();
+    }
+
     @SuppressWarnings("SpellCheckingInspection")
     @OnClick(R.id.tab_clockers)
     public void onClockersClick() {
-            mCurrentBottomTab = CLOCKERS;
-            mTopTabLayout.setVisibility(GONE);
-            mTopTabLayout.removeAllTabs();
-            mNonSwipeableViewPager.setCurrentItem(CLOCKERS, true);
-            mBottomTabLayout[0].setSelected(true);
-            mBottomTabLayout[1].setSelected(false);
-            mBottomTabLayout[2].setSelected(false);
-            expandToolbar(false);
+        mCurrentBottomTab = CLOCKERS;
+        mTopTabLayout.setVisibility(GONE);
+        mTopTabLayout.removeAllTabs();
+        mNonSwipeableViewPager.setCurrentItem(CLOCKERS, true);
+        mBottomTabLayout[0].setSelected(true);
+        mBottomTabLayout[1].setSelected(false);
+        mBottomTabLayout[2].setSelected(false);
+        expandToolbar(false);
     }
 
     @OnClick(R.id.tab_activity)
     public void onActivityClick() {
-            mCurrentBottomTab = ACTIVITY;
-            mNonSwipeableViewPager.setCurrentItem(ACTIVITY, true);
-            mTopTabLayout.setVisibility(VISIBLE);
-            mBottomTabLayout[0].setSelected(false);
-            mBottomTabLayout[1].setSelected(true);
-            mBottomTabLayout[2].setSelected(false);
-            expandToolbar(false);
+        mCurrentBottomTab = ACTIVITY;
+        mNonSwipeableViewPager.setCurrentItem(ACTIVITY, true);
+        mTopTabLayout.setVisibility(VISIBLE);
+        mBottomTabLayout[0].setSelected(false);
+        mBottomTabLayout[1].setSelected(true);
+        mBottomTabLayout[2].setSelected(false);
+        expandToolbar(false);
     }
 
     @OnClick(R.id.tab_settings)
     public void onSettingsClick() {
-            mCurrentBottomTab = SETTINGS;
-            mTopTabLayout.setVisibility(GONE);
-            mTopTabLayout.removeAllTabs();
-            mNonSwipeableViewPager.setCurrentItem(SETTINGS, true);
-            mBottomTabLayout[0].setSelected(false);
-            mBottomTabLayout[1].setSelected(false);
-            mBottomTabLayout[2].setSelected(true);
-            expandToolbar(false);
+        mCurrentBottomTab = SETTINGS;
+        mTopTabLayout.setVisibility(GONE);
+        mTopTabLayout.removeAllTabs();
+        mNonSwipeableViewPager.setCurrentItem(SETTINGS, true);
+        mBottomTabLayout[0].setSelected(false);
+        mBottomTabLayout[1].setSelected(false);
+        mBottomTabLayout[2].setSelected(true);
+        expandToolbar(false);
     }
 
     @Override
@@ -235,5 +287,11 @@ public class MainActivity extends BaseActivity implements Navigator, FragmentLis
     public int changeBottomTabVisibility(boolean focused) {
         mBottomTabContainer.setVisibility((focused) ? GONE : VISIBLE);
         return mBottomTabContainer.getVisibility();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

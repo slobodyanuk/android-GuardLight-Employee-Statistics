@@ -9,6 +9,9 @@ public class Globals {
     * Notification constants
     * */
     public static int MESSAGE_NOTIFICATION_ID = 435345;
+    public static final String EVENT_KEY = "event";
+    public static final String DATE_KEY = "date";
+    public static final String NAME_KEY = "name";
 
     /*
     * Request constants
@@ -27,20 +30,23 @@ public class Globals {
     * ViewPager constants
     * */
     public final static String PAGE_KEY = "page_key";
-
     public final static int TODAY = 0;
     public final static int WEEK = 1;
     public final static int MONTH = 2;
 
+    /*
+    * Time constants
+    * */
+    public final static int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+
+    /*
+     * ViewPager
+     * */
     public final static int CLOCKERS = 0;
     public final static int ACTIVITY = 1;
     public final static int SETTINGS = 2;
 
-    public static final String EVENT_KEY = "event";
-    public static final String DATE_KEY = "date";
-    public static final String ID_KEY = "id";
-
-    public static final String OUT_PASSAGE_KEY = "OUT Passage";
-    public static final String IN_PASSAGE_KEY = "IN Passage";
+    public static final String OUT_PASSAGE_KEY = "Passage OUT";
+    public static final String IN_PASSAGE_KEY = "Passage IN";
 
 }

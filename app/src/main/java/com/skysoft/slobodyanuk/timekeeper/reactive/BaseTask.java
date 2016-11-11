@@ -2,6 +2,8 @@ package com.skysoft.slobodyanuk.timekeeper.reactive;
 
 import com.skysoft.slobodyanuk.timekeeper.rest.response.BaseResponse;
 
+import java.util.List;
+
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -15,6 +17,13 @@ public class BaseTask<T> {
 
     public Subscription execute(T activity, Observable<? extends BaseResponse> observable){
       return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseSubscriber<>(activity));
+    }
+
+    public Subscription executeAsList(Object activity, Observable<List<? extends BaseResponse>> observable){
+        return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseSubscriber<>(activity));

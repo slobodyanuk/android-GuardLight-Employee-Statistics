@@ -1,6 +1,19 @@
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.skysoft.slobodyanuk.timekeeper.view.fragment.EventEmployeeFragment" />
+    tools:context="com.skysoft.slobodyanuk.timekeeper.view.fragment.EventEmployeeFragment">
+
+    <include
+        android:id="@+id/empty"
+        layout="@layout/empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView
+        android:id="@+id/list_event"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

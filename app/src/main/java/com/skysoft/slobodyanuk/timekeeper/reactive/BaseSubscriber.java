@@ -1,7 +1,6 @@
 package com.skysoft.slobodyanuk.timekeeper.reactive;
 
 import com.google.gson.Gson;
-import com.skysoft.slobodyanuk.timekeeper.rest.response.BaseResponse;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.ErrorResponse;
 
 import java.io.IOException;
@@ -14,7 +13,7 @@ import rx.Subscriber;
  * Created by Serhii Slobodyanuk on 03.11.2016.
  */
 
-public class BaseSubscriber<T> extends Subscriber<BaseResponse> {
+public class BaseSubscriber<T, V> extends Subscriber<V> {
 
     private OnSubscribeCompleteListener completeListener;
     private OnSubscribeNextListener nextListener;
@@ -31,6 +30,7 @@ public class BaseSubscriber<T> extends Subscriber<BaseResponse> {
 
     @Override
     public void onError(Throwable e) {
+        e.printStackTrace();
         if (e instanceof HttpException) {
             HttpException exception = (HttpException) e;
             Response response = exception.response();
@@ -47,7 +47,7 @@ public class BaseSubscriber<T> extends Subscriber<BaseResponse> {
     }
 
     @Override
-    public void onNext(BaseResponse t) {
+    public void onNext(V t) {
         nextListener.onNext(t);
         onCompleted();
     }

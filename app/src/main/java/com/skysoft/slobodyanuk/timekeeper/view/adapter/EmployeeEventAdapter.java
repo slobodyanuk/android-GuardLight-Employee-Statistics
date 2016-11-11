@@ -1,7 +1,6 @@
 package com.skysoft.slobodyanuk.timekeeper.view.adapter;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,12 @@ import android.widget.ImageView;
 
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.ClockersItem;
+import com.skysoft.slobodyanuk.timekeeper.util.Globals;
+import com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,21 +21,14 @@ import butterknife.ButterKnife;
 /**
  * Created by Serhii Slobodyanuk on 19.09.2016.
  */
-public class EmployeeEventAdapter extends RecyclerView.Adapter<EmployeeEventAdapter.ListViewHolder> {
+public class EmployeeEventAdapter extends EmptyRecyclerView.Adapter<EmployeeEventAdapter.ListViewHolder> {
 
-    private static ArrayList<ClockersItem> mItems = new ArrayList<>();
+    private List<ClockersItem> mItems;
     private Fragment mContext;
 
 
-    public EmployeeEventAdapter(Fragment mContext) {
-        mItems.clear();
-        for (int i = 0; i < 20; i++) {
-            ClockersItem item = new ClockersItem();
-            item.setName("Item :: " + i);
-            item.setMonth("26/10/2016");
-            item.setTime("1:12 PM");
-            mItems.add(item);
-        }
+    public EmployeeEventAdapter(Fragment mContext, List<ClockersItem> arrayList) {
+        this.mItems = new ArrayList<>(arrayList);
         this.mContext = mContext;
     }
 
@@ -46,7 +41,7 @@ public class EmployeeEventAdapter extends RecyclerView.Adapter<EmployeeEventAdap
     @Override
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
         ClockersItem item = getItem(position);
-        holder.imgPresent.setImageResource((item.isIn()) ? R.drawable.ic_ar_in : R.drawable.ic_ar_out);
+        holder.imgPresent.setImageResource((item.getType().equals(Globals.IN_PASSAGE_KEY)) ? R.drawable.ic_ar_in : R.drawable.ic_ar_out);
         holder.title.setText(item.getName());
         holder.month.setText(item.getMonth());
         holder.time.setText(item.getTime());
@@ -66,8 +61,14 @@ public class EmployeeEventAdapter extends RecyclerView.Adapter<EmployeeEventAdap
         return position;
     }
 
+    public void updateData(List<ClockersItem> employeeFromRealm) {
+        this.mItems.clear();
+        this.mItems = employeeFromRealm;
+        this.notifyDataSetChanged();
+    }
 
-    public static class ListViewHolder extends RecyclerView.ViewHolder {
+
+    public static class ListViewHolder extends EmptyRecyclerView.ViewHolder {
 
         @BindView(R.id.present)
         ImageView imgPresent;

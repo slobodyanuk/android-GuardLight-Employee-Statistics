@@ -24,6 +24,7 @@ public class EmployeePagerAdapter extends FragmentStatePagerAdapter {
 
     public EmployeePagerAdapter(Resources resources, FragmentManager manager) {
         super(manager);
+        this.mFragmentList.clear();
         this.resources = resources;
     }
 

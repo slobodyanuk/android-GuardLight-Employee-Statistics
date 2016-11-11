@@ -37,4 +37,8 @@
     <string name="logout_text">Are you sure you want to logout?</string>
     <string name="cancel">Cancel</string>
 
+    <!--Empty layout-->
+    <string name="nothing">NOTHING!!</string>
+    <string name="empty_list">List is empty</string>
+
 </resources>

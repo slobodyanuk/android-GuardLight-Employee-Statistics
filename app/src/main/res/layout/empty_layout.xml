@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="@dimen/empty_image_size"
+        android:layout_height="@dimen/empty_image_size"
+        android:src="@drawable/ic_empty_list" />
+
+    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/default_min_margin"
+        android:layout_marginBottom="@dimen/default_min_margin"
+        android:text="@string/nothing"
+        android:textSize="23sp"
+        app:typeface="OPEN_SANS_BOLD" />
+
+    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/empty_list"
+        android:textSize="18sp"
+        app:typeface="OPEN_SANS_SEMI_BOLD" />
+
+</LinearLayout>

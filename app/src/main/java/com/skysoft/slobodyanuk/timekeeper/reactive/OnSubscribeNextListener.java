@@ -1,13 +1,11 @@
 package com.skysoft.slobodyanuk.timekeeper.reactive;
 
-import com.skysoft.slobodyanuk.timekeeper.rest.response.BaseResponse;
-
 /**
  * Created by Serhii Slobodyanuk on 03.11.2016.
  */
 
-public interface OnSubscribeNextListener {
+public interface OnSubscribeNextListener<V> {
 
-    void onNext(BaseResponse t);
+    void onNext(V t);
 
 }

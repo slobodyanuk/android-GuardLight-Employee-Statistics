@@ -38,8 +38,9 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //updateToolbar();
         mTextInputLayout.setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_REGULAR));
+        mServerAddress.setFocusable(false);
+        mServerAddress.setFocusableInTouchMode(true);
         mServerAddress.setOnFocusChangeListener((view1, b) -> {
             if (b) mServerAddress.setText(Prefs.getString(PrefsKeys.SERVER_URL, ""));
         });

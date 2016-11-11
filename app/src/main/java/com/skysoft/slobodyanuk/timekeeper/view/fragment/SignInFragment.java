@@ -17,7 +17,6 @@ import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeCompleteListener;
 import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeNextListener;
 import com.skysoft.slobodyanuk.timekeeper.rest.RestClient;
 import com.skysoft.slobodyanuk.timekeeper.rest.request.LoginRequest;
-import com.skysoft.slobodyanuk.timekeeper.rest.response.BaseResponse;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.LoginResponse;
 import com.skysoft.slobodyanuk.timekeeper.service.RegistrationIntentService;
 import com.skysoft.slobodyanuk.timekeeper.util.Globals;
@@ -91,7 +90,7 @@ public class SignInFragment extends BaseFragment implements OnSubscribeCompleteL
     }
 
     @Override
-    public void onNext(BaseResponse response) {
+    public void onNext(Object response) {
         if (response instanceof LoginResponse) {
             if (((SignInActivity) getActivity()).checkPlayServices()) {
                 Prefs.putBoolean(PrefsKeys.SIGN_IN, true);
