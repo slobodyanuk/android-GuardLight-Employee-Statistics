@@ -1,5 +1,7 @@
 package com.skysoft.slobodyanuk.timekeeper.reactive;
 
+import android.os.Handler;
+
 import com.google.gson.Gson;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.ErrorResponse;
 
@@ -48,7 +50,8 @@ public class BaseSubscriber<T, V> extends Subscriber<V> {
 
     @Override
     public void onNext(V t) {
-        nextListener.onNext(t);
+        Handler h = new Handler();
+        h.postDelayed(()->        nextListener.onNext(t), 1000);
         onCompleted();
     }
 }

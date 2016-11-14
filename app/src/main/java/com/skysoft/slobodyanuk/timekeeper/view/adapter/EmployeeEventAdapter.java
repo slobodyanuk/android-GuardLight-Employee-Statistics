@@ -1,15 +1,16 @@
 package com.skysoft.slobodyanuk.timekeeper.view.adapter;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.ClockersItem;
 import com.skysoft.slobodyanuk.timekeeper.util.Globals;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.OnEmployeeClickListener;
 import com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView;
 
@@ -19,8 +20,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.greenrobot.eventbus.EventBus.TAG;
-
 /**
  * Created by Serhii Slobodyanuk on 19.09.2016.
  */
@@ -28,11 +27,11 @@ public class EmployeeEventAdapter extends EmptyRecyclerView.Adapter<EmployeeEven
 
     private List<ClockersItem> mItems;
     private Fragment mContext;
-
+    private OnEmployeeClickListener mEmployeeClickListener;
 
     public EmployeeEventAdapter(Fragment mContext, List<ClockersItem> arrayList) {
-        Log.e(TAG, "EmployeeEventAdapter: " + this);
         this.mItems = new ArrayList<>(arrayList);
+        this.mEmployeeClickListener = (OnEmployeeClickListener) mContext;
         this.mContext = mContext;
     }
 
@@ -45,6 +44,7 @@ public class EmployeeEventAdapter extends EmptyRecyclerView.Adapter<EmployeeEven
     @Override
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
         ClockersItem item = getItem(position);
+        holder.root.setOnClickListener(view -> mEmployeeClickListener.onEmployeeClick(item.getId()));
         holder.imgPresent.setImageResource((item.getType().equals(Globals.IN_PASSAGE_KEY)) ? R.drawable.ic_ar_in : R.drawable.ic_ar_out);
         holder.title.setText(item.getName());
         holder.month.setText(item.getMonth());
@@ -74,6 +74,8 @@ public class EmployeeEventAdapter extends EmptyRecyclerView.Adapter<EmployeeEven
 
     public static class ListViewHolder extends EmptyRecyclerView.ViewHolder {
 
+        @BindView(R.id.root)
+        RelativeLayout root;
         @BindView(R.id.present)
         ImageView imgPresent;
         @BindView(R.id.title)

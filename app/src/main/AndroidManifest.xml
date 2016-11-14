@@ -21,6 +21,10 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateUnchanged|adjustResize" />
 
+        <activity android:name="com.skysoft.slobodyanuk.timekeeper.view.activity.EmployeeInfoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateUnchanged|adjustResize" />
+
         <service
             android:name="com.skysoft.slobodyanuk.timekeeper.service.RegistrationIntentService"
             android:exported="false" />

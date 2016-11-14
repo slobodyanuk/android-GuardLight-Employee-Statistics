@@ -4,6 +4,7 @@ import com.skysoft.slobodyanuk.timekeeper.rest.request.LoginRequest;
 import com.skysoft.slobodyanuk.timekeeper.rest.request.SubscribeEmployeeRequest;
 import com.skysoft.slobodyanuk.timekeeper.rest.request.TokenRequest;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.BaseResponse;
+import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeeInfoResponse;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeesEventResponse;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeesResponse;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.LoginResponse;
@@ -12,6 +13,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -31,6 +33,12 @@ public interface ApiService {
 
     @GET("/api/employees/")
     Observable<EmployeesResponse> getEmployees();
+
+    @GET("/api/employees/{id}")
+    Observable<EmployeeInfoResponse> getEmployeeInfo(@Path("id") String id, @Query("period") String period);
+
+    @GET("/api/employees/{id}")
+    Observable<EmployeeInfoResponse> getEmployeeInfo(@Path("id") int id);
 
     @GET("/api/employees/{id}")
     Observable<EmployeesResponse> getEmployeesById(@Path("id") String id);

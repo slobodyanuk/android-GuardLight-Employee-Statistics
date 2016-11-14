@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="68dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true">
 
-    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/title"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:typeface="OPEN_SANS_SEMI_BOLD"
-        android:textSize="16sp"
-        android:textColor="@color/textColorBlack"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/btn_switch"
-        android:layout_toRightOf="@+id/present" />
+        android:layout_toRightOf="@+id/present"
+        android:textColor="@color/textColorBlack"
+        android:textSize="16sp"
+        app:typeface="OPEN_SANS_SEMI_BOLD" />
 
     <Switch
         android:id="@+id/btn_switch"

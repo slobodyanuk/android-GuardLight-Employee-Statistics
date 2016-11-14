@@ -1,6 +1,7 @@
 package com.skysoft.slobodyanuk.timekeeper.view.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,9 +21,12 @@ import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeNextListener;
 import com.skysoft.slobodyanuk.timekeeper.rest.RestClient;
 import com.skysoft.slobodyanuk.timekeeper.rest.request.SubscribeEmployeeRequest;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeesResponse;
+import com.skysoft.slobodyanuk.timekeeper.util.Globals;
 import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.OnEmployeeClickListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.OnSubscribeEmployee;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
+import com.skysoft.slobodyanuk.timekeeper.view.activity.EmployeeInfoActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.ClockersAdapter;
 import com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.SimpleDividerItemDecoration;
@@ -40,7 +44,7 @@ import rx.Subscription;
 @SuppressWarnings("SpellCheckingInspection")
 public class ClockersFragment extends BaseFragment
         implements OnSubscribeNextListener, OnSubscribeCompleteListener, SwipeRefreshLayout.OnRefreshListener,
-        OnSubscribeEmployee {
+        OnSubscribeEmployee, OnEmployeeClickListener {
 
     @BindView(R.id.list)
     EmptyRecyclerView mRecyclerView;
@@ -114,7 +118,6 @@ public class ClockersFragment extends BaseFragment
 
     @Override
     public void onCompleted() {
-        hideProgress();
         if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
     }
 
@@ -192,6 +195,13 @@ public class ClockersFragment extends BaseFragment
     }
 
     @Override
+    public void onEmployeeClick(int id) {
+        Intent intent = new Intent(getActivity(), EmployeeInfoActivity.class);
+        intent.putExtra(Globals.EMPLOYEE_ID_ARGS, id);
+        startActivity(intent);
+    }
+
+    @Override
     public void updateToolbar() {
         if (isVisible()) {
             ((BaseActivity) getActivity()).disableMenuContainer();
@@ -223,4 +233,5 @@ public class ClockersFragment extends BaseFragment
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
+
 }

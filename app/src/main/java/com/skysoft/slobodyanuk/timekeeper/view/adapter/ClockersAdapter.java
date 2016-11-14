@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.Employee;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.OnEmployeeClickListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.OnSubscribeEmployee;
 import com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView;
 
@@ -29,12 +31,14 @@ public class ClockersAdapter extends RecyclerView.Adapter<ClockersAdapter.ListVi
     private static final int mRedCircle = R.drawable.red_circle;
     private static final int mBlueCircle = R.drawable.blue_circle;
     private OnSubscribeEmployee mSubscriber;
+    private OnEmployeeClickListener mEmployeeClickListener;
     private boolean[] checked;
     private SparseBooleanArray mSubscribedId = new SparseBooleanArray();
 
     public ClockersAdapter(Fragment mContext, List<Employee> t) {
         this.mItems = t;
         this.mSubscriber = (OnSubscribeEmployee) mContext;
+        this.mEmployeeClickListener = (OnEmployeeClickListener) mContext;
         this.checked = new boolean[mItems.size()];
         initCheckArray();
     }
@@ -57,6 +61,7 @@ public class ClockersAdapter extends RecyclerView.Adapter<ClockersAdapter.ListVi
     @Override
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
         Employee item = mItems.get(position);
+        holder.root.setOnClickListener(view -> mEmployeeClickListener.onEmployeeClick(item.getId()));
         holder.imgPresent.setImageResource((item.isAttendant()) ? mBlueCircle : mRedCircle);
         holder.title.setText(item.getName());
         holder.btnSwitch.setChecked(checked[position]);
@@ -82,6 +87,8 @@ public class ClockersAdapter extends RecyclerView.Adapter<ClockersAdapter.ListVi
 
     public static class ListViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.root)
+        RelativeLayout root;
         @BindView(R.id.present)
         ImageView imgPresent;
         @BindView(R.id.title)

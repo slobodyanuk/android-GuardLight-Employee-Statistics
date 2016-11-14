@@ -68,7 +68,6 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.bottom_tabs)
     LinearLayout mTabsContainer;
 
-    private FragmentManager mFragmentManager;
     private int mCurrentBottomTab = ACTIVITY;
     private int bottomVisible = VISIBLE;
     private boolean toolbarVisible;
@@ -93,7 +92,6 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
             if (Prefs.getBoolean(PrefsKeys.SIGN_IN, false) &&
                     !TextUtils.isEmpty(Prefs.getString(PrefsKeys.API_KEY, ""))) {
@@ -131,9 +129,6 @@ public class MainActivity extends BaseActivity
                     Log.e("tag", "onPageSelected: ");
                     pos = position;
                     ((BaseFragment) page).updateToolbar();
-//                    if (page instanceof EmployeeFragment){
-//                        ((EmployeeFragment) page).updateViewPager();
-//                    }
                 }
             }
         };
@@ -260,12 +255,12 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        int i = mFragmentManager.getBackStackEntryCount();
+        int i = getSupportFragmentManager().getBackStackEntryCount();
         if (i >= 1) {
-            FragmentManager.BackStackEntry backEntry = mFragmentManager
-                    .getBackStackEntryAt(mFragmentManager.getBackStackEntryCount() - 1);
+            FragmentManager.BackStackEntry backEntry = getSupportFragmentManager()
+                    .getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);
             String str = backEntry.getName();
-            BaseFragment currentFragment = (BaseFragment) mFragmentManager.findFragmentByTag(str);
+            BaseFragment currentFragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(str);
             if (currentFragment != null) {
                 currentFragment.updateToolbar();
             }

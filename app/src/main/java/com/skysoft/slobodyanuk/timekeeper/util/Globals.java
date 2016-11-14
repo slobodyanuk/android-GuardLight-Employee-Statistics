@@ -40,11 +40,16 @@ public class Globals {
     public final static int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
 
     /*
-     * ViewPager
+     * Main ViewPager
      * */
     public final static int CLOCKERS = 0;
     public final static int ACTIVITY = 1;
     public final static int SETTINGS = 2;
+
+    /*
+    * Fragment arguments
+    * */
+    public static final String EMPLOYEE_ID_ARGS = "id";
 
     public static final String OUT_PASSAGE_KEY = "Passage OUT";
     public static final String IN_PASSAGE_KEY = "Passage IN";

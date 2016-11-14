@@ -41,4 +41,10 @@
     <string name="nothing">NOTHING!!</string>
     <string name="empty_list">List is empty</string>
 
+    <!--Chart fragment-->
+    <string name="clock_in_time">Clock in time / average</string>
+    <string name="clock_out_time">Clock out time / average</string>
+    <string name="time_at_work">Time at work / average</string>
+    <string name="time_details">See times details</string>
+
 </resources>

@@ -100,7 +100,6 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
 
     @Override
     public void onCompleted() {
-        hideProgress();
         if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
         mSubscription.unsubscribe();
     }
@@ -167,11 +166,13 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
 
     private void setupChartViewPager() {
         mPagerType = PagerType.CHART;
-        adapter.clearFragments();
-        adapter.addFragment(ChartFragment.newInstance(TODAY), TODAY);
-        adapter.addFragment(ChartFragment.newInstance(WEEK), WEEK);
-        adapter.addFragment(ChartFragment.newInstance(MONTH), MONTH);
-        adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            adapter.clearFragments();
+            adapter.addFragment(ChartFragment.newInstance(TODAY), TODAY);
+            adapter.addFragment(ChartFragment.newInstance(WEEK), WEEK);
+            adapter.addFragment(ChartFragment.newInstance(MONTH), MONTH);
+            adapter.notifyDataSetChanged();
+        }
         hideProgress();
     }
 
@@ -184,7 +185,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.month)));
         if (mPagerType.equals(PagerType.ACTIVITY)) {
             setupViewPager();
-        }else {
+        } else {
             setupChartViewPager();
         }
     }

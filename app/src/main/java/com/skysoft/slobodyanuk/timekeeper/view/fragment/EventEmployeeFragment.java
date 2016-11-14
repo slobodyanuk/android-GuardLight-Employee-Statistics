@@ -1,6 +1,7 @@
 package com.skysoft.slobodyanuk.timekeeper.view.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +15,9 @@ import com.skysoft.slobodyanuk.timekeeper.data.EmployeeEvent;
 import com.skysoft.slobodyanuk.timekeeper.util.Globals;
 import com.skysoft.slobodyanuk.timekeeper.util.date.TimeConverter;
 import com.skysoft.slobodyanuk.timekeeper.util.date.TimeUtil;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.OnEmployeeClickListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
+import com.skysoft.slobodyanuk.timekeeper.view.activity.EmployeeInfoActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeeEventAdapter;
 import com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.SimpleDividerItemDecoration;
@@ -27,7 +30,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 @SuppressWarnings("SpellCheckingInspection")
-public class EventEmployeeFragment extends BaseFragment {
+public class EventEmployeeFragment extends BaseFragment implements OnEmployeeClickListener{
 
     @BindView(R.id.list_event)
     EmptyRecyclerView mRecyclerView;
@@ -37,7 +40,6 @@ public class EventEmployeeFragment extends BaseFragment {
 
     private Realm mRealm;
     private int mPage;
-
 
     public static EventEmployeeFragment newInstance(int page) {
         EventEmployeeFragment fragment = new EventEmployeeFragment();
@@ -53,6 +55,13 @@ public class EventEmployeeFragment extends BaseFragment {
         updateToolbar();
         mPage = (getArguments() != null) ? getArguments().getInt(Globals.PAGE_KEY) : 0;
         initEventData();
+    }
+
+    @Override
+    public void onEmployeeClick(int id) {
+        Intent intent = new Intent(getActivity(), EmployeeInfoActivity.class);
+        intent.putExtra(Globals.EMPLOYEE_ID_ARGS, id);
+        startActivity(intent);
     }
 
     public void initEventData() {
