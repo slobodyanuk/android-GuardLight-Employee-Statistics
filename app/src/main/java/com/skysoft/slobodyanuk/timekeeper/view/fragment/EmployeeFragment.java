@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -56,10 +57,15 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
 
     private TabLayout mTabLayout;
     private EmployeePagerAdapter adapter;
-    private boolean created;
     private Realm mRealm;
     private Subscription mSubscription;
     private ViewPager.SimpleOnPageChangeListener mSimpleOnPageChangeListener;
+    private PagerType mPagerType = PagerType.ACTIVITY;
+    private int mCurrentPage = 0;
+
+    private enum PagerType {
+        CHART, ACTIVITY
+    }
 
     public static Fragment newInstance() {
         Fragment fragment = new EmployeeFragment();
@@ -80,6 +86,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
 
     private void executeEmployeeEvent() {
         showProgress();
+        mCurrentPage = mViewPager.getCurrentItem();
         try {
             mSubscription = new BaseTask<>().execute(this, RestClient
                     .getApiService()
@@ -119,6 +126,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
     }
 
     private void setupViewPager() {
+        mPagerType = PagerType.ACTIVITY;
         if (adapter == null) {
             adapter = new EmployeePagerAdapter(getResources(), getChildFragmentManager());
             adapter.addFragment(EventEmployeeFragment.newInstance(TODAY), TODAY);
@@ -137,13 +145,14 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
                 @Override
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
+                    Log.e(TAG, "onPageSelected: " + position);
                     if (adapter.getItem(position) instanceof EventEmployeeFragment) {
                         ((EventEmployeeFragment) adapter.getItem(position)).initEventData();
                     }
                 }
             };
             mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
-            mSimpleOnPageChangeListener.onPageSelected(0);
+            mViewPager.post(() -> mSimpleOnPageChangeListener.onPageSelected(mCurrentPage));
             mTabLayout.setupWithViewPager(mViewPager, false);
         } else {
             adapter.clearFragments();
@@ -151,12 +160,13 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             adapter.addFragment(EventEmployeeFragment.newInstance(WEEK), WEEK);
             adapter.addFragment(EventEmployeeFragment.newInstance(MONTH), MONTH);
             adapter.notifyDataSetChanged();
-            mSimpleOnPageChangeListener.onPageSelected(0);
+            mViewPager.setCurrentItem(mCurrentPage, true);
         }
         hideProgress();
     }
 
     private void setupChartViewPager() {
+        mPagerType = PagerType.CHART;
         adapter.clearFragments();
         adapter.addFragment(ChartFragment.newInstance(TODAY), TODAY);
         adapter.addFragment(ChartFragment.newInstance(WEEK), WEEK);
@@ -172,7 +182,11 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.today)));
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.week)));
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.month)));
-        setupViewPager();
+        if (mPagerType.equals(PagerType.ACTIVITY)) {
+            setupViewPager();
+        }else {
+            setupChartViewPager();
+        }
     }
 
     @Override

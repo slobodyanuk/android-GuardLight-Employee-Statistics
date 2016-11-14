@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.util;
+package com.skysoft.slobodyanuk.timekeeper.util.date;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
