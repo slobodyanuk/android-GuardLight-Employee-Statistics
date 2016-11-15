@@ -55,22 +55,25 @@
             android:layout_marginTop="5dp"
             android:gravity="bottom"
             android:textColorHint="@color/textColorBlack"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/ErrorLayout"
             app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium">
 
-            <EditText
+            <com.skysoft.slobodyanuk.timekeeper.view.component.ValidateEditText
                 android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:hint="@string/username"
-                android:maxLines="1"
                 android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
-                android:inputType="text"
                 android:textColor="@color/textColorBlack"
-                android:textSize="28sp" />
+                android:textSize="28sp"
+                app:typeText="email" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -120,24 +123,27 @@
             android:layout_below="@+id/password_line"
             android:gravity="bottom|center"
             android:textColorHint="@color/textColorBlack"
-            app:passwordToggleEnabled="false"
-            app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium">
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/ErrorLayout"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:passwordToggleEnabled="false">
 
-            <EditText
+            <com.skysoft.slobodyanuk.timekeeper.view.component.ValidateEditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="start"
                 android:gravity="center"
+                app:typeText="password"
                 android:hint="@string/password"
-                android:maxLines="1"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
+                android:maxLines="1"
                 android:textColor="@color/textColorBlack"
                 android:textSize="28sp" />
 
         </android.support.design.widget.TextInputLayout>
-    </RelativeLayout>
 
+    </RelativeLayout>
 
 </ScrollView>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -24,9 +25,11 @@ import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
 import com.skysoft.slobodyanuk.timekeeper.util.KeyboardUtil;
 import com.skysoft.slobodyanuk.timekeeper.util.PrefsKeys;
 import com.skysoft.slobodyanuk.timekeeper.util.TypefaceManager;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.OnValidationTextListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.MainActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.SignInActivity;
+import com.skysoft.slobodyanuk.timekeeper.view.component.ValidateEditText;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -36,18 +39,23 @@ import rx.Subscription;
 /**
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
-public class SignInFragment extends BaseFragment implements OnSubscribeCompleteListener, OnSubscribeNextListener {
+public class SignInFragment extends BaseFragment implements OnSubscribeCompleteListener, OnSubscribeNextListener,
+        OnValidationTextListener {
 
     private static final String TAG = SignInFragment.class.getCanonicalName();
 
     @BindView(R.id.et_username)
-    EditText mUserName;
+    ValidateEditText mUserName;
     @BindView(R.id.et_password)
-    EditText mPassword;
+    ValidateEditText mPassword;
     @BindViews({R.id.input_username, R.id.input_password})
     TextInputLayout[] mTextInputLayouts;
+    @BindView(R.id.btn_confirm)
+    AppCompatButton mConfirmButton;
 
     private Subscription mSubscription;
+    private boolean isCorrectPass;
+    private boolean isCorrectEmail;
 
     public static Fragment newInstance() {
         return new SignInFragment();
@@ -63,6 +71,9 @@ public class SignInFragment extends BaseFragment implements OnSubscribeCompleteL
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((BaseActivity) getActivity()).disableToolbar();
+        mConfirmButton.setEnabled(false);
+        mUserName.setListener(this);
+        mPassword.setListener(this);
         mTextInputLayouts[0].setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_LIGHT));
         mTextInputLayouts[1].setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_LIGHT));
 
@@ -117,6 +128,28 @@ public class SignInFragment extends BaseFragment implements OnSubscribeCompleteL
         Prefs.putBoolean(PrefsKeys.SIGN_IN, true);
         Prefs.putString(PrefsKeys.API_KEY, "wdf");
         MainActivity.launch(getActivity());
+    }
+
+    @Override
+    public void onValidate(EditText editText) {
+        if (editText.equals(mPassword)) {
+            isCorrectPass = true;
+        }
+        if (editText.equals(mUserName)) {
+            isCorrectEmail = true;
+        }
+        mConfirmButton.setEnabled((isCorrectEmail && isCorrectPass));
+    }
+
+    @Override
+    public void onValidateError(EditText editText) {
+        if (editText.equals(mPassword)) {
+            isCorrectPass = false;
+        }
+        if (editText.equals(mUserName)) {
+            isCorrectEmail = false;
+        }
+        mConfirmButton.setEnabled(false);
     }
 
     @Override

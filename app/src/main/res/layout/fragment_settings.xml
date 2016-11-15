@@ -14,9 +14,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_height="match_parent">
+            android:focusableInTouchMode="true">
 
             <RelativeLayout
                 android:id="@+id/notification_container"
@@ -75,9 +75,11 @@
                     android:clipToPadding="false"
                     android:gravity="left"
                     android:textColorHint="@color/textColorBlack"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/ErrorLayout"
                     app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium">
 
-                    <EditText
+                    <com.skysoft.slobodyanuk.timekeeper.view.component.ValidateEditText
                         android:id="@+id/et_server_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -87,6 +89,7 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:paddingBottom="10dp"
+                        app:typeText="url"
                         android:paddingTop="10dp"
                         android:textColor="@color/textColorBlack"
                         android:textSize="21sp" />
@@ -102,8 +105,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/default_component_margin"
                     android:background="?attr/actionBarItemBackground"
-                    android:visibility="invisible"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:visibility="invisible">
 
                     <ImageView
                         android:layout_width="wrap_content"

@@ -5,11 +5,21 @@
         <attr name="typeface" />
     </declare-styleable>
 
+    <declare-styleable name="TypeEditText">
+        <attr name="typeText" />
+    </declare-styleable>
+
     <attr name="typeface" format="enum">
         <enum name="OPEN_SANS_REGULAR" value="0" />
         <enum name="OPEN_SANS_SEMI_BOLD" value="1" />
         <enum name="OPEN_SANS_LIGHT" value="2" />
         <enum name="OPEN_SANS_BOLD" value="3" />
+    </attr>
+
+    <attr name="typeText" format="enum">
+        <enum name="email" value="0" />
+        <enum name="url" value="1" />
+        <enum name="password" value="2" />
     </attr>
 
 </resources>

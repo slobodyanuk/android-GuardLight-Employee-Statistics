@@ -40,9 +40,6 @@ public interface ApiService {
     @GET("/api/employees/{id}")
     Observable<EmployeeInfoResponse> getEmployeeInfo(@Path("id") int id);
 
-    @GET("/api/employees/{id}")
-    Observable<EmployeesResponse> getEmployeesById(@Path("id") String id);
-
     @GET("/api/events/{period}")
     Observable<EmployeesEventResponse> getEmployeesEvent(@Path("period") String period);
 

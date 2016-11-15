@@ -27,6 +27,13 @@ public class Globals {
     public final static int OPEN_SANS_BOLD = 3;
 
     /*
+    * EditText type handling const
+    * */
+    public static final int EDITTEXT_EMAIL_TYPE = 0;
+    public static final int EDITTEXT_URL_TYPE = 1;
+    public static final int EDITTEXT_PASSWORD_TYPE = 2;
+
+    /*
     * ViewPager constants
     * */
     public final static String PAGE_KEY = "page_key";

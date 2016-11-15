@@ -47,4 +47,9 @@
     <string name="time_at_work">Time at work / average</string>
     <string name="time_details">See times details</string>
 
+    <!--Error-->
+    <string name="error_empty">The field cannot be empty</string>
+    <string name="error_email">Incorrect Email</string>
+    <string name="error_url">Incorrect URL</string>
+
 </resources>

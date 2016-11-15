@@ -17,22 +17,26 @@ import com.skysoft.slobodyanuk.timekeeper.util.Globals;
 import com.skysoft.slobodyanuk.timekeeper.util.KeyboardUtil;
 import com.skysoft.slobodyanuk.timekeeper.util.PrefsKeys;
 import com.skysoft.slobodyanuk.timekeeper.util.TypefaceManager;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.OnValidationTextListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.MainActivity;
+import com.skysoft.slobodyanuk.timekeeper.view.component.ValidateEditText;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SettingsFragment extends BaseFragment {
+public class SettingsFragment extends BaseFragment implements OnValidationTextListener{
 
     @BindView(R.id.input_server)
     TextInputLayout mTextInputLayout;
     @BindView(R.id.et_server_address)
-    EditText mServerAddress;
+    ValidateEditText mServerAddress;
     @BindView(R.id.btn_notification)
     Switch mSwitchNotification;
     @BindView(R.id.btn_confirm)
     RelativeLayout mConfirmServerButton;
+
+    private boolean isCorrect;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -41,6 +45,8 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mServerAddress.setListener(this);
+        mConfirmServerButton.setEnabled(false);
         mTextInputLayout.setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_REGULAR));
         mServerAddress.setOnFocusChangeListener((view1, b) -> {
             if (b) mServerAddress.setText(Prefs.getString(PrefsKeys.SERVER_URL, ""));
@@ -74,6 +80,23 @@ public class SettingsFragment extends BaseFragment {
                         (dialog, id) -> logout());
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void onValidate(EditText editText) {
+        if (editText.equals(mServerAddress)) {
+            isCorrect = true;
+        }
+
+        mConfirmServerButton.setEnabled(true);
+    }
+
+    @Override
+    public void onValidateError(EditText editText) {
+        if (editText.equals(mServerAddress)) {
+            isCorrect = false;
+        }
+        mConfirmServerButton.setEnabled(false);
     }
 
     private void logout() {

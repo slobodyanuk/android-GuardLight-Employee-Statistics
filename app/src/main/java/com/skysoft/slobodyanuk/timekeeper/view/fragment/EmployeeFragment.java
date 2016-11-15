@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -44,7 +45,7 @@ import static com.skysoft.slobodyanuk.timekeeper.util.Globals.WEEK;
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
 public class EmployeeFragment extends BaseFragment implements TopTabListener,
-        OnSubscribeCompleteListener, OnSubscribeNextListener, SwipeRefreshLayout.OnRefreshListener {
+        OnSubscribeCompleteListener, OnSubscribeNextListener, OnRefreshListener {
 
     private static final String TAG = EmployeeFragment.class.getCanonicalName();
 
@@ -89,10 +90,11 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
         mCurrentPage = mViewPager.getCurrentItem();
         try {
             mSubscription = new BaseTask<>()
-                    .execute(this, RestClient
-                            .getApiService()
-                            .getEmployeesEvent("month")
-                            .compose(bindToLifecycle()));
+                    .execute(this,
+                            RestClient
+                                    .getApiService()
+                                    .getEmployeesEvent("month")
+                                    .compose(bindToLifecycle()));
         } catch (IllegalUrlException e) {
             Toast.makeText(getActivity(), getString(R.string.error_illegal_url), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
