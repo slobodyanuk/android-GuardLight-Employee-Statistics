@@ -1,7 +1,5 @@
 package com.skysoft.slobodyanuk.timekeeper.reactive;
 
-import android.os.Handler;
-
 import com.google.gson.Gson;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.ErrorResponse;
 
@@ -39,7 +37,8 @@ public class BaseSubscriber<T, V> extends Subscriber<V> {
             Gson gson = new Gson();
             try {
                 completeListener.onError(gson
-                        .fromJson(response.errorBody().string(), ErrorResponse.class).getMessage());
+                        .fromJson(response.errorBody().string(), ErrorResponse.class)
+                        .getMessage());
             } catch (IOException e1) {
                 completeListener.onError("Failed");
             }
@@ -50,8 +49,7 @@ public class BaseSubscriber<T, V> extends Subscriber<V> {
 
     @Override
     public void onNext(V t) {
-        Handler h = new Handler();
-        h.postDelayed(()->        nextListener.onNext(t), 1000);
+        nextListener.onNext(t);
         onCompleted();
     }
 }

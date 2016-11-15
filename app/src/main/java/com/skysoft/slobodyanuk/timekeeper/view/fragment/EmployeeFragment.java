@@ -6,12 +6,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.skysoft.slobodyanuk.timekeeper.R;
+import com.skysoft.slobodyanuk.timekeeper.data.Employee;
 import com.skysoft.slobodyanuk.timekeeper.data.EmployeeEvent;
 import com.skysoft.slobodyanuk.timekeeper.data.event.ChartBackEvent;
 import com.skysoft.slobodyanuk.timekeeper.reactive.BaseTask;
@@ -88,10 +88,11 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
         showProgress();
         mCurrentPage = mViewPager.getCurrentItem();
         try {
-            mSubscription = new BaseTask<>().execute(this, RestClient
-                    .getApiService()
-                    .getEmployeesEvent("month")
-                    .compose(bindToLifecycle()));
+            mSubscription = new BaseTask<>()
+                    .execute(this, RestClient
+                            .getApiService()
+                            .getEmployeesEvent("month")
+                            .compose(bindToLifecycle()));
         } catch (IllegalUrlException e) {
             Toast.makeText(getActivity(), getString(R.string.error_illegal_url), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -109,6 +110,11 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
         hideProgress();
         if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
         Toast.makeText(getActivity(), ex, Toast.LENGTH_SHORT).show();
+        mRealm = Realm.getDefaultInstance();
+        if (!mRealm.where(Employee.class).findAll().isEmpty()) {
+            ((FragmentListener) getActivity()).onFragmentCreated(this);
+        }
+        mRealm.close();
     }
 
     @Override
@@ -144,7 +150,6 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
                 @Override
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
-                    Log.e(TAG, "onPageSelected: " + position);
                     if (adapter.getItem(position) instanceof EventEmployeeFragment) {
                         ((EventEmployeeFragment) adapter.getItem(position)).initEventData();
                     }

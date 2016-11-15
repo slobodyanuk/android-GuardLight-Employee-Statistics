@@ -1,9 +1,9 @@
 package com.skysoft.slobodyanuk.timekeeper.view.fragment;
 
+import android.app.DialogFragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -24,6 +24,7 @@ import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import butterknife.BindView;
@@ -36,10 +37,13 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
 
     @BindView(R.id.chart)
     LineChart mLineChart;
+
     private int[] mColors = new int[]{
             Color.RED,
             Color.GREEN,
     };
+
+    private DaysValueFormatter.TimeState mTimeState = DaysValueFormatter.TimeState.TODAY;
 
     public static Fragment newInstance(int page) {
         ChartFragment fragment = new ChartFragment();
@@ -52,6 +56,20 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            int page = getArguments().getInt(Globals.PAGE_KEY);
+            switch (page) {
+                case 0:
+                    mTimeState = DaysValueFormatter.TimeState.TODAY;
+                    break;
+                case 1:
+                    mTimeState = DaysValueFormatter.TimeState.WEEK;
+                    break;
+                case 2:
+                    mTimeState = DaysValueFormatter.TimeState.MONTH;
+                    break;
+            }
+        }
         updateToolbar();
         drawChart();
     }
@@ -80,7 +98,6 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
         xAxis.setPosition(XAxis.XAxisPosition.TOP_INSIDE);
         xAxis.setTextSize(10f);
         xAxis.setAxisMinValue(1f);
-        xAxis.setAxisMaxValue(32f);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(true);
@@ -88,7 +105,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
         xAxis.setCenterAxisLabels(true);
         xAxis.setGranularity(1f); // one
 
-        xAxis.setValueFormatter(new DaysValueFormatter());
+        xAxis.setValueFormatter(new DaysValueFormatter(mTimeState));
 
         YAxis leftAxis = mLineChart.getAxisLeft();
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
@@ -103,17 +120,43 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
 
         YAxis rightAxis = mLineChart.getAxisRight();
         rightAxis.setEnabled(false);
-        initDataChart();
+        initDataChart(mTimeState);
     }
 
-    private void initDataChart() {
+    private void initDataChart(DaysValueFormatter.TimeState state) {
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        int count;
+        int iterator;
+        if (state.equals(DaysValueFormatter.TimeState.TODAY)) {
+            count = calendar.getActualMaximum(Calendar.HOUR_OF_DAY);
+            iterator = 0;
+            XAxis xAxis = mLineChart.getXAxis();
+            xAxis.setAxisMaxValue(count + 1);
+            xAxis.setAxisMinValue(iterator);
+        } else if (state.equals(DaysValueFormatter.TimeState.WEEK)) {
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            c.clear(Calendar.MINUTE);
+            c.clear(Calendar.SECOND);
+            c.clear(Calendar.MILLISECOND);
+            iterator = c.get(Calendar.DAY_OF_MONTH);
+            count = calendar.getActualMaximum(Calendar.DAY_OF_WEEK) + iterator - 1;
+            XAxis xAxis = mLineChart.getXAxis();
+            xAxis.setAxisMaxValue(count + 1);
+            xAxis.setAxisMinValue(iterator);
+        } else {
+            count = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            XAxis xAxis = mLineChart.getXAxis();
+            xAxis.setAxisMaxValue(count + 1);
+            iterator = 1;
+        }
         for (int z = 0; z < 2; z++) {
 
             ArrayList<Entry> values = new ArrayList<Entry>();
 
-            for (int i = 1; i <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+            for (int i = iterator; i <= count; i++) {
                 int val = (int) ((Math.random() * 8));
                 values.add(new Entry(i + 0.5f, val));
             }

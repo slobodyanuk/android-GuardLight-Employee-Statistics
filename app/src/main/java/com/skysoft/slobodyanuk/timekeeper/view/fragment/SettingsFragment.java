@@ -44,7 +44,9 @@ public class SettingsFragment extends BaseFragment {
         mTextInputLayout.setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_REGULAR));
         mServerAddress.setOnFocusChangeListener((view1, b) -> {
             if (b) mServerAddress.setText(Prefs.getString(PrefsKeys.SERVER_URL, ""));
-            mConfirmServerButton.setVisibility((b) ? View.VISIBLE : View.INVISIBLE);
+            if (mConfirmServerButton != null) {
+                mConfirmServerButton.setVisibility((b) ? View.VISIBLE : View.INVISIBLE);
+            }
         });
 
         mSwitchNotification.setChecked(Prefs.getBoolean(PrefsKeys.NOTIFICATION, true));

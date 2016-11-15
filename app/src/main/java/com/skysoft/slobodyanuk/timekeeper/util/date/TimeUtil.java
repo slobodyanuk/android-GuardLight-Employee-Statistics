@@ -5,14 +5,20 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import lombok.Getter;
+
 /**
  * Created by Serhii Slobodyanuk on 08.11.2016.
  */
 
 public class TimeUtil {
 
+    @Getter
     private long startTime;
+
+    @Getter
     private long endTime;
+
     private TimeZone zone;
 
     public TimeUtil init(boolean isWeek){

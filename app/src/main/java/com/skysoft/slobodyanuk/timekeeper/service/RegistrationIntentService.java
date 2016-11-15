@@ -39,9 +39,10 @@ public class RegistrationIntentService extends IntentService implements OnSubscr
 
         if (!TextUtils.isEmpty(token)) {
             try {
-               mSubscription = new BaseTask<>().execute(this, RestClient
-                        .getApiService()
-                        .subscribe(new TokenRequest(token)));
+                mSubscription = new BaseTask<>()
+                        .execute(this, RestClient
+                                .getApiService()
+                                .subscribe(new TokenRequest(token)));
             } catch (IllegalUrlException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), getString(R.string.error_illegal_url), Toast.LENGTH_SHORT).show();

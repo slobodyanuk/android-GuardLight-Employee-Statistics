@@ -30,7 +30,7 @@ public class EmployeeApp extends Application {
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
-        Realm.deleteRealm(realmConfiguration);
+//        Realm.deleteRealm(realmConfiguration);
         Realm.setDefaultConfiguration(realmConfiguration);
     }
 }
