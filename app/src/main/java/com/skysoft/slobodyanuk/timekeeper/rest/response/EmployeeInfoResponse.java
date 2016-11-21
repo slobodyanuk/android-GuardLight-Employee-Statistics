@@ -1,8 +1,10 @@
 package com.skysoft.slobodyanuk.timekeeper.rest.response;
 
 import com.google.gson.annotations.SerializedName;
-import com.skysoft.slobodyanuk.timekeeper.data.Employee;
+import com.skysoft.slobodyanuk.timekeeper.data.BaseEmployeeInfo;
+import com.skysoft.slobodyanuk.timekeeper.data.RealmString;
 
+import io.realm.RealmList;
 import lombok.Getter;
 
 /**
@@ -12,16 +14,16 @@ import lombok.Getter;
 public class EmployeeInfoResponse extends BaseResponse {
 
     @Getter
-    Employee employee;
+    BaseEmployeeInfo employee;
 
     @Getter
-    String[] arriveTime;
+    RealmList<RealmString> arriveTime;
 
     @Getter
-    String[] leftTime;
+    RealmList<RealmString> leftTime;
 
     @Getter
-    String[] label;
+    RealmList<RealmString> label;
 
     @Getter
     String totalTime;

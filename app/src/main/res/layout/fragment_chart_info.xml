@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root"
     android:background="#fffafafa"
     android:clickable="true"
     android:orientation="vertical">
@@ -12,15 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.github.mikephil.charting.charts.HorizontalBarChart
-            android:id="@+id/chart"
+        <LinearLayout
+            android:id="@+id/chart_container"
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="match_parent"
+            android:isScrollContainer="true"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/progress"
+                layout="@layout/progress_layout"
+                android:visibility="gone" />
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="350dp" />
+
+        </LinearLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/chart"
+            android:layout_below="@+id/chart_container"
             android:layout_marginTop="@dimen/default_min_margin"
             android:paddingBottom="20dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -177,12 +192,12 @@
                         android:background="@color/colorLightGray" />
 
                     <RelativeLayout
-                        android:layout_width="match_parent"
                         android:id="@+id/details_time_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/divider5"
-                        android:clickable="true"
                         android:background="?attr/selectableItemBackground"
-                        android:layout_height="wrap_content">
+                        android:clickable="true">
 
                         <ImageView
                             android:id="@+id/details_time_icon"

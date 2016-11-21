@@ -35,7 +35,7 @@ public interface ApiService {
     Observable<EmployeesResponse> getEmployees();
 
     @GET("/api/employees/{id}")
-    Observable<EmployeeInfoResponse> getEmployeeInfo(@Path("id") String id, @Query("period") String period);
+    Observable<EmployeeInfoResponse> getEmployeeInfo(@Path("id") int id, @Query("period") String period);
 
     @GET("/api/employees/{id}")
     Observable<EmployeeInfoResponse> getEmployeeInfo(@Path("id") int id);

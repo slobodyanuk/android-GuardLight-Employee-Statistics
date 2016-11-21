@@ -57,6 +57,7 @@ public class Globals {
     * Fragment arguments
     * */
     public static final String EMPLOYEE_ID_ARGS = "id";
+    public static final String SINGLE_CHART_ARGS = "single_chart";
 
     public static final String OUT_PASSAGE_KEY = "Passage OUT";
     public static final String IN_PASSAGE_KEY = "Passage IN";

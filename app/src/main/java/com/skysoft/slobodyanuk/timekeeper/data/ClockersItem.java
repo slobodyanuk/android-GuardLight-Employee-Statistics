@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @SuppressWarnings("SpellCheckingInspection")
-public class ClockersItem {
+public class ClockersItem{
 
     private int id;
 

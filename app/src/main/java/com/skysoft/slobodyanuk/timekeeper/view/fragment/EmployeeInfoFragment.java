@@ -2,43 +2,40 @@ package com.skysoft.slobodyanuk.timekeeper.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.Employee;
-import com.skysoft.slobodyanuk.timekeeper.reactive.BaseTask;
-import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeCompleteListener;
-import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeNextListener;
-import com.skysoft.slobodyanuk.timekeeper.rest.RestClient;
-import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeeInfoResponse;
-import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.FragmentListener;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.TopTabListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
-
-import java.util.Arrays;
+import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeePagerAdapter;
 
 import butterknife.BindView;
 import io.realm.Realm;
-import rx.Subscription;
 
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.EMPLOYEE_ID_ARGS;
+import static com.skysoft.slobodyanuk.timekeeper.util.Globals.MONTH;
+import static com.skysoft.slobodyanuk.timekeeper.util.Globals.TODAY;
+import static com.skysoft.slobodyanuk.timekeeper.util.Globals.WEEK;
 
 /**
  * Created by Serhii Slobodyanuk on 14.11.2016.
  */
 
-public class EmployeeInfoFragment extends BaseFragment implements OnSubscribeCompleteListener, OnSubscribeNextListener {
+public class EmployeeInfoFragment extends BaseFragment implements TopTabListener {
 
-    @BindView(R.id.progress)
-    LinearLayout mProgressBar;
-    @BindView(R.id.text)
-    TextView textView;
+    @BindView(R.id.pager)
+    ViewPager mViewPager;
 
     private Realm mRealm;
     private int id;
-    private Subscription mSubscription;
+    private EmployeePagerAdapter mPagerAdapter;
+    private ViewPager.SimpleOnPageChangeListener mPageChangeListener;
+    private TabLayout mTabLayout;
 
     public static EmployeeInfoFragment newInstance(int id) {
         Bundle args = new Bundle();
@@ -53,21 +50,34 @@ public class EmployeeInfoFragment extends BaseFragment implements OnSubscribeCom
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) id = getArguments().getInt(EMPLOYEE_ID_ARGS);
         updateToolbar();
-        executeEmployeeInfo();
+        ((FragmentListener) getActivity()).onFragmentCreated(this);
     }
 
-    private void executeEmployeeInfo() {
-        showProgress();
-        try {
-            mSubscription = new BaseTask<>()
-                    .execute(this, RestClient
-                            .getApiService()
-                            .getEmployeeInfo(id)
-                            .compose(bindToLifecycle()));
-        } catch (IllegalUrlException e) {
-            Toast.makeText(getActivity(), getString(R.string.error_illegal_url), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+    private void setupViewPager() {
+        mPagerAdapter = new EmployeePagerAdapter(getResources(), getChildFragmentManager());
+        mPagerAdapter.addFragment(ChartInfoFragment.newInstance(TODAY, id), TODAY);
+        mPagerAdapter.addFragment(ChartInfoFragment.newInstance(WEEK, id), WEEK);
+        mPagerAdapter.addFragment(ChartInfoFragment.newInstance(MONTH, id), MONTH);
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.addOnPageChangeListener(setupPageListener());
+        mViewPager.post(() -> mPageChangeListener.onPageSelected(0));
+    }
+
+    private ViewPager.SimpleOnPageChangeListener setupPageListener() {
+        return mPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+            int pos = -1;
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                Fragment page = mPagerAdapter.getItem(position);
+                if (pos != position) {
+                    pos = position;
+                    ((BaseFragment) page).updateToolbar();
+                    ((ChartInfoFragment) page).updateData(pos);
+                }
+            }
+        };
     }
 
     @Override
@@ -85,41 +95,17 @@ public class EmployeeInfoFragment extends BaseFragment implements OnSubscribeCom
     }
 
     @Override
-    public void onCompleted() {
-        mSubscription.unsubscribe();
-    }
-
-    @Override
-    public void onError(String ex) {
-        hideProgress();
-        Toast.makeText(getActivity(), ex, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNext(Object t) {
-        if (t instanceof EmployeeInfoResponse) {
-            EmployeeInfoResponse response = (EmployeeInfoResponse) t;
-            textView.setText(response.getEmployee().getName() + "\n" +
-                    Arrays.toString(response.getArriveTime()) + "\n" +
-                    response.getTotalTime());
-        }
-        hideProgress();
-    }
-
-    private void showProgress() {
-        if (mProgressBar != null) {
-            mProgressBar.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void hideProgress() {
-        if (mProgressBar != null) {
-            mProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
     public int getLayoutResource() {
-        return R.layout.fragment_employee_info;
+        return R.layout.fragment_employee;
+    }
+
+    @Override
+    public void setupTabLayout(TabLayout tabLayout) {
+        if (mTabLayout != null) mTabLayout.removeAllTabs();
+        mTabLayout = tabLayout;
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.today)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.week)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.month)));
+        setupViewPager();
     }
 }

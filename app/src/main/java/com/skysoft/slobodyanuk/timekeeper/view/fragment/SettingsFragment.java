@@ -25,7 +25,7 @@ import com.skysoft.slobodyanuk.timekeeper.view.component.ValidateEditText;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SettingsFragment extends BaseFragment implements OnValidationTextListener{
+public class SettingsFragment extends BaseFragment implements OnValidationTextListener {
 
     @BindView(R.id.input_server)
     TextInputLayout mTextInputLayout;
@@ -70,8 +70,9 @@ public class SettingsFragment extends BaseFragment implements OnValidationTextLi
 
     @OnClick(R.id.logout_container)
     public void onLogout() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
-        builder.setTitle(R.string.logout)
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
+                android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+                .setTitle(R.string.logout)
                 .setMessage(R.string.logout_text)
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel,

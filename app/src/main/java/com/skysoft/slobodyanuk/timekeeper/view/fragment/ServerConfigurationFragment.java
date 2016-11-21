@@ -46,18 +46,19 @@ public class ServerConfigurationFragment extends BaseFragment implements OnValid
         mServerAddress.setListener(this);
         mConfirmButton.setEnabled(false);
         ((BaseActivity) getActivity()).disableToolbar();
-        mTextInputLayout.setTypeface(TypefaceManager.obtainTypeface(getActivity(), Globals.OPEN_SANS_LIGHT));
+        mTextInputLayout.setTypeface(TypefaceManager.obtainTypeface(getActivity(),
+                Globals.OPEN_SANS_LIGHT));
         mServerAddress.setOnFocusChangeListener((view1, b) -> {
             if (b) mServerAddress.setText(Prefs.getString(PrefsKeys.SERVER_URL, ""));
         });
-
     }
 
     @OnClick(R.id.btn_confirm)
     public void onConfirmServer() {
         Prefs.putBoolean(PrefsKeys.SERVER_AVAILABLE, true);
         String url = String.valueOf(mServerAddress.getText());
-        Prefs.putString(PrefsKeys.SERVER_URL, (TextUtils.isEmpty(url) ? Prefs.getString(PrefsKeys.SERVER_URL, "") : url));
+        Prefs.putString(PrefsKeys.SERVER_URL,
+                (TextUtils.isEmpty(url) ? Prefs.getString(PrefsKeys.SERVER_URL, "") : url));
         KeyboardUtil.hideKeyboard(getView());
         ((BaseActivity) getActivity())
                 .replaceFragment(R.id.container, SignInFragment.newInstance(), getString(R.string.sign_in));
