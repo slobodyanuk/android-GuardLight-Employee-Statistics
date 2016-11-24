@@ -59,8 +59,10 @@ public class EmployeeInfoFragment extends BaseFragment implements TopTabListener
         mPagerAdapter.addFragment(ChartInfoFragment.newInstance(WEEK, id), WEEK);
         mPagerAdapter.addFragment(ChartInfoFragment.newInstance(MONTH, id), MONTH);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(setupPageListener());
         mViewPager.post(() -> mPageChangeListener.onPageSelected(0));
+        mTabLayout.setupWithViewPager(mViewPager, false);
     }
 
     private ViewPager.SimpleOnPageChangeListener setupPageListener() {

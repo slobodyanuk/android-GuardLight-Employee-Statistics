@@ -103,8 +103,8 @@ public class EventEmployeeFragment extends BaseFragment implements OnEmployeeCli
             item.setId(employee.getId());
             item.setName(employee.getName());
             item.setType(events.get(i).getType());
-            item.setMonth(timeConverter.getMonth(events.get(i).getDate()));
-            item.setTime(timeConverter.getTime(events.get(i).getDate()));
+            item.setMonth(timeConverter.getMonthFromMillis(events.get(i).getDate()));
+            item.setTime(timeConverter.getTimeFromMillis(events.get(i).getDate()));
             clockersItems.add(item);
         }
         mRealm.close();

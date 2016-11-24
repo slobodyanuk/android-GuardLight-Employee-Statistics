@@ -38,8 +38,8 @@ public class DaysValueFormatter implements AxisValueFormatter {
     }
 
     private String initHourValue(float value){
-        int time = (int) value;
-        return String.format("%s:00", time);
+        int time = (int) (Globals.START_WORK_TIME + value);
+        return  String.format("%1s:%2$tM", time, calendar);
     }
 
     private String initDayValue(float value){

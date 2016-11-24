@@ -5,10 +5,14 @@ import android.util.Patterns;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.skysoft.slobodyanuk.timekeeper.data.RealmString;
 import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
 import com.skysoft.slobodyanuk.timekeeper.util.PrefsKeys;
+import com.skysoft.slobodyanuk.timekeeper.util.RealmStringListTypeAdapter;
 
+import io.realm.RealmList;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -42,6 +46,9 @@ public class RestClient {
     private static final Gson gson = new GsonBuilder()
             .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
             .setLenient()
+            .registerTypeAdapter(new TypeToken<RealmList<RealmString>>() {
+                    }.getType(),
+                    RealmStringListTypeAdapter.INSTANCE)
             .create();
 
     public static ApiService getApiService() throws IllegalUrlException {

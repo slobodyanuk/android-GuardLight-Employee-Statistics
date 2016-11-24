@@ -45,6 +45,9 @@ public class Globals {
     * Time constants
     * */
     public final static int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+    public final static float START_WORK_TIME = 6f;
+    public final static float END_WORK_TIME = 21f;
+    public final static String UNDEFINED = "undefined";
 
     /*
      * Main ViewPager

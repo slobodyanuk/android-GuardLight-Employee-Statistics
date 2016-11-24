@@ -12,13 +12,19 @@ import io.realm.RealmResults;
  */
 public class NameValueFormatter implements AxisValueFormatter {
 
-    private final RealmResults<Employee> employees;
+    private RealmResults<Employee> employees = null;
     private String name = "null";
     private String nameFromRealm;
 
     public NameValueFormatter() {
         Realm mRealm = Realm.getDefaultInstance();
         employees = mRealm.where(Employee.class).findAll();
+        mRealm.close();
+    }
+
+    public NameValueFormatter(int id) {
+        Realm mRealm = Realm.getDefaultInstance();
+        employees = mRealm.where(Employee.class).equalTo("id", id).findAll();
         mRealm.close();
     }
 

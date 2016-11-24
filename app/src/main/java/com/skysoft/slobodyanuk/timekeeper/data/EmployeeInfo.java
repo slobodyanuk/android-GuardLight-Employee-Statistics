@@ -8,12 +8,14 @@ import io.realm.annotations.PrimaryKey;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Created by Serhii Slobodyanuk on 03.11.2016.
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class EmployeeInfo extends RealmObject {
 
     @PrimaryKey
@@ -23,23 +25,23 @@ public class EmployeeInfo extends RealmObject {
     private BaseEmployeeInfo employee;
 
     @Getter
-    private RealmList<RealmString> arriveTime = new RealmList<>();
+    private RealmList<RealmString> arriveTime;
 
     @Getter
-    private RealmList<RealmString> leftTime = new RealmList<>();
+    private RealmList<RealmString> leftTime;
 
     @Getter
-    private RealmList<RealmString> label = new RealmList<>();
+    private RealmList<RealmString> label;
 
     @Getter
-    private String totalTime = "";
+    private String totalTime;
 
     @Getter
     @SerializedName("avarageArriveTime")
-    private String averageArriveTime = "";
+    private String averageArriveTime;
 
     @Getter
     @SerializedName("avarageLeftTime")
-    private String averageLeftTime = "";
+    private String averageLeftTime;
 
 }

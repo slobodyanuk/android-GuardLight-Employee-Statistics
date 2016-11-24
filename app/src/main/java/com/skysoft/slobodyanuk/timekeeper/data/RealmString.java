@@ -12,6 +12,6 @@ public class RealmString extends RealmObject {
 
     @Getter
     @Setter
-    private String time;
+    private String value;
 
 }
