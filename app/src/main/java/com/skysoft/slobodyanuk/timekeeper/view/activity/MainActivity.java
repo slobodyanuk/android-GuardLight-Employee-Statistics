@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity
         mPagerAdapter.addFragment(SettingsFragment.newInstance(), getString(R.string.settings));
         mNonSwipeableViewPager.setAdapter(mPagerAdapter);
         mNonSwipeableViewPager.addOnPageChangeListener(setupPageListener());
-        mNonSwipeableViewPager.post(() -> mPageChangeListener.onPageSelected(ACTIVITY));
+        mNonSwipeableViewPager.post(() -> mNonSwipeableViewPager.setCurrentItem(ACTIVITY, true));
     }
 
     private ViewPager.SimpleOnPageChangeListener setupPageListener() {

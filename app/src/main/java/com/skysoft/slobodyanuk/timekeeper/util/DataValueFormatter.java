@@ -1,7 +1,7 @@
 package com.skysoft.slobodyanuk.timekeeper.util;
 
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.skysoft.slobodyanuk.timekeeper.data.EmployeeInfo;
 
@@ -11,7 +11,7 @@ import io.realm.RealmResults;
 /**
  * Created by Serhii Slobodyanuk on 20.10.2016.
  */
-public class DataValueFormatter implements ValueFormatter {
+public class DataValueFormatter implements IValueFormatter {
 
     private final RealmResults<EmployeeInfo> employees;
     private String name = "null";

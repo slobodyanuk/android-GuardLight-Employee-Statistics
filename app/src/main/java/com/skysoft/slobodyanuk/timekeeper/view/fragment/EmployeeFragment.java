@@ -23,6 +23,7 @@ import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeesEventResponse;
 import com.skysoft.slobodyanuk.timekeeper.service.FragmentEvent;
 import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.FragmentListener;
+import com.skysoft.slobodyanuk.timekeeper.util.listener.OnRefreshEnableListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.TopTabListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeePagerAdapter;
@@ -45,7 +46,8 @@ import static com.skysoft.slobodyanuk.timekeeper.util.Globals.WEEK;
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
 public class EmployeeFragment extends BaseFragment implements TopTabListener,
-        OnSubscribeCompleteListener, OnSubscribeNextListener, OnRefreshListener {
+        OnSubscribeCompleteListener, OnSubscribeNextListener, OnRefreshListener,
+        OnRefreshEnableListener {
 
     private static final String TAG = EmployeeFragment.class.getCanonicalName();
 
@@ -63,10 +65,6 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
     private ViewPager.SimpleOnPageChangeListener mSimpleOnPageChangeListener;
     private PagerType mPagerType = PagerType.ACTIVITY;
     private int mCurrentPage = 0;
-
-    private enum PagerType {
-        CHART, ACTIVITY
-    }
 
     public static Fragment newInstance() {
         Fragment fragment = new EmployeeFragment();
@@ -139,7 +137,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             adapter.addFragment(EventEmployeeFragment.newInstance(TODAY), TODAY);
             adapter.addFragment(EventEmployeeFragment.newInstance(WEEK), WEEK);
             adapter.addFragment(EventEmployeeFragment.newInstance(MONTH), MONTH);
-            mViewPager.setOffscreenPageLimit(2);
+            mViewPager.setOffscreenPageLimit(3);
             mViewPager.setAdapter(adapter);
             mSimpleOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
 
@@ -158,7 +156,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
                 }
             };
             mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
-            mViewPager.post(() -> mSimpleOnPageChangeListener.onPageSelected(mCurrentPage));
+            mViewPager.post(() -> mViewPager.setCurrentItem(mCurrentPage, true));
             mTabLayout.setupWithViewPager(mViewPager, false);
         } else {
             adapter.clearFragments();
@@ -173,11 +171,22 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
 
     private void setupChartViewPager() {
         mPagerType = PagerType.CHART;
+        ChartFragment fragment;
         if (adapter != null) {
             adapter.clearFragments();
-            adapter.addFragment(ChartFragment.newInstance(TODAY), TODAY);
-            adapter.addFragment(ChartFragment.newInstance(WEEK), WEEK);
-            adapter.addFragment(ChartFragment.newInstance(MONTH), MONTH);
+
+            fragment = ChartFragment.newInstance(TODAY);
+            fragment.setRefreshEnableListener(this);
+            adapter.addFragment(fragment, TODAY);
+
+            fragment = ChartFragment.newInstance(WEEK);
+            fragment.setRefreshEnableListener(this);
+            adapter.addFragment(fragment, WEEK);
+
+            fragment = ChartFragment.newInstance(MONTH);
+            fragment.setRefreshEnableListener(this);
+            adapter.addFragment(fragment, MONTH);
+
             adapter.notifyDataSetChanged();
         }
         hideProgress();
@@ -251,6 +260,17 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onRefreshEnable(boolean enable) {
+        if (mRefreshLayout != null) {
+            mRefreshLayout.setOnRefreshListener((enable) ? this : null);
+        }
+    }
+
+    private enum PagerType {
+        CHART, ACTIVITY
     }
 
 }

@@ -27,7 +27,7 @@ import butterknife.Unbinder;
 /**
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
-public abstract class BaseActivity extends RxAppCompatActivity{
+public abstract class BaseActivity extends RxAppCompatActivity {
 
     @Nullable
     @BindView(R.id.toolbar)
@@ -157,7 +157,7 @@ public abstract class BaseActivity extends RxAppCompatActivity{
         switch (menuItem.getItemId()) {
             case android.R.id.home:
                 if (isChartFragment) {
-                    if (fragment != null){
+                    if (fragment != null) {
                         EventBus.getDefault().post(new ChartBackEvent());
                     }
                 } else {
@@ -165,6 +165,17 @@ public abstract class BaseActivity extends RxAppCompatActivity{
                 }
         }
         return (super.onOptionsItemSelected(menuItem));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isChartFragment) {
+            if (fragment != null) {
+                EventBus.getDefault().post(new ChartBackEvent());
+            }
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

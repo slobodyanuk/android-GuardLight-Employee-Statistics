@@ -1,10 +1,10 @@
 package com.skysoft.slobodyanuk.timekeeper.view.fragment;
 
 import android.app.DialogFragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -22,6 +22,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.EmployeeInfo;
 import com.skysoft.slobodyanuk.timekeeper.reactive.BaseTask;
@@ -29,13 +30,13 @@ import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeCompleteListener;
 import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeNextListener;
 import com.skysoft.slobodyanuk.timekeeper.rest.RestClient;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeeInfoResponse;
-import com.skysoft.slobodyanuk.timekeeper.util.DaysValueFormatter;
-import com.skysoft.slobodyanuk.timekeeper.util.Globals;
+import com.skysoft.slobodyanuk.timekeeper.util.EmptyValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
 import com.skysoft.slobodyanuk.timekeeper.util.NameValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.YAxisValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.date.TimeConverter;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
+import com.skysoft.slobodyanuk.timekeeper.view.component.ChartMarkerView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView;
 
@@ -47,18 +48,23 @@ import rx.Subscription;
 
 import static com.skysoft.slobodyanuk.timekeeper.R.id.chart;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.EMPLOYEE_ID_ARGS;
+import static com.skysoft.slobodyanuk.timekeeper.util.Globals.PAGE_KEY;
+import static com.skysoft.slobodyanuk.timekeeper.util.Globals.TimeState;
 
 /**
  * Created by Serhii Slobodyanuk on 14.09.2016.
  */
 public class ChartInfoFragment extends BaseFragment
         implements OnChartValueSelectedListener, OnChartGestureListener,
-        OnSubscribeCompleteListener, OnSubscribeNextListener {
+        OnSubscribeCompleteListener, OnSubscribeNextListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = ChartInfoFragment.class.getCanonicalName();
 
     @BindView(R.id.progress)
     LinearLayout mProgressBar;
+
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout mRefreshLayout;
 
     @BindView(chart)
     HorizontalBarChart mChart;
@@ -78,16 +84,19 @@ public class ChartInfoFragment extends BaseFragment
     private int[] mColors;
     private TimeConverter mTimeConverter;
 
-    private DaysValueFormatter.TimeState mTimeState = DaysValueFormatter.TimeState.TODAY;
+    private TimeState mTimeState = TimeState.TODAY;
     private Subscription mSubscription;
     private int page;
     private YAxis yAxis;
     private XAxis xAxis;
+    private EmployeeInfo employeeInfo;
+    private int pageArgs;
+    private boolean isRefresh = false;
 
     public static Fragment newInstance(int page, int id) {
         ChartInfoFragment fragment = new ChartInfoFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(Globals.PAGE_KEY, page);
+        bundle.putInt(PAGE_KEY, page);
         bundle.putInt(EMPLOYEE_ID_ARGS, id);
         fragment.setArguments(bundle);
         return fragment;
@@ -97,6 +106,7 @@ public class ChartInfoFragment extends BaseFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mTimeConverter = new TimeConverter();
+        if (mRefreshLayout != null) mRefreshLayout.setOnRefreshListener(this);
         mColors = new int[]{
                 getResources().getColor(android.R.color.transparent),
                 getResources().getColor(android.R.color.holo_green_light),
@@ -104,27 +114,31 @@ public class ChartInfoFragment extends BaseFragment
                 getResources().getColor(R.color.colorRed)
         };
         if (getArguments() != null) {
-            int pageArgs = getArguments().getInt(Globals.PAGE_KEY);
-            id = getArguments().getInt(Globals.EMPLOYEE_ID_ARGS);
-            switch (pageArgs) {
-                case 0:
-                    mTimeState = DaysValueFormatter.TimeState.TODAY;
-                    page = 0;
-                    executeEmployeeInfo("today");
-                    break;
-                case 1:
-                    mTimeState = DaysValueFormatter.TimeState.WEEK;
-                    page = 1;
-                    executeEmployeeInfo("week");
-                    break;
-                case 2:
-                    mTimeState = DaysValueFormatter.TimeState.MONTH;
-                    page = 2;
-                    executeEmployeeInfo("month");
-                    break;
-            }
+            pageArgs = getArguments().getInt(PAGE_KEY);
+            id = getArguments().getInt(EMPLOYEE_ID_ARGS);
+            getEmployeeInfo();
         }
         updateToolbar();
+    }
+
+    private void getEmployeeInfo() {
+        switch (pageArgs) {
+            case 0:
+                mTimeState = TimeState.TODAY;
+                page = 0;
+                executeEmployeeInfo("today");
+                break;
+            case 1:
+                mTimeState = TimeState.WEEK;
+                page = 1;
+                executeEmployeeInfo("week");
+                break;
+            case 2:
+                mTimeState = TimeState.MONTH;
+                page = 2;
+                executeEmployeeInfo("month");
+                break;
+        }
     }
 
     private void executeEmployeeInfo(String period) {
@@ -143,12 +157,14 @@ public class ChartInfoFragment extends BaseFragment
 
     @Override
     public void onCompleted() {
+        if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
         mSubscription.unsubscribe();
     }
 
     @Override
     public void onError(String ex) {
         hideProgress();
+        if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
         Toast.makeText(getActivity(), ex, Toast.LENGTH_SHORT).show();
     }
 
@@ -168,14 +184,20 @@ public class ChartInfoFragment extends BaseFragment
             mRealm.commitTransaction();
             mRealm.close();
         }
-        drawChart();
+        if (isRefresh){
+            if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
+            initDataChart(mTimeState);
+            isRefresh = false;
+        }else {
+            drawChart();
+        }
         initTimeText();
         hideProgress();
     }
 
     private void initTimeText() {
         mRealm = Realm.getDefaultInstance();
-        EmployeeInfo employeeInfo = mRealm.where(EmployeeInfo.class).equalTo("page", this.page).findFirst();
+        employeeInfo = mRealm.where(EmployeeInfo.class).equalTo("page", this.page).findFirst();
         mTextInTime.setText(mTimeConverter.getTextTime(String.valueOf(employeeInfo.getAverageArriveTime())));
         mTextOutTime.setText(mTimeConverter.getTextTime(String.valueOf(employeeInfo.getAverageLeftTime())));
         mTextAtWork.setText(mTimeConverter.getTextTime(String.valueOf(employeeInfo.getTotalTime())));
@@ -196,7 +218,7 @@ public class ChartInfoFragment extends BaseFragment
 
 
     private void drawChart() {
-        mChart.setDescription("");
+        mChart.setDescription(null);
         mChart.setOnChartValueSelectedListener(this);
         mChart.setOnChartGestureListener(this);
         mChart.setDrawBarShadow(false);
@@ -204,7 +226,7 @@ public class ChartInfoFragment extends BaseFragment
         mChart.setDrawGridBackground(false);
 
         xAxis = mChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(true);
 
@@ -216,20 +238,22 @@ public class ChartInfoFragment extends BaseFragment
 
         mChart.getAxisLeft().setEnabled(false);
         mChart.getLegend().setEnabled(false);
+
         initDataChart(mTimeState);
 
     }
 
-    private void initDataChart(DaysValueFormatter.TimeState state) {
+    private void initDataChart(TimeState state) {
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
 
         mRealm = Realm.getDefaultInstance();
         EmployeeInfo employees = mRealm.where(EmployeeInfo.class).findFirst();
         mRealm.close();
 
-        xAxis.setAxisMinValue(employees.getEmployee().getId());
-        xAxis.setAxisMaxValue(employees.getEmployee().getId());
+        xAxis.setAxisMaxValue(1);
+        xAxis.setAxisMinValue(1);
         xAxis.setValueFormatter(new NameValueFormatter(employees.getEmployee().getId()));
+
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(1);
 
@@ -239,7 +263,7 @@ public class ChartInfoFragment extends BaseFragment
         float start2 = 10f;
         float start3 = 1f;
 
-        yVals1.add(new BarEntry(employees.getEmployee().getId(), new float[]{start0, start1, start2, start3}));
+        yVals1.add(new BarEntry(1, new float[]{start0, start1, start2, start3}));
         BarDataSet set1;
 
         if (mChart.getData() != null &&
@@ -254,10 +278,14 @@ public class ChartInfoFragment extends BaseFragment
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
             BarData data = new BarData(dataSets);
-            data.setValueTextColor(Color.WHITE);
+            data.setValueFormatter(new EmptyValueFormatter());
+            data.setDrawValues(false);
             data.setBarWidth(0.4f);
+//            ChartMarkerView view = new ChartMarkerView(getActivity(), R.layout.marker_view);
+//            mChart.setMarkerView(view);
             mChart.setData(data);
         }
+
         mChart.setFitBars(true);
         mChart.invalidate();
     }
@@ -344,7 +372,7 @@ public class ChartInfoFragment extends BaseFragment
         mRealm = Realm.getDefaultInstance();
         switch (pos) {
             case 0:
-                mTimeState = DaysValueFormatter.TimeState.TODAY;
+                mTimeState = TimeState.TODAY;
                 page = 0;
                 if (mRealm.where(EmployeeInfo.class).equalTo("page", page).findAll().isEmpty()) {
                     executeEmployeeInfo("today");
@@ -354,7 +382,7 @@ public class ChartInfoFragment extends BaseFragment
                 }
                 break;
             case 1:
-                mTimeState = DaysValueFormatter.TimeState.WEEK;
+                mTimeState = TimeState.WEEK;
                 page = 1;
                 if (mRealm.where(EmployeeInfo.class).equalTo("page", page).findAll().isEmpty()) {
                     executeEmployeeInfo("week");
@@ -364,7 +392,7 @@ public class ChartInfoFragment extends BaseFragment
                 }
                 break;
             case 2:
-                mTimeState = DaysValueFormatter.TimeState.MONTH;
+                mTimeState = TimeState.MONTH;
                 page = 2;
                 if (mRealm.where(EmployeeInfo.class).equalTo("page", page).findAll().isEmpty()) {
                     executeEmployeeInfo("month");
@@ -375,5 +403,12 @@ public class ChartInfoFragment extends BaseFragment
                 break;
         }
         mRealm.close();
+    }
+
+    @Override
+    public void onRefresh() {
+        isRefresh = true;
+        if (mRefreshLayout != null) mRefreshLayout.setRefreshing(true);
+        getEmployeeInfo();
     }
 }

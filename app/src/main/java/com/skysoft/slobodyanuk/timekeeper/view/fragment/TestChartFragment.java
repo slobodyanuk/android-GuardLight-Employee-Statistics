@@ -77,7 +77,7 @@ public class TestChartFragment extends BaseFragment implements OnChartValueSelec
     private void drawChart() {
         mLineChart.setOnChartValueSelectedListener(this);
         mLineChart.setDrawGridBackground(true);
-        mLineChart.setDescription("");
+        mLineChart.setDescription(null);
         mLineChart.setDrawBorders(true);
         mLineChart.getAxisLeft().setEnabled(true);
 

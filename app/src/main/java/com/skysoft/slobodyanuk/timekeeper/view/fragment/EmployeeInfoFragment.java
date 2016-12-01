@@ -61,7 +61,7 @@ public class EmployeeInfoFragment extends BaseFragment implements TopTabListener
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(setupPageListener());
-        mViewPager.post(() -> mPageChangeListener.onPageSelected(0));
+        mViewPager.post(() -> mViewPager.setCurrentItem(0, true));
         mTabLayout.setupWithViewPager(mViewPager, false);
     }
 

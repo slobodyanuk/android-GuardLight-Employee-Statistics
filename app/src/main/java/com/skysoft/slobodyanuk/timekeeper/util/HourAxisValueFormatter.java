@@ -1,7 +1,7 @@
-
 package com.skysoft.slobodyanuk.timekeeper.util;
+
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,8 +11,7 @@ import java.util.Locale;
 /**
  * Created by Yasir on 02/06/16.
  */
-public class HourAxisValueFormatter implements AxisValueFormatter
-{
+public class HourAxisValueFormatter implements IAxisValueFormatter {
 
     private long referenceTimestamp; // minimum timestamp in your data set
     private DateFormat mDataFormat;
@@ -46,17 +45,11 @@ public class HourAxisValueFormatter implements AxisValueFormatter
         return getHour(originalTimestamp);
     }
 
-    @Override
-    public int getDecimalDigits() {
-        return 0;
-    }
-
-    private String getHour(long timestamp){
-        try{
-            mDate.setTime(timestamp*1000);
+    private String getHour(long timestamp) {
+        try {
+            mDate.setTime(timestamp * 1000);
             return mDataFormat.format(mDate);
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return "xx";
         }
     }

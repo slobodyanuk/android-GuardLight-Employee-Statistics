@@ -49,6 +49,10 @@ public class Globals {
     public final static float END_WORK_TIME = 21f;
     public final static String UNDEFINED = "undefined";
 
+    public enum TimeState {
+        TODAY, WEEK, MONTH
+    }
+
     /*
      * Main ViewPager
      * */
