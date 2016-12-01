@@ -22,7 +22,6 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.EmployeeInfo;
 import com.skysoft.slobodyanuk.timekeeper.reactive.BaseTask;
@@ -36,7 +35,6 @@ import com.skysoft.slobodyanuk.timekeeper.util.NameValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.YAxisValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.date.TimeConverter;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
-import com.skysoft.slobodyanuk.timekeeper.view.component.ChartMarkerView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView;
 
@@ -62,9 +60,9 @@ public class ChartInfoFragment extends BaseFragment
 
     @BindView(R.id.progress)
     LinearLayout mProgressBar;
-
-    @BindView(R.id.refresh)
-    SwipeRefreshLayout mRefreshLayout;
+//
+//    @BindView(R.id.refresh)
+//    SwipeRefreshLayout mRefreshLayout;
 
     @BindView(chart)
     HorizontalBarChart mChart;
@@ -78,12 +76,11 @@ public class ChartInfoFragment extends BaseFragment
     TypefaceTextView mTextOutTime;
     @BindView(R.id.at_work)
     TypefaceTextView mTextAtWork;
-
+    float oldY;
     private Realm mRealm;
     private int id;
     private int[] mColors;
     private TimeConverter mTimeConverter;
-
     private TimeState mTimeState = TimeState.TODAY;
     private Subscription mSubscription;
     private int page;
@@ -184,11 +181,12 @@ public class ChartInfoFragment extends BaseFragment
             mRealm.commitTransaction();
             mRealm.close();
         }
-        if (isRefresh){
+        if (isRefresh) {
             if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
             initDataChart(mTimeState);
             isRefresh = false;
-        }else {
+        } else {
+            if (mRefreshLayout != null) mRefreshLayout.setRefreshing(false);
             drawChart();
         }
         initTimeText();
@@ -215,7 +213,6 @@ public class ChartInfoFragment extends BaseFragment
             mProgressBar.setVisibility(View.GONE);
         }
     }
-
 
     private void drawChart() {
         mChart.setDescription(null);
@@ -279,13 +276,12 @@ public class ChartInfoFragment extends BaseFragment
             dataSets.add(set1);
             BarData data = new BarData(dataSets);
             data.setValueFormatter(new EmptyValueFormatter());
-            data.setDrawValues(false);
+            data.setDrawValues(true);
             data.setBarWidth(0.4f);
-//            ChartMarkerView view = new ChartMarkerView(getActivity(), R.layout.marker_view);
-//            mChart.setMarkerView(view);
             mChart.setData(data);
         }
 
+        mChart.getXAxis().setCenterAxisLabels(true);
         mChart.setFitBars(true);
         mChart.invalidate();
     }
@@ -322,11 +318,11 @@ public class ChartInfoFragment extends BaseFragment
 
     @Override
     public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-
     }
 
     @Override
     public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+        mRefreshLayout.setOnRefreshListener(this);
         if (mScrollView != null) {
             mScrollView.setScrollingEnabled(true);
         }
@@ -334,9 +330,6 @@ public class ChartInfoFragment extends BaseFragment
 
     @Override
     public void onChartLongPressed(MotionEvent me) {
-        if (mScrollView != null) {
-            mScrollView.setScrollingEnabled(false);
-        }
     }
 
     @Override
@@ -356,6 +349,7 @@ public class ChartInfoFragment extends BaseFragment
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+        mRefreshLayout.setOnRefreshListener(null);
         if (mScrollView != null) {
             mScrollView.setScrollingEnabled(false);
         }
@@ -363,9 +357,13 @@ public class ChartInfoFragment extends BaseFragment
 
     @Override
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
-        if (mScrollView != null) {
-            mScrollView.setScrollingEnabled(false);
+        if (dY == oldY) {
+            mRefreshLayout.setOnRefreshListener(this);
+            if (mScrollView != null) {
+                mScrollView.setScrollingEnabled(true);
+            }
         }
+        oldY = dY;
     }
 
     public void updateData(int pos) {

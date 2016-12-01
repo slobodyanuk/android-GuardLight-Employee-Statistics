@@ -21,7 +21,6 @@ public class EmptyValueFormatter implements IValueFormatter {
     @Override
     public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
         if (value > 0) {
-            viewPortHandler.setDragOffsetX(20);
             return mFormat.format(value);
         } else
             return "";

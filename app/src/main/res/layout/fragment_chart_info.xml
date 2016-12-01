@@ -1,231 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
+    android:id="@+id/refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fffafafa"
-    android:clickable="true"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView
+        android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/chart_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:isScrollContainer="true"
-            android:orientation="vertical">
-
-            <include
-                android:id="@+id/progress"
-                layout="@layout/progress_layout"
-                android:visibility="gone" />
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/chart"
-                android:layout_width="match_parent"
-                android:layout_height="350dp" />
-
-        </LinearLayout>
-
+        android:layout_height="match_parent"
+        android:background="#fffafafa"
+        android:clickable="true"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/chart_container"
-            android:layout_marginTop="@dimen/default_min_margin"
-            android:paddingBottom="20dp"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin">
+            android:layout_height="match_parent">
+
 
             <RelativeLayout
-                android:id="@+id/in_time_container"
+                android:id="@+id/chart_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <View
-                    android:id="@+id/divider1"
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chart"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/colorLightGray" />
+                    android:layout_height="350dp" />
 
-                <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
-                    android:id="@+id/clock_in_time_text"
+                <include
+                    android:id="@+id/progress"
+                    layout="@layout/progress_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/divider1"
-                    android:layout_toLeftOf="@+id/clock_in_time"
-                    android:padding="20dp"
-                    android:text="@string/clock_in_time"
-                    android:textSize="18sp"
-                    app:typeface="OPEN_SANS_LIGHT" />
-
-                <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
-                    android:id="@+id/clock_in_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/divider1"
-                    android:layout_centerVertical="true"
-                    android:padding="20dp"
-                    android:text="@string/undefined"
-                    android:textColor="@color/textColorBlack"
-                    android:textSize="18sp"
-                    app:typeface="OPEN_SANS_SEMI_BOLD" />
+                    android:layout_height="350dp"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/out_time_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/in_time_container">
-
-                <View
-                    android:id="@+id/divider2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/colorLightGray" />
-
-                <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
-                    android:id="@+id/clock_out_time_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/divider2"
-                    android:layout_toLeftOf="@+id/clock_out_time"
-                    android:padding="20dp"
-                    android:text="@string/clock_out_time"
-                    android:textSize="18sp"
-                    app:typeface="OPEN_SANS_LIGHT" />
-
-                <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
-                    android:id="@+id/clock_out_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/divider2"
-                    android:layout_centerVertical="true"
-                    android:padding="20dp"
-                    android:text="@string/undefined"
-                    android:textColor="@color/textColorBlack"
-                    android:textSize="18sp"
-                    app:typeface="OPEN_SANS_SEMI_BOLD" />
-
-            </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/at_work_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/out_time_container"
-                android:layout_marginBottom="60dp">
-
-                <View
-                    android:id="@+id/divider3"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/colorLightGray" />
-
-                <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
-                    android:id="@+id/at_work_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/divider3"
-                    android:layout_toLeftOf="@+id/at_work"
-                    android:padding="20dp"
-                    android:text="@string/time_at_work"
-                    android:textSize="18sp"
-                    app:typeface="OPEN_SANS_LIGHT" />
-
-                <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
-                    android:id="@+id/at_work"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/divider3"
-                    android:layout_centerVertical="true"
-                    android:padding="20dp"
-                    android:text="@string/undefined"
-                    android:textColor="@color/textColorBlack"
-                    android:textSize="18sp"
-                    app:typeface="OPEN_SANS_SEMI_BOLD" />
-
-                <View
-                    android:id="@+id/divider4"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@+id/at_work"
-                    android:layout_margin="5dp"
-                    android:background="@color/colorLightGray" />
-
-            </RelativeLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/at_work_container">
+                android:layout_height="match_parent"
+                android:layout_below="@+id/chart_container"
+                android:layout_marginTop="@dimen/default_min_margin"
+                android:paddingBottom="20dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
 
                 <RelativeLayout
-                    android:id="@+id/details_container"
+                    android:id="@+id/in_time_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <View
-                        android:id="@+id/divider5"
+                        android:id="@+id/divider1"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_margin="5dp"
                         android:background="@color/colorLightGray" />
 
-                    <View
-                        android:id="@+id/divider6"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/details_time_container"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorLightGray" />
-
-                    <RelativeLayout
-                        android:id="@+id/details_time_container"
+                    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+                        android:id="@+id/clock_in_time_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/divider5"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true">
+                        android:layout_below="@+id/divider1"
+                        android:layout_toLeftOf="@+id/clock_in_time"
+                        android:padding="20dp"
+                        android:text="@string/clock_in_time"
+                        android:textSize="18sp"
+                        app:typeface="OPEN_SANS_LIGHT" />
 
-                        <ImageView
-                            android:id="@+id/details_time_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="25dp"
-                            android:src="@drawable/ic_details" />
-
-                        <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
-                            android:id="@+id/details_time_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/details_time_icon"
-                            android:padding="20dp"
-                            android:text="@string/time_details"
-                            android:textColor="@color/textColorBlack"
-                            android:textSize="18sp"
-                            app:typeface="OPEN_SANS_SEMI_BOLD" />
-
-                    </RelativeLayout>
+                    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+                        android:id="@+id/clock_in_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/divider1"
+                        android:layout_centerVertical="true"
+                        android:padding="20dp"
+                        android:text="@string/undefined"
+                        android:textColor="@color/textColorBlack"
+                        android:textSize="18sp"
+                        app:typeface="OPEN_SANS_SEMI_BOLD" />
 
                 </RelativeLayout>
 
-            </FrameLayout>
+                <RelativeLayout
+                    android:id="@+id/out_time_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/in_time_container">
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorLightGray" />
+
+                    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+                        android:id="@+id/clock_out_time_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/divider2"
+                        android:layout_toLeftOf="@+id/clock_out_time"
+                        android:padding="20dp"
+                        android:text="@string/clock_out_time"
+                        android:textSize="18sp"
+                        app:typeface="OPEN_SANS_LIGHT" />
+
+                    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+                        android:id="@+id/clock_out_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/divider2"
+                        android:layout_centerVertical="true"
+                        android:padding="20dp"
+                        android:text="@string/undefined"
+                        android:textColor="@color/textColorBlack"
+                        android:textSize="18sp"
+                        app:typeface="OPEN_SANS_SEMI_BOLD" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/at_work_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/out_time_container"
+                    android:layout_marginBottom="60dp">
+
+                    <View
+                        android:id="@+id/divider3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorLightGray" />
+
+                    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+                        android:id="@+id/at_work_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/divider3"
+                        android:layout_toLeftOf="@+id/at_work"
+                        android:padding="20dp"
+                        android:text="@string/time_at_work"
+                        android:textSize="18sp"
+                        app:typeface="OPEN_SANS_LIGHT" />
+
+                    <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+                        android:id="@+id/at_work"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/divider3"
+                        android:layout_centerVertical="true"
+                        android:padding="20dp"
+                        android:text="@string/undefined"
+                        android:textColor="@color/textColorBlack"
+                        android:textSize="18sp"
+                        app:typeface="OPEN_SANS_SEMI_BOLD" />
+
+                    <View
+                        android:id="@+id/divider4"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/at_work"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorLightGray" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/at_work_container">
+
+                    <RelativeLayout
+                        android:id="@+id/details_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <View
+                            android:id="@+id/divider5"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="5dp"
+                            android:background="@color/colorLightGray" />
+
+                        <View
+                            android:id="@+id/divider6"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/details_time_container"
+                            android:layout_margin="5dp"
+                            android:background="@color/colorLightGray" />
+
+                        <RelativeLayout
+                            android:id="@+id/details_time_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/divider5"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true">
+
+                            <ImageView
+                                android:id="@+id/details_time_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="25dp"
+                                android:src="@drawable/ic_details" />
+
+                            <com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView
+                                android:id="@+id/details_time_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/details_time_icon"
+                                android:padding="20dp"
+                                android:text="@string/time_details"
+                                android:textColor="@color/textColorBlack"
+                                android:textSize="18sp"
+                                app:typeface="OPEN_SANS_SEMI_BOLD" />
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </FrameLayout>
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
+    </com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView>
 
-</com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

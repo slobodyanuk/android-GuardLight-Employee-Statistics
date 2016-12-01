@@ -45,14 +45,14 @@ public class NameValueFormatter implements IAxisValueFormatter {
                 name = nameFromRealm;
                 //Label inside bar view
                 axis.setXOffset((float) (new Paint().measureText(name)));
-                return name.replaceAll(" ", "\n");
+                return name;
             } catch (Exception e) {
                 return "";
             }
         } else {
             // center chart for single user
             if ((int) value == 1) {
-                axis.setXOffset((float) (new Paint().measureText(name) / 1.5));
+                axis.setXOffset((float) (new Paint().measureText(name)));
                 return name;
             } else {
                 return "";

@@ -172,6 +172,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         if (isChartFragment) {
             if (fragment != null) {
                 EventBus.getDefault().post(new ChartBackEvent());
+                isChartFragment =false;
             }
         } else {
             super.onBackPressed();

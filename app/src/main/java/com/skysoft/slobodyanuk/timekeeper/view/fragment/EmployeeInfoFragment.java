@@ -98,7 +98,7 @@ public class EmployeeInfoFragment extends BaseFragment implements TopTabListener
 
     @Override
     public int getLayoutResource() {
-        return R.layout.fragment_employee;
+        return R.layout.fragment_employee_info;
     }
 
     @Override

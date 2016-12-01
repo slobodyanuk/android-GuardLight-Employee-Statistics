@@ -2,10 +2,7 @@ package com.skysoft.slobodyanuk.timekeeper.view.fragment;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -37,7 +34,6 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static com.skysoft.slobodyanuk.timekeeper.R.id.chart;
-import static com.skysoft.slobodyanuk.timekeeper.R.id.logo;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.PAGE_KEY;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.TimeState;
 
@@ -51,11 +47,10 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
     HorizontalBarChart mChart;
     @BindView(R.id.root)
     LockableScrollView mScrollView;
-
+    float oldY;
     private Realm mRealm;
     private int id;
     private int[] mColors;
-
     private TimeState mTimeState = TimeState.TODAY;
     private OnRefreshEnableListener mRefreshEnableListener;
 
@@ -94,12 +89,12 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
         drawChart();
     }
 
-
     private void drawChart() {
         mChart.setDescription(null);
         mChart.setOnChartValueSelectedListener(this);
         mChart.setOnChartGestureListener(this);
         mChart.setDrawBarShadow(false);
+        mChart.setDoubleTapToZoomEnabled(false);
         mChart.setPinchZoom(false);
         mChart.setDrawGridBackground(false);
 
@@ -166,6 +161,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
             mChart.setData(data);
         }
 
+        mChart.setViewPortOffsets(10f, 10f, 10f, 0f);
         mChart.getXAxis().setCenterAxisLabels(true);
         mChart.setFitBars(true);
         mChart.invalidate();
@@ -196,7 +192,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
         }
     }
 
-    public void setRefreshEnableListener(OnRefreshEnableListener listener){
+    public void setRefreshEnableListener(OnRefreshEnableListener listener) {
         this.mRefreshEnableListener = listener;
     }
 
@@ -245,10 +241,9 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
         }
     }
 
-    float oldY;
     @Override
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
-        if (dY == oldY){
+        if (dY == oldY) {
             mRefreshEnableListener.onRefreshEnable(true);
             if (mScrollView != null) {
                 mScrollView.setScrollingEnabled(true);
