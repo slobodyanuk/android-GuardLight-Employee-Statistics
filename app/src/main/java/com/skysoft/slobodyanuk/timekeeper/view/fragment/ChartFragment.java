@@ -24,6 +24,7 @@ import com.skysoft.slobodyanuk.timekeeper.data.Employee;
 import com.skysoft.slobodyanuk.timekeeper.util.EmptyValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.NameValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.YAxisValueFormatter;
+import com.skysoft.slobodyanuk.timekeeper.util.date.TimeConverter;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.OnRefreshEnableListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView;
@@ -73,6 +74,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
                 getResources().getColor(android.R.color.holo_blue_dark),
                 getResources().getColor(R.color.colorRed)
         };
+
         if (getArguments() != null) {
             int page = getArguments().getInt(PAGE_KEY);
             switch (page) {
@@ -132,14 +134,12 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
         if (employees.size() > 5) {
             mChart.zoom(1f, 2f, mChart.getCenterOfView().getX(), mChart.getCenterOfView().getY());
         }
+        TimeConverter timeConverter =  new TimeConverter();
 
         for (int i = 0; i < employees.size(); i++) {
-            float val0 = 1;
-            float val1 = 2;
-            float val2 = 8;
-            float val3 = 2;
+            float[] date = timeConverter.getBarTime("7:12", "8:43", "18:00", "19:00");
 
-            yVals1.add(new BarEntry(i, new float[]{val0, val1, val2, val3}));
+            yVals1.add(new BarEntry(i, date));
         }
         mRealm.close();
 

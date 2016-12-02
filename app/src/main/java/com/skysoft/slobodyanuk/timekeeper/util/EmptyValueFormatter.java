@@ -1,14 +1,10 @@
 package com.skysoft.slobodyanuk.timekeeper.util;
 
-import android.util.Log;
-
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.DecimalFormat;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Serhii Slobodyanuk on 24.11.2016.

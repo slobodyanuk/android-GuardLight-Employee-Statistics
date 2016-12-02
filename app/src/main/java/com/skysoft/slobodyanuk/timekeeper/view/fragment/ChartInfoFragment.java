@@ -255,13 +255,11 @@ public class ChartInfoFragment extends BaseFragment
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(1);
 
-        //Remove.
-        float start0 = 1f;
-        float start1 = 1f;
-        float start2 = 10f;
-        float start3 = 1f;
+        TimeConverter timeConverter =  new TimeConverter();
+        float[] date = timeConverter.getBarTime("7:12", "8:43", "18:00", "19:00");
 
-        yVals1.add(new BarEntry(1, new float[]{start0, start1, start2, start3}));
+
+        yVals1.add(new BarEntry(1, date));
         BarDataSet set1;
 
         if (mChart.getData() != null &&

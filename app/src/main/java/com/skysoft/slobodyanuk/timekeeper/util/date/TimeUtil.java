@@ -13,6 +13,8 @@ import lombok.Getter;
 
 public class TimeUtil {
 
+    public static final int HOUR = 60;
+
     @Getter
     private long startTime;
 

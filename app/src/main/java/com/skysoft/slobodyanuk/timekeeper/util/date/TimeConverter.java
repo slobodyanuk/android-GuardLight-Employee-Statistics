@@ -1,8 +1,10 @@
 package com.skysoft.slobodyanuk.timekeeper.util.date;
 
-import com.skysoft.slobodyanuk.timekeeper.data.RealmString;
+import android.util.Log;
 
-import java.text.ParseException;
+import com.skysoft.slobodyanuk.timekeeper.data.RealmString;
+import com.skysoft.slobodyanuk.timekeeper.util.Globals;
+
 import java.text.SimpleDateFormat;
 import java.util.AbstractCollection;
 import java.util.Collections;
@@ -13,6 +15,7 @@ import java.util.TimeZone;
 
 import io.realm.RealmList;
 
+import static android.content.ContentValues.TAG;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.UNDEFINED;
 
 /**
@@ -35,15 +38,22 @@ public class TimeConverter {
         return format.format(date);
     }
 
-    public long getTimeFromString(String timeInString) {
-        try {
-            SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            format.setTimeZone(TimeZone.getTimeZone("GMT"));
-            return format.parse(timeInString).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0;
-        }
+    public float[] getBarTime(String timeIn, String startTimeAtWork, String endTimeAtWork, String timeOut) {
+        float[] times = new float[4];
+        times[0] = convertTimeString(timeIn) - Globals.START_WORK_TIME;
+        Log.e(TAG, "getBarTime: " + times[0] );
+        times[1] = convertTimeString(startTimeAtWork) - convertTimeString(timeIn);
+        Log.e(TAG, "getBarTime: " + times[1] );
+        times[2] = convertTimeString(endTimeAtWork) - convertTimeString(startTimeAtWork);
+        Log.e(TAG, "getBarTime: " + times[2] );
+        times[3] = convertTimeString(timeOut) - convertTimeString(endTimeAtWork);
+        Log.e(TAG, "getBarTime: " + times[3] );
+        return times;
+    }
+
+    private float convertTimeString(String time){
+        String[] splited = time.split(":");
+        return Float.parseFloat(splited[0]) + (Float.parseFloat(splited[1]) / TimeUtil.HOUR);
     }
 
 
