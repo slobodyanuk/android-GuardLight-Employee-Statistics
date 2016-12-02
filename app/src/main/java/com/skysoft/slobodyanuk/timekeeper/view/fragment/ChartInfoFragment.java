@@ -1,6 +1,7 @@
 package com.skysoft.slobodyanuk.timekeeper.view.fragment;
 
 import android.app.DialogFragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -278,6 +279,7 @@ public class ChartInfoFragment extends BaseFragment
             data.setValueFormatter(new EmptyValueFormatter());
             data.setDrawValues(true);
             data.setBarWidth(0.4f);
+            data.setValueTextColor(Color.WHITE);
             mChart.setData(data);
         }
 

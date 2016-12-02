@@ -1,6 +1,7 @@
 package com.skysoft.slobodyanuk.timekeeper.view.fragment;
 
 import android.app.DialogFragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
@@ -47,7 +48,8 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
     HorizontalBarChart mChart;
     @BindView(R.id.root)
     LockableScrollView mScrollView;
-    float oldY;
+
+    private float oldY;
     private Realm mRealm;
     private int id;
     private int[] mColors;
@@ -158,6 +160,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
             data.setDrawValues(true);
             data.setValueFormatter(new EmptyValueFormatter());
             data.setBarWidth(0.4f);
+            data.setValueTextColor(Color.WHITE);
             mChart.setData(data);
         }
 
