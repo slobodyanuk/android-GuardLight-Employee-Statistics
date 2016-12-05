@@ -13,6 +13,7 @@ import com.skysoft.slobodyanuk.timekeeper.util.listener.FragmentListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.TopTabListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeePagerAdapter;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.chart.ChartInfoFragment;
 
 import butterknife.BindView;
 import io.realm.Realm;

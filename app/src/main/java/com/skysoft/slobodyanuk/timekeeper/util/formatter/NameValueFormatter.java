@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.util;
+package com.skysoft.slobodyanuk.timekeeper.util.formatter;
 
 import android.graphics.Paint;
 
@@ -44,7 +44,7 @@ public class NameValueFormatter implements IAxisValueFormatter {
                 name = (name.equals(nameFromRealm)) ? "" : nameFromRealm;
                 name = nameFromRealm;
                 //Label inside bar view
-                axis.setXOffset((float) (new Paint().measureText(name)));
+                axis.setXOffset(new Paint().measureText(name));
                 return name;
             } catch (Exception e) {
                 return "";

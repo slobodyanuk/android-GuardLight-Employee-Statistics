@@ -37,9 +37,12 @@ public class Globals {
     * ViewPager constants
     * */
     public final static String PAGE_KEY = "page_key";
+    public final static String START_RANGE_DATE_SELECTED = "start_date_range";
+    public final static String END_RANGE_DATE_SELECTED = "end_date_range";
     public final static int TODAY = 0;
     public final static int WEEK = 1;
     public final static int MONTH = 2;
+    public final static int DATE_RANGE = 3;
 
     /*
     * Time constants
@@ -50,7 +53,7 @@ public class Globals {
     public final static String UNDEFINED = "undefined";
 
     public enum TimeState {
-        TODAY, WEEK, MONTH
+        TODAY, WEEK, MONTH, DATE_RANGE
     }
 
     /*

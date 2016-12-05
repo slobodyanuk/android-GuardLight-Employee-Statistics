@@ -1,7 +1,8 @@
-package com.skysoft.slobodyanuk.timekeeper.util;
+package com.skysoft.slobodyanuk.timekeeper.util.formatter;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.skysoft.slobodyanuk.timekeeper.util.Globals;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

@@ -1,7 +1,5 @@
 package com.skysoft.slobodyanuk.timekeeper.util.date;
 
-import android.util.Log;
-
 import com.skysoft.slobodyanuk.timekeeper.data.RealmString;
 import com.skysoft.slobodyanuk.timekeeper.util.Globals;
 
@@ -15,7 +13,6 @@ import java.util.TimeZone;
 
 import io.realm.RealmList;
 
-import static android.content.ContentValues.TAG;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.UNDEFINED;
 
 /**
@@ -41,19 +38,15 @@ public class TimeConverter {
     public float[] getBarTime(String timeIn, String startTimeAtWork, String endTimeAtWork, String timeOut) {
         float[] times = new float[4];
         times[0] = convertTimeString(timeIn) - Globals.START_WORK_TIME;
-        Log.e(TAG, "getBarTime: " + times[0] );
         times[1] = convertTimeString(startTimeAtWork) - convertTimeString(timeIn);
-        Log.e(TAG, "getBarTime: " + times[1] );
         times[2] = convertTimeString(endTimeAtWork) - convertTimeString(startTimeAtWork);
-        Log.e(TAG, "getBarTime: " + times[2] );
         times[3] = convertTimeString(timeOut) - convertTimeString(endTimeAtWork);
-        Log.e(TAG, "getBarTime: " + times[3] );
         return times;
     }
 
     private float convertTimeString(String time){
-        String[] splited = time.split(":");
-        return Float.parseFloat(splited[0]) + (Float.parseFloat(splited[1]) / TimeUtil.HOUR);
+        String[] splitted = time.split(":");
+        return Float.parseFloat(splitted[0]) + (Float.parseFloat(splitted[1]) / TimeUtil.HOUR);
     }
 
 

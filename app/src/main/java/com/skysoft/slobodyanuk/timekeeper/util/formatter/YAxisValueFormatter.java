@@ -1,7 +1,8 @@
-package com.skysoft.slobodyanuk.timekeeper.util;
+package com.skysoft.slobodyanuk.timekeeper.util.formatter;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.skysoft.slobodyanuk.timekeeper.util.Globals;
 
 /**
  * Created by Serhii Slobodyanuk on 20.10.2016.

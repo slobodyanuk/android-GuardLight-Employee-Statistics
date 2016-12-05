@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.event.ChartBackEvent;
-import com.skysoft.slobodyanuk.timekeeper.view.fragment.ChartFragment;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.chart.ChartFragment;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import org.greenrobot.eventbus.EventBus;

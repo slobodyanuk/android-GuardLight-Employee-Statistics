@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.view.fragment;
+package com.skysoft.slobodyanuk.timekeeper.view.fragment.chart;
 
 import android.app.DialogFragment;
 import android.graphics.Color;
@@ -30,14 +30,15 @@ import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeCompleteListener;
 import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeNextListener;
 import com.skysoft.slobodyanuk.timekeeper.rest.RestClient;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeeInfoResponse;
-import com.skysoft.slobodyanuk.timekeeper.util.EmptyValueFormatter;
+import com.skysoft.slobodyanuk.timekeeper.util.formatter.EmptyValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
-import com.skysoft.slobodyanuk.timekeeper.util.NameValueFormatter;
-import com.skysoft.slobodyanuk.timekeeper.util.YAxisValueFormatter;
+import com.skysoft.slobodyanuk.timekeeper.util.formatter.NameValueFormatter;
+import com.skysoft.slobodyanuk.timekeeper.util.formatter.YAxisValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.date.TimeConverter;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.TypefaceTextView;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 
 import java.util.ArrayList;
 
@@ -274,7 +275,7 @@ public class ChartInfoFragment extends BaseFragment
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
             BarData data = new BarData(dataSets);
-            data.setValueFormatter(new EmptyValueFormatter());
+            data.setValueFormatter(new EmptyValueFormatter(mTimeState));
             data.setDrawValues(true);
             data.setBarWidth(0.4f);
             data.setValueTextColor(Color.WHITE);

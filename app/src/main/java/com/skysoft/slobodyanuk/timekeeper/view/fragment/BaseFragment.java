@@ -14,7 +14,6 @@ import com.trello.rxlifecycle.components.support.RxFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 import butterknife.Unbinder;
 
 /**
@@ -26,7 +25,7 @@ public abstract class BaseFragment extends RxFragment {
 
     @Nullable
     @BindView(R.id.refresh)
-    SwipeRefreshLayout mRefreshLayout;
+    public SwipeRefreshLayout mRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -27,6 +27,7 @@ import com.skysoft.slobodyanuk.timekeeper.util.listener.OnRefreshEnableListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.TopTabListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeePagerAdapter;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.chart.ChartFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

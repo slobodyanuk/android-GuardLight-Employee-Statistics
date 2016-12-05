@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.view.fragment;
+package com.skysoft.slobodyanuk.timekeeper.view.fragment.chart;
 
 import android.app.DialogFragment;
 import android.graphics.Color;
@@ -21,22 +21,27 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.Employee;
-import com.skysoft.slobodyanuk.timekeeper.util.EmptyValueFormatter;
-import com.skysoft.slobodyanuk.timekeeper.util.NameValueFormatter;
-import com.skysoft.slobodyanuk.timekeeper.util.YAxisValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.date.TimeConverter;
+import com.skysoft.slobodyanuk.timekeeper.util.formatter.EmptyValueFormatter;
+import com.skysoft.slobodyanuk.timekeeper.util.formatter.NameValueFormatter;
+import com.skysoft.slobodyanuk.timekeeper.util.formatter.YAxisValueFormatter;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.OnRefreshEnableListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.component.LockableScrollView;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static com.skysoft.slobodyanuk.timekeeper.R.id.chart;
+import static com.skysoft.slobodyanuk.timekeeper.util.Globals.END_RANGE_DATE_SELECTED;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.PAGE_KEY;
+import static com.skysoft.slobodyanuk.timekeeper.util.Globals.START_RANGE_DATE_SELECTED;
 import static com.skysoft.slobodyanuk.timekeeper.util.Globals.TimeState;
 
 /**
@@ -51,9 +56,10 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
     LockableScrollView mScrollView;
 
     private float oldY;
-    private Realm mRealm;
-    private int id;
     private int[] mColors;
+    private long mStartDate;
+    private long mEndDate;
+
     private TimeState mTimeState = TimeState.TODAY;
     private OnRefreshEnableListener mRefreshEnableListener;
 
@@ -61,6 +67,16 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
         ChartFragment fragment = new ChartFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(PAGE_KEY, page);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static ChartFragment newInstance(int page, long start, long end) {
+        ChartFragment fragment = new ChartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(PAGE_KEY, page);
+        bundle.putLong(START_RANGE_DATE_SELECTED, start);
+        bundle.putLong(END_RANGE_DATE_SELECTED, end);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -86,6 +102,11 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
                     break;
                 case 2:
                     mTimeState = TimeState.MONTH;
+                    break;
+                case 3:
+                    mTimeState = TimeState.DATE_RANGE;
+                    mStartDate = getArguments().getLong(START_RANGE_DATE_SELECTED);
+                    mEndDate = getArguments().getLong(END_RANGE_DATE_SELECTED);
                     break;
             }
         }
@@ -121,7 +142,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
     }
 
     private void initDataChart(TimeState state) {
-        mRealm = Realm.getDefaultInstance();
+        Realm mRealm = Realm.getDefaultInstance();
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
         RealmResults<Employee> employees = mRealm.where(Employee.class).findAll();
 
@@ -137,7 +158,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
         TimeConverter timeConverter =  new TimeConverter();
 
         for (int i = 0; i < employees.size(); i++) {
-            float[] date = timeConverter.getBarTime("7:12", "8:43", "18:00", "19:00");
+            float[] date = timeConverter.getBarTime("7:43", "8:20", "18:18", "19:05");
 
             yVals1.add(new BarEntry(i, date));
         }
@@ -158,7 +179,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
             dataSets.add(set1);
             BarData data = new BarData(dataSets);
             data.setDrawValues(true);
-            data.setValueFormatter(new EmptyValueFormatter());
+            data.setValueFormatter(new EmptyValueFormatter(mTimeState));
             data.setBarWidth(0.4f);
             data.setValueTextColor(Color.WHITE);
             mChart.setData(data);
@@ -173,14 +194,21 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
     @Override
     public void updateToolbar() {
         ((BaseActivity) getActivity()).unableToolbar();
-        ((BaseActivity) getActivity()).unableChartHomeButton(this);
-        ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.charts));
-        ((BaseActivity) getActivity())
-                .unableMenuContainer(R.drawable.ic_nb_calendar)
-                .setOnClickListener(view -> {
-                    DialogFragment datePickerFragment = new DatePickerFragment();
-                    datePickerFragment.show(getActivity().getFragmentManager(), "Date Picker");
-                });
+        if (mTimeState.equals(TimeState.DATE_RANGE)){
+            ((BaseActivity) getActivity()).unableHomeButton();
+            ((BaseActivity) getActivity()).disableMenuContainer();
+            ((BaseActivity) getActivity()).setToolbarTitle(String.format(Locale.getDefault(),
+                    "%1$ta, %1$tb  %1$te  -  %2$ta, %2$tb  %2$te", new Date(mStartDate), new Date(mEndDate)));
+        }else {
+            ((BaseActivity) getActivity()).unableChartHomeButton(this);
+            ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.charts));
+            ((BaseActivity) getActivity())
+                    .unableMenuContainer(R.drawable.ic_nb_calendar)
+                    .setOnClickListener(view -> {
+                        DialogFragment datePickerFragment = new DatePickerFragment();
+                        datePickerFragment.show(getActivity().getFragmentManager(), "Date Picker");
+                    });
+        }
     }
 
     @Override
