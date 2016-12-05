@@ -62,9 +62,6 @@ public class ChartInfoFragment extends BaseFragment
 
     @BindView(R.id.progress)
     LinearLayout mProgressBar;
-//
-//    @BindView(R.id.refresh)
-//    SwipeRefreshLayout mRefreshLayout;
 
     @BindView(chart)
     HorizontalBarChart mChart;
@@ -78,6 +75,7 @@ public class ChartInfoFragment extends BaseFragment
     TypefaceTextView mTextOutTime;
     @BindView(R.id.at_work)
     TypefaceTextView mTextAtWork;
+
     float oldY;
     private Realm mRealm;
     private int id;
@@ -323,7 +321,9 @@ public class ChartInfoFragment extends BaseFragment
 
     @Override
     public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-        mRefreshLayout.setOnRefreshListener(this);
+        if (mRefreshLayout != null) {
+            mRefreshLayout.setOnRefreshListener(this);
+        }
         if (mScrollView != null) {
             mScrollView.setScrollingEnabled(true);
         }
@@ -350,7 +350,9 @@ public class ChartInfoFragment extends BaseFragment
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-        mRefreshLayout.setOnRefreshListener(null);
+        if (mRefreshLayout != null) {
+            mRefreshLayout.setOnRefreshListener(null);
+        }
         if (mScrollView != null) {
             mScrollView.setScrollingEnabled(false);
         }
@@ -359,7 +361,9 @@ public class ChartInfoFragment extends BaseFragment
     @Override
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
         if (dY == oldY) {
-            mRefreshLayout.setOnRefreshListener(this);
+            if (mRefreshLayout != null) {
+                mRefreshLayout.setOnRefreshListener(this);
+            }
             if (mScrollView != null) {
                 mScrollView.setScrollingEnabled(true);
             }

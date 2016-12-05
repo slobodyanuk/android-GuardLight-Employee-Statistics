@@ -5,8 +5,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +21,8 @@ import com.skysoft.slobodyanuk.timekeeper.view.fragment.chart.ChartFragment;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.lang.reflect.Field;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +40,10 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     @Nullable
     @BindView(R.id.toolbar_menu)
     RelativeLayout mMenuContainer;
+
+    @Nullable
+    @BindView(R.id.bar_layout)
+    AppBarLayout mAppBarLayout;
 
     private Unbinder mBinder;
     private boolean isChartFragment;
@@ -61,6 +69,20 @@ public abstract class BaseActivity extends RxAppCompatActivity {
             View view = mToolbar.getChildAt(i);
             if (view instanceof TextView) {
                 TextView tv = (TextView) view;
+                try {
+                    Field f = mToolbar.getClass().getDeclaredField("mTitleTextView");
+                    f.setAccessible(true);
+                    tv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                    tv.setFocusable(true);
+                    tv.setFocusableInTouchMode(true);
+                    tv.requestFocus();
+                    tv.setSingleLine(true);
+                    tv.setSelected(true);
+                    tv.setMarqueeRepeatLimit(-1);
+
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
                 Toolbar.LayoutParams lp = (Toolbar.LayoutParams) tv.getLayoutParams();
                 lp.width = Toolbar.LayoutParams.MATCH_PARENT;
                 tv.setLayoutParams(lp);
@@ -150,6 +172,10 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         if (mMenuContainer != null) {
             mMenuContainer.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public AppBarLayout getAppBarLayout() {
+        return mAppBarLayout;
     }
 
     @Override

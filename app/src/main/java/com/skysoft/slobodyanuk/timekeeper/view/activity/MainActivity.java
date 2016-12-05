@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -113,7 +112,7 @@ public class MainActivity extends BaseActivity
         mPagerAdapter.addFragment(SettingsFragment.newInstance(), getString(R.string.settings));
         mNonSwipeableViewPager.setAdapter(mPagerAdapter);
         mNonSwipeableViewPager.addOnPageChangeListener(setupPageListener());
-        mNonSwipeableViewPager.post(() -> mNonSwipeableViewPager.setCurrentItem(ACTIVITY, true));
+        mNonSwipeableViewPager.post(() -> mNonSwipeableViewPager.setCurrentItem(ACTIVITY, false));
     }
 
     private ViewPager.SimpleOnPageChangeListener setupPageListener() {
@@ -126,7 +125,6 @@ public class MainActivity extends BaseActivity
                 mCurrentBottomTab = position;
                 initBottomTabs();
                 if (pos != position) {
-                    Log.e("tag", "onPageSelected: ");
                     pos = position;
                     ((BaseFragment) page).updateToolbar();
                 }
@@ -167,7 +165,6 @@ public class MainActivity extends BaseActivity
             }
         }
     }
-
     private void initBottomTabs() {
         switch (mCurrentBottomTab) {
             case CLOCKERS:
@@ -222,7 +219,7 @@ public class MainActivity extends BaseActivity
         mCurrentBottomTab = CLOCKERS;
         mTopTabLayout.setVisibility(GONE);
         mTopTabLayout.removeAllTabs();
-        mNonSwipeableViewPager.setCurrentItem(CLOCKERS, true);
+        mNonSwipeableViewPager.setCurrentItem(CLOCKERS, false);
         mBottomTabLayout[0].setSelected(true);
         mBottomTabLayout[1].setSelected(false);
         mBottomTabLayout[2].setSelected(false);
@@ -232,8 +229,8 @@ public class MainActivity extends BaseActivity
     @OnClick(R.id.tab_activity)
     public void onActivityClick() {
         mCurrentBottomTab = ACTIVITY;
-        mNonSwipeableViewPager.setCurrentItem(ACTIVITY, true);
         mTopTabLayout.setVisibility(VISIBLE);
+        mNonSwipeableViewPager.setCurrentItem(ACTIVITY, false);
         mBottomTabLayout[0].setSelected(false);
         mBottomTabLayout[1].setSelected(true);
         mBottomTabLayout[2].setSelected(false);
@@ -245,7 +242,7 @@ public class MainActivity extends BaseActivity
         mCurrentBottomTab = SETTINGS;
         mTopTabLayout.setVisibility(GONE);
         mTopTabLayout.removeAllTabs();
-        mNonSwipeableViewPager.setCurrentItem(SETTINGS, true);
+        mNonSwipeableViewPager.setCurrentItem(SETTINGS, false);
         mBottomTabLayout[0].setSelected(false);
         mBottomTabLayout[1].setSelected(false);
         mBottomTabLayout[2].setSelected(true);
@@ -270,6 +267,10 @@ public class MainActivity extends BaseActivity
     @Override
     protected int getLayoutResources() {
         return R.layout.activity_main;
+    }
+
+    public TabLayout getTopTabLayout() {
+        return mTopTabLayout;
     }
 
     @Override
