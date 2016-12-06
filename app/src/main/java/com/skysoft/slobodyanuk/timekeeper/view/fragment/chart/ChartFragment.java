@@ -185,7 +185,6 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
             mChart.setData(data);
         }
 
-        mChart.setViewPortOffsets(10f, 10f, 10f, 0f);
         mChart.getXAxis().setCenterAxisLabels(true);
         mChart.setFitBars(true);
         mChart.invalidate();
