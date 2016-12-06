@@ -1,6 +1,7 @@
 package com.skysoft.slobodyanuk.timekeeper;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.ContextWrapper;
 
 import com.pixplicity.easyprefs.library.Prefs;
@@ -14,10 +15,13 @@ import io.realm.RealmConfiguration;
  */
 public class EmployeeApp extends Application {
 
+    private static Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
         PreferencesManager.initializeInstance(this);
+        context = getApplicationContext();
 
         new Prefs.Builder()
                 .setContext(this)
@@ -32,5 +36,9 @@ public class EmployeeApp extends Application {
                 .build();
 //        Realm.deleteRealm(realmConfiguration);
         Realm.setDefaultConfiguration(realmConfiguration);
+    }
+
+    public static Context getContext(){
+        return context;
     }
 }

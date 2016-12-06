@@ -32,7 +32,7 @@
     <string name="settings">Settings</string>
     <string name="notification">Notification</string>
     <string name="notifications">Notifications</string>
-    <string name="error_illegal_url">Error: illegal URL</string>
+    <string name="error_illegal_url">Error: illegal URL or bad connection</string>
     <string name="logout">Logout</string>
     <string name="logout_text">Are you sure you want to logout?</string>
     <string name="cancel">Cancel</string>

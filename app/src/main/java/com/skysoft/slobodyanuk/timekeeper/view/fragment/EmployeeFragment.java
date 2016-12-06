@@ -63,7 +63,6 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
     private EmployeePagerAdapter adapter;
     private Realm mRealm;
     private Subscription mSubscription;
-    private ViewPager.SimpleOnPageChangeListener mSimpleOnPageChangeListener;
     private PagerType mPagerType = PagerType.ACTIVITY;
     private int mCurrentPage = 0;
 
@@ -131,7 +130,6 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             } else {
                 setupChartViewPager();
             }
-            ((FragmentListener) getActivity()).onFragmentCreated(this);
         }
     }
 
@@ -144,7 +142,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             adapter.addFragment(EventEmployeeFragment.newInstance(MONTH), MONTH);
             mViewPager.setOffscreenPageLimit(1);
             mViewPager.setAdapter(adapter);
-            mSimpleOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+            mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
@@ -159,8 +157,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
                         ((EventEmployeeFragment) adapter.getItem(position)).initEventData();
                     }
                 }
-            };
-            mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
+            });
             mViewPager.post(() -> mViewPager.setCurrentItem(mCurrentPage, false));
         } else {
             adapter.clearFragments();
@@ -168,8 +165,9 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             adapter.addFragment(EventEmployeeFragment.newInstance(WEEK), WEEK);
             adapter.addFragment(EventEmployeeFragment.newInstance(MONTH), MONTH);
             adapter.notifyDataSetChanged();
-            mViewPager.post(() -> mViewPager.setCurrentItem(mCurrentPage, false));
+            mViewPager.post(() -> mViewPager.setCurrentItem(mCurrentPage));
         }
+        ((FragmentListener) getActivity()).onFragmentCreated(this);
         hideProgress();
     }
 
@@ -193,6 +191,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
 
             adapter.notifyDataSetChanged();
         }
+        ((FragmentListener) getActivity()).onFragmentCreated(this);
         hideProgress();
     }
 

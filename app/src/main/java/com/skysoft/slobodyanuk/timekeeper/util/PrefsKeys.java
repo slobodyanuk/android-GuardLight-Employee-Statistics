@@ -17,4 +17,7 @@ public class PrefsKeys {
     public static final String USERNAME = "username";
 
     public static final String API_KEY = "api_key";
+
+    public static final String SUBSCRIBE_DEVICE = "subscribe";
+
 }

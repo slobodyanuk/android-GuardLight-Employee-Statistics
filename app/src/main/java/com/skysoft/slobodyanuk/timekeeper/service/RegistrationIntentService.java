@@ -3,17 +3,21 @@ package com.skysoft.slobodyanuk.timekeeper.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.skysoft.slobodyanuk.timekeeper.R;
+import com.skysoft.slobodyanuk.timekeeper.data.event.SubscribeEvent;
 import com.skysoft.slobodyanuk.timekeeper.reactive.BaseTask;
 import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeCompleteListener;
 import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeNextListener;
 import com.skysoft.slobodyanuk.timekeeper.rest.RestClient;
 import com.skysoft.slobodyanuk.timekeeper.rest.request.TokenRequest;
 import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
+import com.skysoft.slobodyanuk.timekeeper.util.PrefsKeys;
+
+import org.greenrobot.eventbus.EventBus;
 
 import rx.Subscription;
 
@@ -23,6 +27,7 @@ import rx.Subscription;
 public class RegistrationIntentService extends IntentService implements OnSubscribeNextListener, OnSubscribeCompleteListener {
 
     private static final String TAG = RegistrationIntentService.class.getCanonicalName();
+    private String token;
 
     public RegistrationIntentService() {
         super(TAG);
@@ -32,11 +37,13 @@ public class RegistrationIntentService extends IntentService implements OnSubscr
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        FirebaseInstanceId instanceID = FirebaseInstanceId.getInstance();
-        String senderId = getResources().getString(R.string.gcm_defaultSenderId);
-        String token = instanceID.getToken();
-        Log.d(TAG, "FCM Registration Token: " + token);
+            FirebaseInstanceId instanceID = FirebaseInstanceId.getInstance();
+            String senderId = getResources().getString(R.string.gcm_defaultSenderId);
+            token = instanceID.getToken();
+            executeToken(token);
+    }
 
+    private void executeToken(String token){
         if (!TextUtils.isEmpty(token)) {
             try {
                 mSubscription = new BaseTask<>()
@@ -64,10 +71,13 @@ public class RegistrationIntentService extends IntentService implements OnSubscr
     @Override
     public void onError(String ex) {
         makeToast(ex);
+        EventBus.getDefault().post(new SubscribeEvent(false));
+        Prefs.putBoolean(PrefsKeys.SUBSCRIBE_DEVICE, false);
     }
 
     @Override
     public void onNext(Object t) {
-        makeToast("Response: success");
+        Prefs.putBoolean(PrefsKeys.SUBSCRIBE_DEVICE, true);
+        EventBus.getDefault().post(new SubscribeEvent(true));
     }
 }

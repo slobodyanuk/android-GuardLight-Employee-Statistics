@@ -7,7 +7,7 @@ import java.util.Map;
  */
 public class FragmentEvent {
 
-   private Map<String, String> data;
+    private Map<String, String> data;
 
     public FragmentEvent(Map<String, String> data) {
         this.data = data;

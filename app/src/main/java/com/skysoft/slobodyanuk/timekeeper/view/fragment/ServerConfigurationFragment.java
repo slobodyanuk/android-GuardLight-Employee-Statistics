@@ -83,4 +83,5 @@ public class ServerConfigurationFragment extends BaseFragment implements OnValid
     public int getLayoutResource() {
         return R.layout.fragment_server;
     }
+
 }

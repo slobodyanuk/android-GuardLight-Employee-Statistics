@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.view.Navigator;
-import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.trello.rxlifecycle.components.support.RxFragment;
 
 import butterknife.BindView;
@@ -31,7 +30,7 @@ public abstract class BaseFragment extends RxFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutResource(), container, false);
         bind = ButterKnife.bind(this, view);
-        ((BaseActivity) getActivity()).disableMenuContainer();
+//        ((BaseActivity) getActivity()).disableMenuContainer();
         if (mRefreshLayout != null) {
             mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                     android.R.color.holo_orange_light,

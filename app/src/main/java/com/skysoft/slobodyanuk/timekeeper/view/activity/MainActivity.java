@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -19,6 +18,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.event.RefreshContentEvent;
 import com.skysoft.slobodyanuk.timekeeper.data.event.ShowCheckEvent;
+import com.skysoft.slobodyanuk.timekeeper.data.event.SubscribeEvent;
 import com.skysoft.slobodyanuk.timekeeper.service.RegistrationIntentService;
 import com.skysoft.slobodyanuk.timekeeper.util.KeyboardUtil;
 import com.skysoft.slobodyanuk.timekeeper.util.PrefsKeys;
@@ -92,17 +92,32 @@ public class MainActivity extends BaseActivity
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            if (Prefs.getBoolean(PrefsKeys.SIGN_IN, false) &&
-                    !TextUtils.isEmpty(Prefs.getString(PrefsKeys.API_KEY, ""))) {
+            if (Prefs.getBoolean(PrefsKeys.SIGN_IN, false)) {
                 Intent intent = new Intent(this, RegistrationIntentService.class);
                 startService(intent);
             } else {
                 Toast.makeText(this, getString(R.string.sign_in), Toast.LENGTH_SHORT).show();
                 SignInActivity.launch(this);
             }
+        }else {
+            setupViewPager();
         }
-        setupViewPager();
         setupCoordinatorLayout();
+
+    }
+
+    @Subscribe
+    public void onEvent(SubscribeEvent event) {
+        if (event.isSubscribed()) {
+            setupViewPager();
+        } else {
+            logout();
+        }
+    }
+
+    private void logout() {
+        Prefs.clear();
+        SignInActivity.launch(this);
     }
 
     private void setupViewPager() {
@@ -118,6 +133,7 @@ public class MainActivity extends BaseActivity
     private ViewPager.SimpleOnPageChangeListener setupPageListener() {
         return mPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
             int pos = -1;
+
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -165,6 +181,7 @@ public class MainActivity extends BaseActivity
             }
         }
     }
+
     private void initBottomTabs() {
         switch (mCurrentBottomTab) {
             case CLOCKERS:

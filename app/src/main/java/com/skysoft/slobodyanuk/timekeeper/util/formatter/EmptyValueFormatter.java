@@ -33,7 +33,7 @@ public class EmptyValueFormatter implements IValueFormatter {
         if (timeState.equals(Globals.TimeState.TODAY)) {
             return "";
         } else {
-            if (value > 0 && lastX == entry.getX()) {
+            if (lastX == entry.getX()) {
                 stackedIndex++;
                 if (stackedIndex < 3) {
                     if (stackedIndex == 1) {

@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.skysoft.slobodyanuk.timekeeper.view.activity.MainActivity"
+        <activity
+            android:name="com.skysoft.slobodyanuk.timekeeper.view.activity.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateUnchanged|adjustResize" />
 
@@ -21,17 +22,25 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateUnchanged|adjustResize" />
 
-        <activity android:name="com.skysoft.slobodyanuk.timekeeper.view.activity.EmployeeInfoActivity"
+        <activity
+            android:name="com.skysoft.slobodyanuk.timekeeper.view.activity.EmployeeInfoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateUnchanged|adjustResize" />
 
-        <activity android:name="com.skysoft.slobodyanuk.timekeeper.view.activity.ChartRangeActivity"
+        <activity
+            android:name="com.skysoft.slobodyanuk.timekeeper.view.activity.ChartRangeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateUnchanged|adjustResize" />
 
         <service
             android:name="com.skysoft.slobodyanuk.timekeeper.service.RegistrationIntentService"
-            android:exported="false" />
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="com.skysoft.slobodyanuk.timekeeper.service.UPDATE_SUBSCRIBE_TOKEN" />
+            </intent-filter>
+
+        </service>
         <service
             android:name="com.skysoft.slobodyanuk.timekeeper.service.InstanceService"
             android:exported="false">

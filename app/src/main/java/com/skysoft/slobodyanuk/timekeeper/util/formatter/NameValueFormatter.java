@@ -14,14 +14,17 @@ import io.realm.RealmResults;
  */
 public class NameValueFormatter implements IAxisValueFormatter {
 
+    private RealmResults<Employee> realmResults;
     private boolean isSingleBar;
     private RealmResults<Employee> employees = null;
     private String name = "";
+    private String realmName = "";
 
     public NameValueFormatter() {
         Realm mRealm = Realm.getDefaultInstance();
         employees = mRealm.where(Employee.class).findAll();
         this.isSingleBar = false;
+        realmResults = employees.where().findAll();
         mRealm.close();
     }
 
@@ -36,23 +39,22 @@ public class NameValueFormatter implements IAxisValueFormatter {
     public String getFormattedValue(float value, AxisBase axis) {
         if (!isSingleBar) {
             int iterator = (int) (value);
-            try {
-                String nameFromRealm = employees.where()
-                        .findAll().get(iterator)
-                        .getName();
+            if (iterator < 0 || iterator >= realmResults.size()) {
+                return "";
+            } else {
+                realmName = realmResults.get(iterator).getName();
 
-                name = (name.equals(nameFromRealm)) ? "" : nameFromRealm;
-                name = nameFromRealm;
+                name = (name.equals(realmName)) ? "" : realmName;
+                name = realmName;
+
                 //Label inside bar view
                 axis.setXOffset(new Paint().measureText(name));
                 return name;
-            } catch (Exception e) {
-                return "";
             }
         } else {
             // center chart for single user
             if ((int) value == 1) {
-                axis.setXOffset((float) (new Paint().measureText(name)));
+                axis.setXOffset(new Paint().measureText(name));
                 return name;
             } else {
                 return "";

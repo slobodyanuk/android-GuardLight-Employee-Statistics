@@ -127,7 +127,9 @@ public class EventEmployeeFragment extends BaseFragment implements OnEmployeeCli
 
     @Override
     public void updateToolbar() {
-        ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts);
+        if (isVisible()) {
+            ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts);
+        }
     }
 
     @Override

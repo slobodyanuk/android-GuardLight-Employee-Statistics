@@ -247,6 +247,10 @@ public class ChartInfoFragment extends BaseFragment
         EmployeeInfo employees = mRealm.where(EmployeeInfo.class).findFirst();
         mRealm.close();
 
+        if (xAxis == null){
+            drawChart();
+            return;
+        }
         xAxis.setAxisMaxValue(1);
         xAxis.setAxisMinValue(1);
         xAxis.setValueFormatter(new NameValueFormatter(employees.getEmployee().getId()));

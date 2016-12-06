@@ -43,7 +43,7 @@ public class BaseSubscriber<T, V> extends Subscriber<V> {
                 completeListener.onError("Failed");
             }
         } else {
-            completeListener.onError(e.getMessage());
+            completeListener.onError((e.getMessage().isEmpty()) ? "Failed" : e.getMessage());
         }
     }
 
