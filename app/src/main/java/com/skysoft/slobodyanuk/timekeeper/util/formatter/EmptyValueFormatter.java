@@ -37,9 +37,11 @@ public class EmptyValueFormatter implements IValueFormatter {
                 stackedIndex++;
                 if (stackedIndex < 3) {
                     if (stackedIndex == 1) {
-                        return String.format("%1$30s", mFormat.format(value) + "12:22");
+                        // time at work {index = 1}
+                        return String.format("%1$30s", "12:22");
                     } else {
-                        return mFormat.format(value) + "12:22";
+                        // time out {index = 2}
+                        return "12:22";
                     }
                 } else {
                     stackedIndex = -1;
@@ -48,7 +50,8 @@ public class EmptyValueFormatter implements IValueFormatter {
             } else {
                 lastX = entry.getX();
                 stackedIndex = 0;
-                return mFormat.format(value) + "12:22";
+                // time in {index = 0}
+                return "12:22";
             }
         }
     }

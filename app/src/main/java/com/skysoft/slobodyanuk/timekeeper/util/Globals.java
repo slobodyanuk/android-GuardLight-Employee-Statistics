@@ -9,7 +9,7 @@ public class Globals {
     * Notification constants
     * */
     public static int MESSAGE_NOTIFICATION_ID = 435345;
-    public static final String EVENT_KEY = "event";
+    public static final String EVENT_KEY = "isPassage";
     public static final String DATE_KEY = "date";
     public static final String NAME_KEY = "name";
 

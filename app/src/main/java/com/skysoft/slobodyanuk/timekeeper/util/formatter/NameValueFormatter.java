@@ -16,13 +16,13 @@ public class NameValueFormatter implements IAxisValueFormatter {
 
     private RealmResults<Employee> realmResults;
     private boolean isSingleBar;
-    private RealmResults<Employee> employees = null;
     private String name = "";
-    private String realmName = "";
+    private float offset;
+    private Paint paint = new Paint();
 
     public NameValueFormatter() {
         Realm mRealm = Realm.getDefaultInstance();
-        employees = mRealm.where(Employee.class).findAll();
+        RealmResults<Employee> employees = mRealm.where(Employee.class).findAll();
         this.isSingleBar = false;
         realmResults = employees.where().findAll();
         mRealm.close();
@@ -42,13 +42,16 @@ public class NameValueFormatter implements IAxisValueFormatter {
             if (iterator < 0 || iterator >= realmResults.size()) {
                 return "";
             } else {
-                realmName = realmResults.get(iterator).getName();
+                String realmName = realmResults.get(iterator).getName();
 
                 name = (name.equals(realmName)) ? "" : realmName;
                 name = realmName;
 
-                //Label inside bar view
-                axis.setXOffset(new Paint().measureText(name));
+                //Label inside bar view]
+                if (offset < paint.measureText(name)) {
+                    offset = paint.measureText(name);
+                    axis.setXOffset(offset);
+                }
                 return name;
             }
         } else {

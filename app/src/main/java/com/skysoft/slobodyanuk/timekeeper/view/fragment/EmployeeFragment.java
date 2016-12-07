@@ -15,12 +15,12 @@ import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.data.Employee;
 import com.skysoft.slobodyanuk.timekeeper.data.EmployeeEvent;
 import com.skysoft.slobodyanuk.timekeeper.data.event.ChartBackEvent;
+import com.skysoft.slobodyanuk.timekeeper.data.event.RefreshEmployeeEvent;
 import com.skysoft.slobodyanuk.timekeeper.reactive.BaseTask;
 import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeCompleteListener;
 import com.skysoft.slobodyanuk.timekeeper.reactive.OnSubscribeNextListener;
 import com.skysoft.slobodyanuk.timekeeper.rest.RestClient;
 import com.skysoft.slobodyanuk.timekeeper.rest.response.EmployeesEventResponse;
-import com.skysoft.slobodyanuk.timekeeper.service.FragmentEvent;
 import com.skysoft.slobodyanuk.timekeeper.util.IllegalUrlException;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.FragmentListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.OnRefreshEnableListener;
@@ -32,8 +32,6 @@ import com.skysoft.slobodyanuk.timekeeper.view.fragment.chart.ChartFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.Map;
 
 import butterknife.BindView;
 import io.realm.Realm;
@@ -240,12 +238,9 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
         return R.layout.fragment_employee;
     }
 
-    public void showEvent(Map<String, String> data) {
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(FragmentEvent event) {
-        showEvent(event.getData());
+    public void onEvent(RefreshEmployeeEvent employeeEvent){
+        onRefresh();
     }
 
     @Subscribe

@@ -10,6 +10,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.skysoft.slobodyanuk.timekeeper.R;
+import com.skysoft.slobodyanuk.timekeeper.data.event.RefreshEmployeeEvent;
 import com.skysoft.slobodyanuk.timekeeper.util.Globals;
 import com.skysoft.slobodyanuk.timekeeper.util.PreferencesManager;
 import com.skysoft.slobodyanuk.timekeeper.util.PrefsKeys;
@@ -40,8 +41,8 @@ public class MessageHandler extends FirebaseMessagingService {
         if (Prefs.getBoolean(PrefsKeys.NOTIFICATION, true)) {
             Map<String, String> data = remoteMessage.getData();
             createNotification(data);
-//            testLogShow(data);
         }
+        EventBus.getDefault().post(new RefreshEmployeeEvent());
     }
 
     private void createNotification(Map<String, String> data) {
