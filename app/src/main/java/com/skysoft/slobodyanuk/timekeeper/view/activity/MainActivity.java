@@ -71,7 +71,6 @@ public class MainActivity extends BaseActivity
     private int bottomVisible = VISIBLE;
     private boolean toolbarVisible;
     private MainPagerAdapter mPagerAdapter;
-    private ViewPager.SimpleOnPageChangeListener mPageChangeListener;
 
     public static void launch(Context context) {
         Intent i = new Intent(context, MainActivity.class);
@@ -91,6 +90,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState == null) {
             if (Prefs.getBoolean(PrefsKeys.SIGN_IN, false)) {
                 Intent intent = new Intent(this, RegistrationIntentService.class);
@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity
     }
 
     private ViewPager.SimpleOnPageChangeListener setupPageListener() {
-        return mPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+        return new ViewPager.SimpleOnPageChangeListener() {
             int pos = -1;
 
             @Override

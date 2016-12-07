@@ -125,6 +125,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             mRealm.copyToRealmOrUpdate(((EmployeesEventResponse) t).getEvents());
             mRealm.commitTransaction();
             mRealm.close();
+            ((FragmentListener) getActivity()).onFragmentCreated(this);
             if (mPagerType.equals(PagerType.ACTIVITY)) {
                 setupViewPager();
             } else {
@@ -134,6 +135,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
     }
 
     private void setupViewPager() {
+        hideProgress();
         mPagerType = PagerType.ACTIVITY;
         if (adapter == null) {
             adapter = new EmployeePagerAdapter(getResources(), getChildFragmentManager());
@@ -165,10 +167,8 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             adapter.addFragment(EventEmployeeFragment.newInstance(WEEK), WEEK);
             adapter.addFragment(EventEmployeeFragment.newInstance(MONTH), MONTH);
             adapter.notifyDataSetChanged();
-            mViewPager.post(() -> mViewPager.setCurrentItem(mCurrentPage));
+            mViewPager.post(() -> mViewPager.setCurrentItem(mCurrentPage, false));
         }
-        ((FragmentListener) getActivity()).onFragmentCreated(this);
-        hideProgress();
     }
 
     private void setupChartViewPager() {
@@ -202,7 +202,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.today)));
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.week)));
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.month)));
-        mTabLayout.setupWithViewPager(mViewPager, true);
+        mTabLayout.post(() -> mTabLayout.setupWithViewPager(mViewPager, false));
     }
 
     @Override

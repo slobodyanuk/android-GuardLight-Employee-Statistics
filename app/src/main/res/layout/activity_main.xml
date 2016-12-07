@@ -51,18 +51,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<FrameLayout-->
-        <!--android:id="@+id/main_fragment_container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:clipToPadding="false"-->
-        <!--android:paddingBottom="?attr/actionBarSize"-->
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
-
     <com.skysoft.slobodyanuk.timekeeper.view.component.NonSwipeableViewPager
         android:id="@+id/main_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:clipToPadding="false"
         android:paddingBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -92,8 +85,8 @@
                     android:id="@+id/btn_confirm_check"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -114,9 +107,9 @@
                 <FrameLayout
                     android:id="@+id/btn_cancel_check"
                     android:layout_width="match_parent"
-                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_height="match_parent"
-                    android:clickable="true">
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground">
 
                     <ImageView
                         android:layout_width="match_parent"
