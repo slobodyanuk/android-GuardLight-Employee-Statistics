@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -29,9 +30,9 @@ import com.skysoft.slobodyanuk.timekeeper.view.Navigator;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.MainPagerAdapter;
 import com.skysoft.slobodyanuk.timekeeper.view.component.NonSwipeableViewPager;
 import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
-import com.skysoft.slobodyanuk.timekeeper.view.fragment.ClockersFragment;
-import com.skysoft.slobodyanuk.timekeeper.view.fragment.EmployeeFragment;
-import com.skysoft.slobodyanuk.timekeeper.view.fragment.SettingsFragment;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.main.ClockersFragment;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.main.EmployeeFragment;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.main.SettingsFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,6 +59,8 @@ public class MainActivity extends BaseActivity
     FrameLayout mBottomTabContainer;
     @BindView(R.id.root)
     CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.progress)
+    LinearLayout mProgressBar;
     @BindView(R.id.bar_layout)
     AppBarLayout mAppBarLayout;
     @BindViews({R.id.tab_clockers, R.id.tab_activity, R.id.tab_settings})
@@ -90,7 +93,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        showProgress();
         if (savedInstanceState == null) {
             if (Prefs.getBoolean(PrefsKeys.SIGN_IN, false)) {
                 Intent intent = new Intent(this, RegistrationIntentService.class);
@@ -121,6 +124,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void setupViewPager() {
+        hideProgress();
         mPagerAdapter = new MainPagerAdapter(getResources(), getSupportFragmentManager());
         mPagerAdapter.addFragment(ClockersFragment.newInstance(), getString(R.string.clockers));
         mPagerAdapter.addFragment(EmployeeFragment.newInstance(), getString(R.string.activity));
@@ -196,6 +200,18 @@ public class MainActivity extends BaseActivity
             default:
                 onActivityClick();
                 break;
+        }
+    }
+
+    private void showProgress() {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideProgress() {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 

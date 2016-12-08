@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.view.fragment;
+package com.skysoft.slobodyanuk.timekeeper.view.fragment.main;
 
 
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import com.skysoft.slobodyanuk.timekeeper.util.listener.OnValidationTextListener
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.MainActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.component.ValidateEditText;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;

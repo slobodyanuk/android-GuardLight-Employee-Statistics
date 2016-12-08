@@ -43,6 +43,7 @@ import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import rx.Subscription;
 
@@ -294,7 +295,7 @@ public class ChartInfoFragment extends BaseFragment
         if (getActivity() != null) {
             ((BaseActivity) getActivity()).unableToolbar();
             ((BaseActivity) getActivity())
-                    .unableMenuContainer(R.drawable.ic_nb_calendar)
+                    .unableMenuContainer(ButterKnife.findById(getActivity(), R.id.toolbar_menu_calendar))
                     .setOnClickListener(view -> {
                         DialogFragment datePickerFragment = new DatePickerFragment();
                         datePickerFragment.show(getActivity().getFragmentManager(), "Date Picker");

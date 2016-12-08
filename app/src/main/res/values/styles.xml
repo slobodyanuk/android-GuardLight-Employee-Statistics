@@ -31,4 +31,10 @@
         <item name="android:layout_marginRight">@dimen/default_component_margin</item>
     </style>
 
+    <style name="SwitchNotification" parent="Base.Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorSwitchThumbNormal">@android:color/holo_red_light</item>
+        <item name="android:colorForeground">@android:color/holo_red_light</item>
+        <item name="colorAccent">@android:color/holo_green_light</item>
+    </style>
+
 </resources>

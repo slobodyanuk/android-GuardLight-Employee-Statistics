@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -202,7 +203,7 @@ public class ChartFragment extends BaseFragment implements OnChartValueSelectedL
             ((BaseActivity) getActivity()).unableChartHomeButton(this);
             ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.charts));
             ((BaseActivity) getActivity())
-                    .unableMenuContainer(R.drawable.ic_nb_calendar)
+                    .unableMenuContainer(ButterKnife.findById(getActivity(), R.id.toolbar_menu_calendar))
                     .setOnClickListener(view -> {
                         DialogFragment datePickerFragment = new DatePickerFragment();
                         datePickerFragment.show(getActivity().getFragmentManager(), "Date Picker");

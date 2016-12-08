@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.view.fragment;
+package com.skysoft.slobodyanuk.timekeeper.view.fragment.chart;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +13,7 @@ import com.skysoft.slobodyanuk.timekeeper.util.listener.FragmentListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.TopTabListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeePagerAdapter;
-import com.skysoft.slobodyanuk.timekeeper.view.fragment.chart.ChartInfoFragment;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 
 import butterknife.BindView;
 import io.realm.Realm;

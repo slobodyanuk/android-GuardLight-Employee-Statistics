@@ -21,13 +21,13 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <RelativeLayout
-                android:id="@+id/toolbar_menu"
+                android:id="@+id/toolbar_menu_chart"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:background="?attr/actionBarItemBackground"
                 android:clickable="true"
-                android:visibility="invisible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/menu_icon"
@@ -35,6 +35,24 @@
                     android:layout_height="match_parent"
                     android:scaleType="center"
                     android:src="@drawable/ic_nb_charts" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/toolbar_menu_calendar"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/menu_icon_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_nb_calendar" />
 
             </RelativeLayout>
 

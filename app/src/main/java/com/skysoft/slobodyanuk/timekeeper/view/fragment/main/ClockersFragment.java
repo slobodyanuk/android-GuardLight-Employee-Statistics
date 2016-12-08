@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.view.fragment;
+package com.skysoft.slobodyanuk.timekeeper.view.fragment.main;
 
 
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SwitchCompat;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -30,6 +31,7 @@ import com.skysoft.slobodyanuk.timekeeper.view.activity.EmployeeInfoActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.ClockersAdapter;
 import com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.SimpleDividerItemDecoration;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import rx.Subscription;
 
@@ -57,8 +60,8 @@ public class ClockersFragment extends BaseFragment
     private List<Employee> employees;
     private Realm mRealm;
     private Subscription mSubscription;
-    private SparseBooleanArray mCheckedEmployees = new SparseBooleanArray();
     private int[] mUsers;
+    private boolean isChecked = false;
 
     public static ClockersFragment newInstance() {
         return new ClockersFragment();
@@ -178,6 +181,8 @@ public class ClockersFragment extends BaseFragment
 
     @Subscribe
     public void onEvent(RefreshContentEvent ev) {
+        isChecked = false;
+        ((BaseActivity) getActivity()).disableMenuContainer();
         if (ev.isConfirm()) {
             executeSubscribeEmployees(mUsers);
         } else {
@@ -191,6 +196,11 @@ public class ClockersFragment extends BaseFragment
         for (int i = 0; i < array.size(); i++) {
             mUsers[i] = array.keyAt(i);
         }
+        isChecked = true;
+        ((BaseActivity) getActivity()).unableMenuContainer(ButterKnife.findById(getActivity(),
+                R.id.toolbar_menu_switch));
+        SwitchCompat switchCompat = ButterKnife.findById(getActivity(), R.id.menu_switch);
+        switchCompat.setOnCheckedChangeListener((compoundButton, b) -> mAdapter.onCheckEmployees(b));
         EventBus.getDefault().post(new ShowCheckEvent());
     }
 
@@ -204,10 +214,15 @@ public class ClockersFragment extends BaseFragment
     @Override
     public void updateToolbar() {
         if (isVisible()) {
-            ((BaseActivity) getActivity()).disableMenuContainer();
             ((BaseActivity) getActivity()).disableHomeButton();
             ((BaseActivity) getActivity()).unableToolbar();
             ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.notification));
+            if (isChecked) {
+                ((BaseActivity) getActivity()).unableMenuContainer(ButterKnife.findById(getActivity(),
+                        R.id.toolbar_menu_switch));
+            } else {
+                ((BaseActivity) getActivity()).disableMenuContainer();
+            }
         }
     }
 

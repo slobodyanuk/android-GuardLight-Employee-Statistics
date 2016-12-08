@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,16 +37,13 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     Toolbar mToolbar;
 
     @Nullable
-    @BindView(R.id.toolbar_menu)
-    RelativeLayout mMenuContainer;
-
-    @Nullable
     @BindView(R.id.bar_layout)
     AppBarLayout mAppBarLayout;
 
     private Unbinder mBinder;
     private boolean isChartFragment;
     private ChartFragment fragment;
+    private RelativeLayout mCurrentMenuContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,23 +155,28 @@ public abstract class BaseActivity extends RxAppCompatActivity {
                 .commit();
     }
 
-    public RelativeLayout unableMenuContainer(int icon) {
-        if (mMenuContainer != null) {
-            mMenuContainer.setVisibility(View.VISIBLE);
-            ImageView view = ButterKnife.findById(mMenuContainer, R.id.menu_icon);
-            view.setImageResource(icon);
+    public RelativeLayout unableMenuContainer(RelativeLayout container) {
+        if (container != null) {
+            if (mCurrentMenuContainer != null) mCurrentMenuContainer.setVisibility(View.GONE);
+            container.setVisibility(View.VISIBLE);
+            mCurrentMenuContainer = container;
         }
-        return mMenuContainer;
+        return container;
     }
+
+    public RelativeLayout unableMenuContainer() {
+        if (mCurrentMenuContainer != null) {
+            mCurrentMenuContainer.setVisibility(View.VISIBLE);
+        }
+
+        return mCurrentMenuContainer;
+    }
+
 
     public void disableMenuContainer() {
-        if (mMenuContainer != null) {
-            mMenuContainer.setVisibility(View.INVISIBLE);
+        if (mCurrentMenuContainer != null) {
+            mCurrentMenuContainer.setVisibility(View.GONE);
         }
-    }
-
-    public AppBarLayout getAppBarLayout() {
-        return mAppBarLayout;
     }
 
     @Override
@@ -198,7 +199,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         if (isChartFragment) {
             if (fragment != null) {
                 EventBus.getDefault().post(new ChartBackEvent());
-                isChartFragment =false;
+                isChartFragment = false;
             }
         } else {
             super.onBackPressed();

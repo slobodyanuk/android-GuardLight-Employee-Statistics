@@ -9,7 +9,7 @@ import com.skysoft.slobodyanuk.timekeeper.R;
 import com.skysoft.slobodyanuk.timekeeper.util.Globals;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.FragmentListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.TopTabListener;
-import com.skysoft.slobodyanuk.timekeeper.view.fragment.EmployeeInfoFragment;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.chart.EmployeeInfoFragment;
 
 import butterknife.BindView;
 

@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.view.fragment;
+package com.skysoft.slobodyanuk.timekeeper.view.fragment.event;
 
 
 import android.content.Intent;
@@ -21,6 +21,7 @@ import com.skysoft.slobodyanuk.timekeeper.view.activity.EmployeeInfoActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeeEventAdapter;
 import com.skysoft.slobodyanuk.timekeeper.view.component.EmptyRecyclerView;
 import com.skysoft.slobodyanuk.timekeeper.view.component.SimpleDividerItemDecoration;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,7 +129,8 @@ public class EventEmployeeFragment extends BaseFragment implements OnEmployeeCli
     @Override
     public void updateToolbar() {
         if (isVisible()) {
-            ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts);
+            ((BaseActivity) getActivity()).unableMenuContainer();
+
         }
     }
 

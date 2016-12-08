@@ -1,4 +1,4 @@
-package com.skysoft.slobodyanuk.timekeeper.view.fragment;
+package com.skysoft.slobodyanuk.timekeeper.view.fragment.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,13 +27,16 @@ import com.skysoft.slobodyanuk.timekeeper.util.listener.OnRefreshEnableListener;
 import com.skysoft.slobodyanuk.timekeeper.util.listener.TopTabListener;
 import com.skysoft.slobodyanuk.timekeeper.view.activity.BaseActivity;
 import com.skysoft.slobodyanuk.timekeeper.view.adapter.EmployeePagerAdapter;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.BaseFragment;
 import com.skysoft.slobodyanuk.timekeeper.view.fragment.chart.ChartFragment;
+import com.skysoft.slobodyanuk.timekeeper.view.fragment.event.EventEmployeeFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import rx.Subscription;
 
@@ -228,7 +231,8 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
             ((BaseActivity) getActivity()).unableToolbar();
             ((BaseActivity) getActivity()).disableHomeButton();
             ((BaseActivity) getActivity()).setToolbarTitle(getString(R.string.activity));
-            ((BaseActivity) getActivity()).unableMenuContainer(R.drawable.ic_nb_charts)
+            ((BaseActivity) getActivity())
+                    .unableMenuContainer(ButterKnife.findById(getActivity(), R.id.toolbar_menu_chart))
                     .setOnClickListener(clickedView -> setupChartViewPager());
         }
     }
@@ -239,7 +243,7 @@ public class EmployeeFragment extends BaseFragment implements TopTabListener,
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(RefreshEmployeeEvent employeeEvent){
+    public void onEvent(RefreshEmployeeEvent employeeEvent) {
         onRefresh();
     }
 
